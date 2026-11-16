@@ -72,15 +72,23 @@ canciones, así que conviene hacerlo de madrugada o entre temporadas.
 
 🌐 **https://daily-abby.vercel.app**: proyecto `daily-abby` en Vercel.
 
-Para publicar cambios (la primera vez hay que iniciar sesión con `npx vercel login`):
+El código está en el repositorio privado **github.com/EmmaFrz/daily-abby**, conectado a Vercel:
+
+| Acción | Qué pasa |
+|---|---|
+| `git push` a `main` (o merge de un PR) | Vercel compila y **publica en producción** solo (~1 min) |
+| `git push` a otra rama / abrir un PR | Vercel crea una **vista previa** con su propia URL para probar antes |
 
 ```bash
-npx vercel deploy --prod
+git add -A
+git commit -m "Describe el cambio"
+git push            # → se publica solo en https://daily-abby.vercel.app
 ```
 
-Vercel instala, compila (`npm run build`) y publica `apps/web/dist`, según `vercel.json`. `.vercelignore` evita subir
-`legacy/` y los tokens de `.env.local`. Si actualizas el catálogo de música (`npm run musica:actualizar`), vuelve a
-publicar para que llegue a la web.
+Vercel instala, compila (`npm run build`) y publica `apps/web/dist`, según `vercel.json`. Si actualizas el catálogo
+de música (`npm run musica:actualizar`), haz commit y push del `heardle-charts.json` para que llegue a la web.
+
+Publicar a mano sin pasar por GitHub sigue funcionando: `npx vercel deploy --prod`.
 
 ## Arrancar
 
