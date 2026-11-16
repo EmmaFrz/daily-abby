@@ -1,0 +1,9 @@
+# Versión antigua (trivia en vivo): no forma parte de la web
+legacy
+# Se instalan y compilan en Vercel
+node_modules
+apps/web/node_modules
+apps/web/dist
+.vercel
+# Tokens locales de Vercel
+.env*

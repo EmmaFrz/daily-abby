@@ -1,0 +1,11 @@
+node_modules/
+dist/
+*.log
+.DS_Store
+
+# Variables y tokens locales (Vercel guarda aquí su token OIDC)
+.env*
+!.env.example
+
+# Configuración local de Vercel CLI
+.vercel
