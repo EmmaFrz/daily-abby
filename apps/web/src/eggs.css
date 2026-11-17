@@ -320,7 +320,7 @@
 .art-orbit .art-emoji { position: absolute; display: block; font-size: 22px; transform: translate(80px, -11px) rotate(45deg); }
 @keyframes egg-orbit { to { transform: rotate(360deg); } }
 
-/* Seda: figura con capa, máscara con cuernos y aguja; campana colgando de un hilo. */
+/* Seda: peregrino con capucha y bastón de hilo; campana colgando de un hilo. */
 .egg-silk .egg-art { background: radial-gradient(ellipse at 50% 100%, #8a1d32, #2a0c18 60%, #12070d); }
 .egg-art .citadel { height: 40%; }
 .egg-art .threads { --t: 200px; }
@@ -345,51 +345,60 @@
 }
 .wanderer span { position: absolute; display: block; }
 @keyframes egg-hover { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+/* Peregrino original: capucha puntiaguda, ojos que brillan, capa clara y bastón con un carrete de hilo. */
 .wanderer-head {
-  top: 22px;
+  top: 24px;
   left: 50%;
   width: 36px;
   height: 32px;
   margin-left: -18px;
-  border-radius: 46% 46% 50% 50%;
+  border-radius: 50% 50% 42% 42%;
   background:
-    radial-gradient(3px 5px at 34% 58%, #160a10 90%, transparent 100%),
-    radial-gradient(3px 5px at 66% 58%, #160a10 90%, transparent 100%),
-    #f4efe8;
+    radial-gradient(3px 3px at 36% 60%, #ffd27a 90%, transparent 100%),
+    radial-gradient(3px 3px at 64% 60%, #ffd27a 90%, transparent 100%),
+    radial-gradient(ellipse 34% 30% at 50% 60%, #1a0a10 95%, transparent 100%),
+    #d9c8ad;
 }
-/* Los dos cuernos de la máscara. */
-.wanderer-head::before,
-.wanderer-head::after {
+/* Punta de la capucha. */
+.wanderer-head::before {
   content: "";
   position: absolute;
-  top: -20px;
-  width: 9px;
-  height: 26px;
-  background: #f4efe8;
-  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  top: -16px;
+  left: 50%;
+  width: 18px;
+  height: 22px;
+  margin-left: -9px;
+  background: #d9c8ad;
+  clip-path: polygon(30% 0, 100% 100%, 0 100%);
 }
-.wanderer-head::before { left: 3px; transform: rotate(-14deg); }
-.wanderer-head::after { right: 3px; transform: rotate(14deg); }
 .wanderer-cloak {
-  top: 46px;
+  top: 50px;
   left: 50%;
   width: 60px;
-  height: 66px;
+  height: 64px;
   margin-left: -30px;
-  background: linear-gradient(#e0283f, #8e1226);
+  background: linear-gradient(#e8dcc8, #a8936f);
   clip-path: polygon(50% 0, 100% 100%, 72% 90%, 50% 100%, 28% 90%, 0 100%);
   transform-origin: top center;
   animation: egg-cloak 2.6s ease-in-out infinite;
 }
 @keyframes egg-cloak { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+/* Bastón con un carrete de hilo en la punta. */
 .wanderer-needle {
-  top: 20px;
-  right: -6px;
+  top: 18px;
+  right: -4px;
   width: 4px;
-  height: 96px;
+  height: 100px;
   border-radius: 2px;
-  background: linear-gradient(#ffffff, #b9b4c4 60%, #6e6880);
-  transform: rotate(28deg);
+  background: linear-gradient(#8a5a3a, #5c3a24);
+  transform: rotate(12deg);
+}
+.wanderer-needle::before {
+  content: "🧵";
+  position: absolute;
+  top: -20px;
+  left: -10px;
+  font-size: 20px;
 }
 
 /* La Grieta: minimapa con bases, calles, río y jungla, coronado con una corona dorada. */

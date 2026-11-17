@@ -236,7 +236,7 @@ function Art({ scene }: { scene: EasterEgg['scene'] }) {
         <span className="art-bell">
           <span className="art-emoji">🔔</span>
         </span>
-        {/* Pequeña figura con capa roja, máscara blanca con cuernos y su aguja. */}
+        {/* Peregrino original: capucha, capa clara y bastón con un carrete de hilo. */}
         <span className="wanderer">
           <span className="wanderer-needle" />
           <span className="wanderer-cloak" />

@@ -176,7 +176,7 @@ Escape o tocando fuera.
 | Código | Escena | Canción |
 |---|---|---|
 | `OUTER WILDS` | Cielo estrellado con estrellas fugaces; planeta con hoguera y un cohete en órbita | Travelers · Andrew Prahlow |
-| `SILKSONG` | Hilos de seda que caen, brasas y una ciudadela; figura con capa roja, aguja y campana | Silksong · Christopher Larkin |
+| `SILKSONG` | Hilos de seda que caen, brasas y una ciudadela; un peregrino con capucha y bastón de hilo, y una campana | Silksong · Christopher Larkin |
 | `LOL` | Escenario de Worlds con focos dorados que barren y anillos; minimapa de la Grieta (bases, calles, río, Barón, dragón, un ping, dos campeones e Irelia, la campeona de Abby, en la calle superior) con una corona encima | Heavy Is the Crown · LINKIN PARK |
 | `VALORANT` | Azul marino con un corte rojo en diagonal y fragmentos angulosos; mira sobre "ACE" | Die For You · VALORANT Music & Grabbitz |
 | `ARU` | Noche con luna y "z z Z"; Aru, el gato de Abby (blanco, muy peludo y dormilón), durmiendo en su cojín y abriendo sus ojos claros de vez en cuando | Ev'rybody Wants to Be a Cat · Los Aristogatos |
