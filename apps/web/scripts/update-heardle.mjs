@@ -28,6 +28,9 @@ const GENRES = {
   kpop: [51],
   edm: [17, 7], // Dance + Electronic
   espana: [], // Sin lista de Apple: solo la selección de ANCHORS (artistas de España)
+  // Apple tiene el subgénero "Video Game" (100032), pero su lista trae sobre todo versiones de fans y pistas
+  // poco conocidas. Para que se pueda adivinar, solo usamos la selección de ANCHORS (versiones originales).
+  juegos: [],
 };
 
 /** Tienda donde buscar los clásicos de cada género (por defecto EE. UU.). */
@@ -69,6 +72,43 @@ const ANCHORS = {
     ['Marshmello', 'Alone'],
     ['Marshmello', 'Happier'],
     ['Tiësto', 'The Business'],
+  ],
+  // Canciones y bandas sonoras de videojuegos conocidas (versión original del compositor o del juego).
+  // No están en Apple con su versión original: Still Alive, Live & Learn, To Zanarkand, Subwoofer Lullaby…
+  juegos: [
+    ['Toby Fox', 'Megalovania'], ['Toby Fox', 'Hopes and Dreams'], ['Toby Fox', 'Undertale'], ['Toby Fox', 'Fallen Down'],
+    ['Toby Fox', 'Spider Dance'], ['Toby Fox', 'Death by Glamour'], ['Toby Fox', 'Bonetrousle'], ['Toby Fox', 'Rude Buster'],
+    ['Toby Fox', 'Field of Hopes and Dreams'], ['Toby Fox', 'BIG SHOT'], ['Toby Fox', 'THE WORLD REVOLVING'],
+    ['C418', 'Sweden'], ['C418', 'Wet Hands'], ['C418', 'Living Mice'], ['C418', 'Mice on Venus'],
+    ['C418', 'Haggstrom'], ['C418', 'Danny'], ['C418', 'Moog City'],
+    ['Lena Raine', 'Resurrections'], ['Lena Raine', 'First Steps'], ['Lena Raine', 'Reach for the Summit'], ['Lena Raine', 'Pigstep'],
+    ['Christopher Larkin', 'Hollow Knight'], ['Christopher Larkin', 'City of Tears'], ['Christopher Larkin', 'Dirtmouth'],
+    ['Christopher Larkin', 'Greenpath'], ['Christopher Larkin', 'Sealed Vessel'], ['Christopher Larkin', 'Silksong'],
+    ['Darren Korb', 'In the Blood'], ['Darren Korb', 'Good Riddance'], ['Darren Korb', 'Build That Wall'], ['Darren Korb', 'Out of Tartarus'],
+    ['Andrew Prahlow', 'Travelers'], ['Andrew Prahlow', 'Outer Wilds'], ['Andrew Prahlow', 'Timber Hearth'],
+    ['ConcernedApe', 'Stardew Valley Overture'], ['ConcernedApe', 'Cloud Country'],
+    ['Kristofer Maddigan', 'Floral Fury'], ['Kristofer Maddigan', 'Inkwell Isle One'],
+    ['Gareth Coker', 'Light of Nibel'], ['Austin Wintory', 'Apotheosis'],
+    ['Jeremy Soule', 'Dragonborn'], ['Jeremy Soule', 'Far Horizons'], ['Jeremy Soule', 'Secunda'], ['Jeremy Soule', 'Sovngarde'],
+    ['Jeremy Soule', 'The Streets of Whiterun'],
+    ['Mick Gordon', 'BFG Division'], ['Mick Gordon', 'Rip & Tear'], ['Mick Gordon', "At Doom's Gate"],
+    ['Nobuo Uematsu', 'One-Winged Angel'], ['Nobuo Uematsu', 'Prelude'], ['Nobuo Uematsu', "Aerith's Theme"],
+    ['Nobuo Uematsu', 'Liberi Fatali'],
+    ['Emiko Shiratori', 'Melodies of Life'], ['Faye Wong', 'Eyes On Me'],
+    ['Hikaru Utada', 'Simple And Clean'], ['Hikaru Utada', 'Sanctuary'],
+    ['Jonathan Coulton', 'Want You Gone'],
+    ['Rosa Walton', 'I Really Want to Stay at Your House'],
+    ['Crush 40', 'Open Your Heart'],
+    ["Martin O'Donnell", 'Halo'], ['Cynthia Harrell', 'Snake Eater'],
+    ['Akira Yamaoka', 'Promise'], ['Akira Yamaoka', 'Theme of Laura'],
+    ['Motoi Sakuraba', 'Gwyn, Lord of Cinder'],
+    ['Borislav Slavov', 'Down by the River'],
+    ['Jesper Kyd', "Ezio's Family"], ['Gustavo Santaolalla', 'The Last of Us'], ['Bear McCreary', 'God of War'],
+    ['Daniel Lanois', "That's the Way It Is"], ['Dan Salvato', 'Your Reality'],
+    ['League of Legends', 'Legends Never Die'], ['League of Legends', 'Phoenix'],
+    ['League of Legends', 'GODS'], ['League of Legends', 'Burn It All Down'], ['Imagine Dragons', 'Warriors'],
+    ['K/DA', 'POP/STARS'], ['K/DA', 'MORE'], ['K/DA', 'THE BADDEST'], ['K/DA', 'DRUM GO DUM'],
+    ['VALORANT', 'Die For You'], ['LINKIN PARK', 'Heavy Is the Crown'],
   ],
   // Solo artistas de España, de varias épocas.
   espana: [

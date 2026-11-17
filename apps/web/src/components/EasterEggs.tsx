@@ -236,11 +236,12 @@ function Art({ scene }: { scene: EasterEgg['scene'] }) {
         <span className="art-bell">
           <span className="art-emoji">🔔</span>
         </span>
-        {/* Peregrino original: capucha, capa clara y bastón con un carrete de hilo. */}
-        <span className="wanderer">
-          <span className="wanderer-needle" />
-          <span className="wanderer-cloak" />
-          <span className="wanderer-head" />
+        {/* Emblema de Hornet: su aguja con un hilo rojo que se enrolla, y su nombre (no se dibuja su aspecto). */}
+        <span className="silk-emblem">
+          <i className="silk-thread" />
+          <i className="silk-thread silk-thread-2" />
+          <i className="silk-needle" />
+          <i className="silk-tag">Hornet</i>
         </span>
       </>
     );

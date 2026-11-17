@@ -184,8 +184,8 @@ function Hub({ onOpen }: { onOpen: (id: string) => void }) {
             )}
           </h1>
 
-          {/* Un hueco por reto (los 7 Heardle incluidos), en orden del álbum. */}
-          <div className="mt-4 grid max-w-[480px] grid-cols-[repeat(27,minmax(0,1fr))] gap-[3px]" aria-label={`${done} de ${total} retos completados`}>
+          {/* Un hueco por reto (con todos los Heardle), en orden del álbum. */}
+          <div className="mt-4 grid max-w-[480px] gap-[3px]" style={{ gridTemplateColumns: `repeat(${total}, minmax(0, 1fr))` }} aria-label={`${done} de ${total} retos completados`}>
             {ALBUM.flatMap((a) => (a.id === HEARDLE_GROUP.id ? MINIGAMES.filter((m) => m.parent === a.id) : [META[a.id]!])).map((m) => {
               const s = status(m.id);
               const filled = s === 'won' || s === 'lost';

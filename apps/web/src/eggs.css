@@ -320,7 +320,7 @@
 .art-orbit .art-emoji { position: absolute; display: block; font-size: 22px; transform: translate(80px, -11px) rotate(45deg); }
 @keyframes egg-orbit { to { transform: rotate(360deg); } }
 
-/* Seda: peregrino con capucha y bastón de hilo; campana colgando de un hilo. */
+/* Seda: emblema de Hornet (aguja e hilo rojo) y una campana colgando de un hilo. */
 .egg-silk .egg-art { background: radial-gradient(ellipse at 50% 100%, #8a1d32, #2a0c18 60%, #12070d); }
 .egg-art .citadel { height: 40%; }
 .egg-art .threads { --t: 200px; }
@@ -335,70 +335,57 @@
 }
 .art-bell .art-emoji { position: absolute; bottom: -20px; left: -13px; font-size: 26px; }
 @keyframes egg-bell { 0%, 100% { transform: rotate(8deg); } 50% { transform: rotate(-8deg); } }
-.wanderer {
+/* Emblema de Hornet: medallón con su aguja y un hilo rojo que se enrolla alrededor. */
+.silk-emblem {
   left: 50%;
-  bottom: 31%;
-  width: 84px;
-  height: 120px;
-  margin-left: -42px;
+  top: 27%;
+  width: 48%;
+  aspect-ratio: 1;
+  translate: -50% 0;
+  border-radius: 50%;
+  border: 3px solid #c9a24a;
+  background: radial-gradient(circle at 40% 35%, #5a1424, #24070f 70%);
+  box-shadow: 0 0 0 2px #24070f, 0 0 26px rgb(224 40 63 / 0.5);
   animation: egg-hover 3s ease-in-out infinite;
 }
-.wanderer span { position: absolute; display: block; }
 @keyframes egg-hover { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
-/* Peregrino original: capucha puntiaguda, ojos que brillan, capa clara y bastón con un carrete de hilo. */
-.wanderer-head {
-  top: 24px;
+.silk-emblem i { position: absolute; display: block; font-style: normal; }
+.silk-thread {
+  inset: 12%;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: #e0283f;
+  border-right-color: #e0283f;
+  animation: egg-orbit 6s linear infinite;
+}
+.silk-thread-2 { inset: 24%; border-color: transparent transparent #ff6b81 #ff6b81; animation-duration: 4.5s; animation-direction: reverse; }
+.silk-needle {
   left: 50%;
-  width: 36px;
-  height: 32px;
-  margin-left: -18px;
-  border-radius: 50% 50% 42% 42%;
+  top: 8%;
+  width: 7px;
+  height: 84%;
+  margin-left: -3.5px;
+  rotate: 35deg;
   background:
-    radial-gradient(3px 3px at 36% 60%, #ffd27a 90%, transparent 100%),
-    radial-gradient(3px 3px at 64% 60%, #ffd27a 90%, transparent 100%),
-    radial-gradient(ellipse 34% 30% at 50% 60%, #1a0a10 95%, transparent 100%),
-    #d9c8ad;
+    radial-gradient(ellipse 22% 4% at 50% 9%, #24070f 90%, transparent 100%),
+    linear-gradient(90deg, #8f8899, #ffffff 45%, #c9c3d4 70%, #7a7388);
+  clip-path: polygon(20% 0, 80% 0, 80% 82%, 50% 100%, 20% 82%);
+  filter: drop-shadow(0 2px 2px rgb(0 0 0 / 0.5));
 }
-/* Punta de la capucha. */
-.wanderer-head::before {
-  content: "";
-  position: absolute;
-  top: -16px;
+.silk-tag {
   left: 50%;
-  width: 18px;
-  height: 22px;
-  margin-left: -9px;
-  background: #d9c8ad;
-  clip-path: polygon(30% 0, 100% 100%, 0 100%);
-}
-.wanderer-cloak {
-  top: 50px;
-  left: 50%;
-  width: 60px;
-  height: 64px;
-  margin-left: -30px;
-  background: linear-gradient(#e8dcc8, #a8936f);
-  clip-path: polygon(50% 0, 100% 100%, 72% 90%, 50% 100%, 28% 90%, 0 100%);
-  transform-origin: top center;
-  animation: egg-cloak 2.6s ease-in-out infinite;
-}
-@keyframes egg-cloak { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
-/* Bastón con un carrete de hilo en la punta. */
-.wanderer-needle {
-  top: 18px;
-  right: -4px;
-  width: 4px;
-  height: 100px;
-  border-radius: 2px;
-  background: linear-gradient(#8a5a3a, #5c3a24);
-  transform: rotate(12deg);
-}
-.wanderer-needle::before {
-  content: "🧵";
-  position: absolute;
-  top: -20px;
-  left: -10px;
-  font-size: 20px;
+  top: 106%;
+  translate: -50% 0;
+  padding: 2px 9px;
+  border-radius: 4px;
+  background: #24070f;
+  border: 1px solid #c9a24a;
+  color: #f4efe8;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 /* La Grieta: minimapa con bases, calles, río y jungla, coronado con una corona dorada. */
@@ -854,5 +841,5 @@
 
 /* Con movimiento reducido no hay escena animada: la carta aparece y se va con un fundido. */
 @media (prefers-reduced-motion: reduce) {
-  .stars, .shooting, .threads, .embers, .egg-ring, .zz, .vlr-slash, .vlr-shard, .vlr-cross, .art-vlr-ace, .sub-leaf, .sub-alert, .sub-pop, .dg-strip, .art-orbit, .art-fire, .art-bell, .wanderer, .wanderer-cloak, .lol-beam, .lol-ping, .lol-champ, .lol-nexus, .lol-hero, .lol-hero-pulse, .aru-body, .aru-head { animation: none !important; }
+  .stars, .shooting, .threads, .embers, .egg-ring, .zz, .vlr-slash, .vlr-shard, .vlr-cross, .art-vlr-ace, .sub-leaf, .sub-alert, .sub-pop, .dg-strip, .art-orbit, .art-fire, .art-bell, .silk-emblem, .silk-thread, .lol-beam, .lol-ping, .lol-champ, .lol-nexus, .lol-hero, .lol-hero-pulse, .aru-body, .aru-head { animation: none !important; }
 }

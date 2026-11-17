@@ -36,10 +36,10 @@ export const EGGS: EasterEgg[] = [
   {
     id: 'silksong',
     codes: ['silksong', 'hollowknightsilksong'],
-    name: 'Hilo y aguja',
+    name: 'Hornet',
     rarity: '★ Secreta',
-    kind: 'Peregrinaje · La ciudadela',
-    flavor: 'Sube hasta lo más alto. Cada campana que suena es un paso más del camino.',
+    kind: 'Pharloom · Hilo y aguja',
+    flavor: 'Una aguja, un hilo rojo y una ciudadela que escalar. Cada campana que suena es un paso más del camino.',
     scene: 'silk',
     song: { trackId: 1838953941, title: 'Silksong', artist: 'Christopher Larkin' },
   },

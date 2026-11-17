@@ -1,6 +1,6 @@
 # Abby · Diarios
 
-Juego diario de navegador, para un solo jugador, con **27 retos nuevos cada día** con la temática de
+Juego diario de navegador, para un solo jugador, con **28 retos nuevos cada día** con la temática de
 **Abby ([twitch.tv/abby_](https://www.twitch.tv/abby_))**, streamer de Twitch, y del mundo gamer. Todo el mundo recibe los mismos retos cada día:
 salen de la fecha con una semilla fija.
 
@@ -16,7 +16,7 @@ salen de la fecha con una semilla fija.
 | | 🔀 Anagrama | Ordena las letras revueltas de una palabra gamer, con pistas |
 | | ✍️ Crucigrama | Mini crucigrama (máx. 9×9) de cultura pop: música, series, pelis, juegos e internet |
 | | 🕵️ Críptico | Una pista críptica al día: una frase con definición + juego de palabras (anagrama, palabra oculta, charada…) |
-| 🎵 Música | 🎧 Heardle (7 géneros) | Pop, Latino, Rock, Hip-Hop, K-Pop, EDM y España (solo artistas españoles). Cada género es un reto de 5 fases (5 canciones); cada canción suena por tramos de 1, 2, 4, 7, 11 y 16 s |
+| 🎵 Música | 🎧 Heardle (8 géneros) | Pop, Latino, Rock, Hip-Hop, K-Pop, EDM, España (solo artistas españoles) y Videojuegos (bandas sonoras). Cada género es un reto de 5 fases (5 canciones); cada canción suena por tramos de 1, 2, 4, 7, 11 y 16 s |
 | | 📻 ¿Quién canta? | 5 fragmentos de 5 s: elige al artista entre 4 opciones |
 | | 🎤 Artistdle | Adivina el artista por país, género, década de debut, formato e idioma |
 | | 🎶 Emoji musical | Descubre la canción a partir de emojis |
@@ -68,6 +68,10 @@ definidos en `ANCHORS`, dentro del script.
 Es una selección de éxitos de artistas españoles, de Mecano y Raphael a ROSALÍA, Aitana y Quevedo, que se busca
 en la tienda de España (`ANCHORS.espana`). Para ampliarla, añade pares `[artista, título]` y ejecuta
 `npm run musica:actualizar -- espana`.
+**Videojuegos** tampoco usa listas: Apple tiene el subgénero "Video Game", pero su lista trae sobre todo versiones
+de fans y pistas poco conocidas. Es una selección de canciones y bandas sonoras reconocibles (Undertale, Minecraft,
+Hollow Knight, Skyrim, Final Fantasy, Kingdom Hearts, League of Legends, VALORANT…) en su versión original
+(`ANCHORS.juegos`). Para ampliarla, añade pares `[artista, título]` y ejecuta `npm run musica:actualizar -- juegos`.
 
 Para refrescarlo con los éxitos actuales:
 
@@ -176,7 +180,7 @@ Escape o tocando fuera.
 | Código | Escena | Canción |
 |---|---|---|
 | `OUTER WILDS` | Cielo estrellado con estrellas fugaces; planeta con hoguera y un cohete en órbita | Travelers · Andrew Prahlow |
-| `SILKSONG` | Hilos de seda que caen, brasas y una ciudadela; un peregrino con capucha y bastón de hilo, y una campana | Silksong · Christopher Larkin |
+| `SILKSONG` | Hilos de seda que caen, brasas y una ciudadela; el emblema de Hornet (su aguja y un hilo rojo que se enrolla) y una campana | Silksong · Christopher Larkin |
 | `LOL` | Escenario de Worlds con focos dorados que barren y anillos; minimapa de la Grieta (bases, calles, río, Barón, dragón, un ping, dos campeones e Irelia, la campeona de Abby, en la calle superior) con una corona encima | Heavy Is the Crown · LINKIN PARK |
 | `VALORANT` | Azul marino con un corte rojo en diagonal y fragmentos angulosos; mira sobre "ACE" | Die For You · VALORANT Music & Grabbitz |
 | `ARU` | Noche con luna y "z z Z"; Aru, el gato de Abby (blanco, muy peludo y dormilón), durmiendo en su cojín y abriendo sus ojos claros de vez en cuando | Ev'rybody Wants to Be a Cat · Los Aristogatos |

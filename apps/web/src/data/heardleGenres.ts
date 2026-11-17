@@ -6,7 +6,7 @@
 import charts from './heardle-charts.json';
 import { SONGS } from './music';
 
-export type GenreId = 'pop' | 'latino' | 'rock' | 'hiphop' | 'kpop' | 'edm' | 'espana';
+export type GenreId = 'pop' | 'latino' | 'rock' | 'hiphop' | 'kpop' | 'edm' | 'espana' | 'juegos';
 
 export interface Genre {
   id: GenreId;
@@ -24,6 +24,7 @@ export const GENRES: Genre[] = [
   { id: 'kpop', name: 'K-Pop', icon: '💖', tagline: 'Idols, grupos y bandas sonoras', gradient: 'from-sky-400 to-pink-500' },
   { id: 'edm', name: 'EDM', icon: '🎛️', tagline: 'Electrónica y dance: de Avicii al festival', gradient: 'from-cyan-400 to-violet-600' },
   { id: 'espana', name: 'España', icon: '🌞', tagline: 'Solo artistas de España: de Mecano a Quevedo', gradient: 'from-red-500 to-yellow-400' },
+  { id: 'juegos', name: 'Videojuegos', icon: '🕹️', tagline: 'Bandas sonoras: de Undertale a Final Fantasy', gradient: 'from-emerald-400 to-indigo-600' },
 ];
 
 export const GENRES_BY_ID = Object.fromEntries(GENRES.map((g) => [g.id, g])) as Record<GenreId, Genre>;
@@ -48,6 +49,7 @@ const CURATED: Record<GenreId, string[]> = {
   kpop: ['dynamite', 'how-you-like', 'idol', 'gurenge'],
   edm: ['get-lucky'],
   espana: [], // la selección completa está en ANCHORS (scripts/update-heardle.mjs)
+  juegos: [], // también: selección de canciones de videojuegos en ANCHORS
 };
 
 const norm = (s: string) =>
