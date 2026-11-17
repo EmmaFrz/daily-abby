@@ -73,42 +73,43 @@ const ANCHORS = {
     ['Marshmello', 'Happier'],
     ['Tiësto', 'The Business'],
   ],
-  // Canciones y bandas sonoras de videojuegos conocidas (versión original del compositor o del juego).
+  // Canciones y bandas sonoras de videojuegos conocidas (versión original del compositor o del juego),
+  // como [artista, título, juego]: en este género se adivina el juego, no el título.
   // No están en Apple con su versión original: Still Alive, Live & Learn, To Zanarkand, Subwoofer Lullaby…
   juegos: [
-    ['Toby Fox', 'Megalovania'], ['Toby Fox', 'Hopes and Dreams'], ['Toby Fox', 'Undertale'], ['Toby Fox', 'Fallen Down'],
-    ['Toby Fox', 'Spider Dance'], ['Toby Fox', 'Death by Glamour'], ['Toby Fox', 'Bonetrousle'], ['Toby Fox', 'Rude Buster'],
-    ['Toby Fox', 'Field of Hopes and Dreams'], ['Toby Fox', 'BIG SHOT'], ['Toby Fox', 'THE WORLD REVOLVING'],
-    ['C418', 'Sweden'], ['C418', 'Wet Hands'], ['C418', 'Living Mice'], ['C418', 'Mice on Venus'],
-    ['C418', 'Haggstrom'], ['C418', 'Danny'], ['C418', 'Moog City'],
-    ['Lena Raine', 'Resurrections'], ['Lena Raine', 'First Steps'], ['Lena Raine', 'Reach for the Summit'], ['Lena Raine', 'Pigstep'],
-    ['Christopher Larkin', 'Hollow Knight'], ['Christopher Larkin', 'City of Tears'], ['Christopher Larkin', 'Dirtmouth'],
-    ['Christopher Larkin', 'Greenpath'], ['Christopher Larkin', 'Sealed Vessel'], ['Christopher Larkin', 'Silksong'],
-    ['Darren Korb', 'In the Blood'], ['Darren Korb', 'Good Riddance'], ['Darren Korb', 'Build That Wall'], ['Darren Korb', 'Out of Tartarus'],
-    ['Andrew Prahlow', 'Travelers'], ['Andrew Prahlow', 'Outer Wilds'], ['Andrew Prahlow', 'Timber Hearth'],
-    ['ConcernedApe', 'Stardew Valley Overture'], ['ConcernedApe', 'Cloud Country'],
-    ['Kristofer Maddigan', 'Floral Fury'], ['Kristofer Maddigan', 'Inkwell Isle One'],
-    ['Gareth Coker', 'Light of Nibel'], ['Austin Wintory', 'Apotheosis'],
-    ['Jeremy Soule', 'Dragonborn'], ['Jeremy Soule', 'Far Horizons'], ['Jeremy Soule', 'Secunda'], ['Jeremy Soule', 'Sovngarde'],
-    ['Jeremy Soule', 'The Streets of Whiterun'],
-    ['Mick Gordon', 'BFG Division'], ['Mick Gordon', 'Rip & Tear'], ['Mick Gordon', "At Doom's Gate"],
-    ['Nobuo Uematsu', 'One-Winged Angel'], ['Nobuo Uematsu', 'Prelude'], ['Nobuo Uematsu', "Aerith's Theme"],
-    ['Nobuo Uematsu', 'Liberi Fatali'],
-    ['Emiko Shiratori', 'Melodies of Life'], ['Faye Wong', 'Eyes On Me'],
-    ['Hikaru Utada', 'Simple And Clean'], ['Hikaru Utada', 'Sanctuary'],
-    ['Jonathan Coulton', 'Want You Gone'],
-    ['Rosa Walton', 'I Really Want to Stay at Your House'],
-    ['Crush 40', 'Open Your Heart'],
-    ["Martin O'Donnell", 'Halo'], ['Cynthia Harrell', 'Snake Eater'],
-    ['Akira Yamaoka', 'Promise'], ['Akira Yamaoka', 'Theme of Laura'],
-    ['Motoi Sakuraba', 'Gwyn, Lord of Cinder'],
-    ['Borislav Slavov', 'Down by the River'],
-    ['Jesper Kyd', "Ezio's Family"], ['Gustavo Santaolalla', 'The Last of Us'], ['Bear McCreary', 'God of War'],
-    ['Daniel Lanois', "That's the Way It Is"], ['Dan Salvato', 'Your Reality'],
-    ['League of Legends', 'Legends Never Die'], ['League of Legends', 'Phoenix'],
-    ['League of Legends', 'GODS'], ['League of Legends', 'Burn It All Down'], ['Imagine Dragons', 'Warriors'],
-    ['K/DA', 'POP/STARS'], ['K/DA', 'MORE'], ['K/DA', 'THE BADDEST'], ['K/DA', 'DRUM GO DUM'],
-    ['VALORANT', 'Die For You'], ['LINKIN PARK', 'Heavy Is the Crown'],
+    ['Toby Fox', 'Megalovania', 'Undertale'], ['Toby Fox', 'Hopes and Dreams', 'Undertale'], ['Toby Fox', 'Undertale', 'Undertale'], ['Toby Fox', 'Fallen Down', 'Undertale'],
+    ['Toby Fox', 'Spider Dance', 'Undertale'], ['Toby Fox', 'Death by Glamour', 'Undertale'], ['Toby Fox', 'Bonetrousle', 'Undertale'], ['Toby Fox', 'Rude Buster', 'Deltarune'],
+    ['Toby Fox', 'Field of Hopes and Dreams', 'Deltarune'], ['Toby Fox', 'BIG SHOT', 'Deltarune'], ['Toby Fox', 'THE WORLD REVOLVING', 'Deltarune'],
+    ['C418', 'Sweden', 'Minecraft'], ['C418', 'Wet Hands', 'Minecraft'], ['C418', 'Living Mice', 'Minecraft'], ['C418', 'Mice on Venus', 'Minecraft'],
+    ['C418', 'Haggstrom', 'Minecraft'], ['C418', 'Danny', 'Minecraft'], ['C418', 'Moog City', 'Minecraft'],
+    ['Lena Raine', 'Resurrections', 'Celeste'], ['Lena Raine', 'First Steps', 'Celeste'], ['Lena Raine', 'Reach for the Summit', 'Celeste'], ['Lena Raine', 'Pigstep', 'Minecraft'],
+    ['Christopher Larkin', 'Hollow Knight', 'Hollow Knight'], ['Christopher Larkin', 'City of Tears', 'Hollow Knight'], ['Christopher Larkin', 'Dirtmouth', 'Hollow Knight'],
+    ['Christopher Larkin', 'Greenpath', 'Hollow Knight'], ['Christopher Larkin', 'Sealed Vessel', 'Hollow Knight'], ['Christopher Larkin', 'Silksong', 'Hollow Knight: Silksong'],
+    ['Darren Korb', 'In the Blood', 'Hades'], ['Darren Korb', 'Good Riddance', 'Hades'], ['Darren Korb', 'Build That Wall', 'Bastion'], ['Darren Korb', 'Out of Tartarus', 'Hades'],
+    ['Andrew Prahlow', 'Travelers', 'Outer Wilds'], ['Andrew Prahlow', 'Outer Wilds', 'Outer Wilds'], ['Andrew Prahlow', 'Timber Hearth', 'Outer Wilds'],
+    ['ConcernedApe', 'Stardew Valley Overture', 'Stardew Valley'], ['ConcernedApe', 'Cloud Country', 'Stardew Valley'],
+    ['Kristofer Maddigan', 'Floral Fury', 'Cuphead'], ['Kristofer Maddigan', 'Inkwell Isle One', 'Cuphead'],
+    ['Gareth Coker', 'Light of Nibel', 'Ori and the Blind Forest'], ['Austin Wintory', 'Apotheosis', 'Journey'],
+    ['Jeremy Soule', 'Dragonborn', 'Skyrim'], ['Jeremy Soule', 'Far Horizons', 'Skyrim'], ['Jeremy Soule', 'Secunda', 'Skyrim'], ['Jeremy Soule', 'Sovngarde', 'Skyrim'],
+    ['Jeremy Soule', 'The Streets of Whiterun', 'Skyrim'],
+    ['Mick Gordon', 'BFG Division', 'DOOM'], ['Mick Gordon', 'Rip & Tear', 'DOOM'], ['Mick Gordon', "At Doom's Gate", 'DOOM'],
+    ['Nobuo Uematsu', 'One-Winged Angel', 'Final Fantasy'], ['Nobuo Uematsu', 'Prelude', 'Final Fantasy'], ['Nobuo Uematsu', "Aerith's Theme", 'Final Fantasy'],
+    ['Nobuo Uematsu', 'Liberi Fatali', 'Final Fantasy'],
+    ['Emiko Shiratori', 'Melodies of Life', 'Final Fantasy'], ['Faye Wong', 'Eyes On Me', 'Final Fantasy'],
+    ['Hikaru Utada', 'Simple And Clean', 'Kingdom Hearts'], ['Hikaru Utada', 'Sanctuary', 'Kingdom Hearts'],
+    ['Jonathan Coulton', 'Want You Gone', 'Portal 2'],
+    ['Rosa Walton', 'I Really Want to Stay at Your House', 'Cyberpunk 2077'],
+    ['Crush 40', 'Open Your Heart', 'Sonic Adventure'],
+    ["Martin O'Donnell", 'Halo', 'Halo'], ['Cynthia Harrell', 'Snake Eater', 'Metal Gear Solid'],
+    ['Akira Yamaoka', 'Promise', 'Silent Hill'], ['Akira Yamaoka', 'Theme of Laura', 'Silent Hill'],
+    ['Motoi Sakuraba', 'Gwyn, Lord of Cinder', 'Dark Souls'],
+    ['Borislav Slavov', 'Down by the River', "Baldur's Gate 3"],
+    ['Jesper Kyd', "Ezio's Family", "Assassin's Creed"], ['Gustavo Santaolalla', 'The Last of Us', 'The Last of Us'], ['Bear McCreary', 'God of War', 'God of War'],
+    ['Daniel Lanois', "That's the Way It Is", 'Red Dead Redemption 2'], ['Dan Salvato', 'Your Reality', 'Doki Doki Literature Club'],
+    ['League of Legends', 'Legends Never Die', 'League of Legends'], ['League of Legends', 'Phoenix', 'League of Legends'],
+    ['League of Legends', 'GODS', 'League of Legends'], ['League of Legends', 'Burn It All Down', 'League of Legends'], ['Imagine Dragons', 'Warriors', 'League of Legends'],
+    ['K/DA', 'POP/STARS', 'League of Legends'], ['K/DA', 'MORE', 'League of Legends'], ['K/DA', 'THE BADDEST', 'League of Legends'], ['K/DA', 'DRUM GO DUM', 'League of Legends'],
+    ['VALORANT', 'Die For You', 'VALORANT'], ['LINKIN PARK', 'Heavy Is the Crown', 'League of Legends'],
   ],
   // Solo artistas de España, de varias épocas.
   espana: [
@@ -274,9 +275,9 @@ for (const id of targets) {
     songs.push(s);
   };
 
-  for (const [artist, title] of ANCHORS[id] ?? []) {
+  for (const [artist, title, game] of ANCHORS[id] ?? []) {
     const s = await resolveAnchor(artist, title, ANCHOR_STORE[id] ?? 'us');
-    if (s) add(s);
+    if (s) add(game ? { ...s, g: game } : s);
   }
   const anchors = songs.length;
 

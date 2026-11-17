@@ -16,7 +16,7 @@ salen de la fecha con una semilla fija.
 | | 🔀 Anagrama | Ordena las letras revueltas de una palabra gamer, con pistas |
 | | ✍️ Crucigrama | Mini crucigrama (máx. 9×9) de cultura pop: música, series, pelis, juegos e internet |
 | | 🕵️ Críptico | Una pista críptica al día: una frase con definición + juego de palabras (anagrama, palabra oculta, charada…) |
-| 🎵 Música | 🎧 Heardle (8 géneros) | Pop, Latino, Rock, Hip-Hop, K-Pop, EDM, España (solo artistas españoles) y Videojuegos (bandas sonoras). Cada género es un reto de 5 fases (5 canciones); cada canción suena por tramos de 1, 2, 4, 7, 11 y 16 s |
+| 🎵 Música | 🎧 Heardle (8 géneros) | Pop, Latino, Rock, Hip-Hop, K-Pop, EDM, España (solo artistas españoles) y Videojuegos (bandas sonoras: aquí se adivina el juego, no el título). Cada género es un reto de 5 fases (5 canciones); cada canción suena por tramos de 1, 2, 4, 7, 11 y 16 s |
 | | 📻 ¿Quién canta? | 5 fragmentos de 5 s: elige al artista entre 4 opciones |
 | | 🎤 Artistdle | Adivina el artista por país, género, década de debut, formato e idioma |
 | | 🎶 Emoji musical | Descubre la canción a partir de emojis |
@@ -71,7 +71,9 @@ en la tienda de España (`ANCHORS.espana`). Para ampliarla, añade pares `[artis
 **Videojuegos** tampoco usa listas: Apple tiene el subgénero "Video Game", pero su lista trae sobre todo versiones
 de fans y pistas poco conocidas. Es una selección de canciones y bandas sonoras reconocibles (Undertale, Minecraft,
 Hollow Knight, Skyrim, Final Fantasy, Kingdom Hearts, League of Legends, VALORANT…) en su versión original
-(`ANCHORS.juegos`). Para ampliarla, añade pares `[artista, título]` y ejecuta `npm run musica:actualizar -- juegos`.
+(`ANCHORS.juegos`). Como casi nadie se sabe el título de una pieza orquestal, en este género se adivina **el juego**:
+el buscador lista juegos y cada canción lleva el suyo (`guessBy: 'game'` en `heardleGenres.ts`). Para ampliarla,
+añade `[artista, título, juego]` y ejecuta `npm run musica:actualizar -- juegos`.
 
 Para refrescarlo con los éxitos actuales:
 

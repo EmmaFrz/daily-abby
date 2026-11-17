@@ -14,6 +14,8 @@ export interface Genre {
   icon: string;
   tagline: string;
   gradient: string;
+  /** 'game': se adivina el juego de la canción, no su título (las bandas sonoras se reconocen por el juego). */
+  guessBy?: 'game';
 }
 
 export const GENRES: Genre[] = [
@@ -24,7 +26,7 @@ export const GENRES: Genre[] = [
   { id: 'kpop', name: 'K-Pop', icon: '💖', tagline: 'Idols, grupos y bandas sonoras', gradient: 'from-sky-400 to-pink-500' },
   { id: 'edm', name: 'EDM', icon: '🎛️', tagline: 'Electrónica y dance: de Avicii al festival', gradient: 'from-cyan-400 to-violet-600' },
   { id: 'espana', name: 'España', icon: '🌞', tagline: 'Solo artistas de España: de Mecano a Quevedo', gradient: 'from-red-500 to-yellow-400' },
-  { id: 'juegos', name: 'Videojuegos', icon: '🕹️', tagline: 'Bandas sonoras: de Undertale a Final Fantasy', gradient: 'from-emerald-400 to-indigo-600' },
+  { id: 'juegos', name: 'Videojuegos', icon: '🕹️', tagline: 'Adivina de qué juego es cada canción', gradient: 'from-emerald-400 to-indigo-600', guessBy: 'game' },
 ];
 
 export const GENRES_BY_ID = Object.fromEntries(GENRES.map((g) => [g.id, g])) as Record<GenreId, Genre>;
@@ -38,6 +40,8 @@ export interface HeardleSong {
   year: number | null;
   /** Tienda de Apple donde está la canción (para pedir la previa). */
   store: string;
+  /** Juego al que pertenece (solo en los géneros con guessBy: 'game'). */
+  game?: string;
 }
 
 /** Canciones de music.ts asignadas a cada género. */
@@ -60,7 +64,7 @@ const norm = (s: string) =>
     .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 
-type ChartRow = { t: string; a: string; id: number; c: string; y: number | null };
+type ChartRow = { t: string; a: string; id: number; c: string; y: number | null; g?: string };
 const CHARTS = (charts as { generatedAt: string; genres: Record<string, ChartRow[]> }).genres;
 export const CHARTS_DATE = (charts as { generatedAt: string }).generatedAt;
 
@@ -78,8 +82,9 @@ function build(genre: GenreId): HeardleSong[] {
     const s = SONGS.find((x) => x.id === id);
     if (s) add({ id: String(s.trackId), trackId: s.trackId, title: s.title, artist: s.artist, year: s.year, store: 'us' });
   }
-  for (const r of CHARTS[genre] ?? []) add({ id: String(r.id), trackId: r.id, title: r.t, artist: r.a, year: r.y, store: r.c });
-  return out;
+  for (const r of CHARTS[genre] ?? []) add({ id: String(r.id), trackId: r.id, title: r.t, artist: r.a, year: r.y, store: r.c, game: r.g });
+  // Si se adivina el juego, una canción sin juego no se podría acertar: se deja fuera.
+  return GENRES_BY_ID[genre].guessBy === 'game' ? out.filter((s) => s.game) : out;
 }
 
 const CATALOGS = Object.fromEntries(GENRES.map((g) => [g.id, build(g.id)])) as Record<GenreId, HeardleSong[]>;
