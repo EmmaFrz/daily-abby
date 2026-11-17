@@ -41,8 +41,9 @@
 .egg-scene { inset: 0; }
 
 .egg-space .egg-scene { background: radial-gradient(ellipse at 70% 15%, #2c2263 0%, #0d0b24 50%, #04030b 100%); }
-.egg-blocks .egg-scene { background: linear-gradient(#5fb4ff, #9fd6ff 55%, #c9ecff); }
-.egg-summit .egg-scene { background: linear-gradient(#120d33 0%, #2c2266 45%, #8a4f93 78%, #f19a8e 100%); }
+.egg-silk .egg-scene { background: radial-gradient(ellipse at 50% 110%, #6b1426 0%, #2a0c18 45%, #0e070c 100%); }
+.egg-rift .egg-scene { background: radial-gradient(ellipse at 50% 40%, #0b2a3d 0%, #061226 45%, #010a13 100%); }
+.egg-aru .egg-scene { background: linear-gradient(#1f1838 0%, #3b2d63 50%, #7a5a95 85%, #c98fb0 100%); }
 
 /* ── Estrellas: un mosaico que se desplaza (se mueve la capa, no se repinta) ── */
 .stars {
@@ -88,63 +89,106 @@
   100% { opacity: 0; transform: rotate(-25deg) translateX(-360px); }
 }
 
-/* ── Bloques: sol cuadrado, nubes de bloques y suelo de hierba y tierra ── */
-.block-sun { top: 9%; right: 12%; width: 72px; height: 72px; background: #fff7c2; box-shadow: 0 0 0 10px rgb(255 247 194 / 0.35); }
-.block-cloud {
-  top: 18%;
-  left: 0;
-  width: 128px;
-  height: 32px;
-  background: #fff;
-  box-shadow: 32px -24px 0 #fff, 64px -24px 0 #fff, 96px 0 0 #fff, -32px 0 0 #fff;
-  opacity: 0.95;
-  animation: egg-cloud 38s linear infinite;
-  will-change: transform;
-}
-.block-cloud-2 { top: 34%; width: 96px; height: 24px; animation-duration: 55s; animation-delay: -30s; }
-@keyframes egg-cloud { from { transform: translateX(-200px); } to { transform: translateX(110vw); } }
-.block-ground {
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 17vh;
-  background:
-    linear-gradient(#5fbf3a 0 22px, #4ea52f 22px 30px, transparent 30px),
-    conic-gradient(#8a5a33 25%, #7a4c2a 0 50%, #8a5a33 0 75%, #9b6a3e 0) 0 30px / 24px 24px;
-}
-
-/* ── Cumbre: cordillera recortada y nieve que cae ── */
-.summit-range {
-  left: -5%;
-  right: -5%;
-  bottom: 0;
-  height: 52%;
-  background: #2a1f57;
-  clip-path: polygon(0 100%, 0 62%, 14% 40%, 24% 55%, 40% 12%, 52% 38%, 62% 26%, 78% 52%, 90% 36%, 100% 50%, 100% 100%);
-}
-.summit-range-front {
-  height: 34%;
-  background: #18123a;
-  clip-path: polygon(0 100%, 0 40%, 20% 70%, 35% 30%, 55% 75%, 72% 45%, 88% 68%, 100% 38%, 100% 100%);
-}
-.snow {
-  --t: 200px;
+/* ── Seda: hilos que caen, brasas que suben y una ciudadela de agujas ── */
+.threads {
+  --t: 260px;
   left: 0;
   right: 0;
   top: calc(-1 * var(--t));
   height: calc(100% + var(--t));
   background-image:
-    radial-gradient(2px 2px at 30px 40px, #fff 50%, transparent 51%),
-    radial-gradient(1.5px 1.5px at 110px 90px, #fff 50%, transparent 51%),
-    radial-gradient(2.5px 2.5px at 170px 20px, #fff 50%, transparent 51%),
-    radial-gradient(1.5px 1.5px at 70px 160px, #fff 50%, transparent 51%),
-    radial-gradient(2px 2px at 150px 150px, #fff 50%, transparent 51%);
+    radial-gradient(1px 60px at 40px 70px, rgb(250 236 222 / 0.75), transparent),
+    radial-gradient(1px 44px at 150px 190px, rgb(250 236 222 / 0.55), transparent),
+    radial-gradient(1.2px 80px at 222px 30px, rgb(250 236 222 / 0.65), transparent),
+    radial-gradient(1px 36px at 96px 230px, rgb(250 236 222 / 0.45), transparent);
   background-size: var(--t) var(--t);
-  opacity: 0.8;
-  animation: egg-fall 12s linear infinite;
+  animation: egg-fall 16s linear infinite;
   will-change: transform;
 }
-.snow-near { --t: 320px; opacity: 0.95; animation-duration: 8s; }
+.threads-near { --t: 380px; opacity: 0.8; animation-duration: 10s; }
+.embers {
+  --t: 220px;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: calc(100% + var(--t));
+  background-image:
+    radial-gradient(2px 2px at 30px 50px, #ff9a6b 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 140px 120px, #ffd2a8 50%, transparent 51%),
+    radial-gradient(2.5px 2.5px at 190px 30px, #ff7a59 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 80px 180px, #ffc08a 50%, transparent 51%);
+  background-size: var(--t) var(--t);
+  animation: egg-drift-up 18s linear infinite, egg-twinkle 1.8s ease-in-out infinite alternate;
+  will-change: transform;
+}
+.embers-gold {
+  background-image:
+    radial-gradient(2px 2px at 30px 50px, #f0d9a0 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 140px 120px, #c8aa6e 50%, transparent 51%),
+    radial-gradient(2.5px 2.5px at 190px 30px, #fff1c9 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 80px 180px, #0ac8b9 50%, transparent 51%);
+  animation-duration: 24s, 2.4s;
+}
+.citadel {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 42%;
+  background: #12060c;
+  clip-path: polygon(0 100%, 0 70%, 8% 70%, 8% 55%, 11% 38%, 14% 55%, 14% 68%, 22% 68%, 22% 45%, 26% 18%, 30% 45%, 30% 62%, 40% 62%, 40% 50%, 44% 50%, 48% 4%, 52% 50%, 56% 50%, 56% 64%, 66% 64%, 66% 38%, 70% 16%, 74% 38%, 74% 60%, 84% 60%, 84% 48%, 88% 30%, 92% 48%, 92% 72%, 100% 72%, 100% 100%);
+}
+
+/* ── La Grieta: anillos dorados que giran y chispas ── */
+.ring {
+  left: 50%;
+  top: 50%;
+  width: 120vmin;
+  height: 120vmin;
+  margin: -60vmin 0 0 -60vmin;
+  border-radius: 50%;
+  border: 2px solid rgb(200 170 110 / 0.4);
+  border-left-color: transparent;
+  border-right-color: transparent;
+  animation: egg-orbit 40s linear infinite;
+}
+.ring-2 {
+  width: 84vmin;
+  height: 84vmin;
+  margin: -42vmin 0 0 -42vmin;
+  border: 2px dashed rgb(10 200 185 / 0.3);
+  animation-duration: 28s;
+  animation-direction: reverse;
+}
+
+/* ── Noche de Aru: luna, estrellas y "z z Z" que suben ── */
+.moon {
+  top: 9%;
+  right: 16%;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  box-shadow: 16px -8px 0 0 #fff3cf;
+  filter: drop-shadow(0 0 12px rgb(255 243 207 / 0.5));
+}
+.zz {
+  left: 50%;
+  top: 58%;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 26px;
+  color: #fff;
+  opacity: 0;
+  animation: egg-zz 4.5s ease-out infinite;
+}
+.egg-scene .zz-1 { left: 22%; top: 70%; }
+.egg-scene .zz-2 { left: 74%; top: 64%; animation-delay: 1.5s; }
+.egg-scene .zz-3 { left: 30%; top: 40%; animation-delay: 3s; font-size: 34px; }
+@keyframes egg-zz {
+  0% { opacity: 0; transform: translate(0, 0) scale(0.6) rotate(-10deg); }
+  20% { opacity: 0.9; }
+  100% { opacity: 0; transform: translate(34px, -110px) scale(1.3) rotate(12deg); }
+}
+
 @keyframes egg-fall { to { transform: translateY(var(--t)); } }
 
 /* ── Carta ── */
@@ -275,34 +319,214 @@
 .art-orbit .art-emoji { position: absolute; display: block; font-size: 22px; transform: translate(80px, -11px) rotate(45deg); }
 @keyframes egg-orbit { to { transform: rotate(360deg); } }
 
-.egg-blocks .egg-art { background: linear-gradient(#5fb4ff, #b9e4ff); }
-.egg-art .block-sun { width: 44px; height: 44px; top: 16%; right: 14%; box-shadow: 0 0 0 6px rgb(255 247 194 / 0.35); }
-.egg-art .block-cloud { top: 24%; width: 64px; height: 16px; box-shadow: 16px -12px 0 #fff, 32px -12px 0 #fff, 48px 0 0 #fff, -16px 0 0 #fff; animation-duration: 22s; }
-.art-grass-block {
-  left: 27%;
-  bottom: 22%;
-  width: 46%;
-  aspect-ratio: 1;
-  box-shadow: 0 10px 0 rgb(0 0 0 / 0.18);
+/* Seda: figura con capa, máscara con cuernos y aguja; campana colgando de un hilo. */
+.egg-silk .egg-art { background: radial-gradient(ellipse at 50% 100%, #8a1d32, #2a0c18 60%, #12070d); }
+.egg-art .citadel { height: 40%; }
+.egg-art .threads { --t: 200px; }
+.art-bell {
+  top: 0;
+  left: 74%;
+  width: 0;
+  height: 30%;
+  border-left: 1px solid rgb(250 236 222 / 0.7);
+  transform-origin: top center;
+  animation: egg-bell 3.2s ease-in-out infinite;
+}
+.art-bell .art-emoji { position: absolute; bottom: -20px; left: -13px; font-size: 26px; }
+@keyframes egg-bell { 0%, 100% { transform: rotate(8deg); } 50% { transform: rotate(-8deg); } }
+.wanderer {
+  left: 50%;
+  bottom: 31%;
+  width: 84px;
+  height: 120px;
+  margin-left: -42px;
+  animation: egg-hover 3s ease-in-out infinite;
+}
+.wanderer span { position: absolute; display: block; }
+@keyframes egg-hover { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+.wanderer-head {
+  top: 22px;
+  left: 50%;
+  width: 36px;
+  height: 32px;
+  margin-left: -18px;
+  border-radius: 46% 46% 50% 50%;
   background:
-    linear-gradient(#5fbf3a 0 24%, #4ea52f 24% 31%, transparent 31%),
-    conic-gradient(#8a5a33 25%, #7a4c2a 0 50%, #8a5a33 0 75%, #9b6a3e 0) 0 0 / 25% 25%;
+    radial-gradient(3px 5px at 34% 58%, #160a10 90%, transparent 100%),
+    radial-gradient(3px 5px at 66% 58%, #160a10 90%, transparent 100%),
+    #f4efe8;
 }
-.art-pick { left: 56%; bottom: 46%; font-size: 40px; transform: rotate(-20deg); transform-origin: 80% 80%; animation: egg-swing 1.6s ease-in-out infinite; }
-@keyframes egg-swing { 0%, 100% { transform: rotate(-20deg); } 50% { transform: rotate(-48deg); } }
-.art-tree { left: 6%; bottom: 22%; font-size: 52px; }
+/* Los dos cuernos de la máscara. */
+.wanderer-head::before,
+.wanderer-head::after {
+  content: "";
+  position: absolute;
+  top: -20px;
+  width: 9px;
+  height: 26px;
+  background: #f4efe8;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+.wanderer-head::before { left: 3px; transform: rotate(-14deg); }
+.wanderer-head::after { right: 3px; transform: rotate(14deg); }
+.wanderer-cloak {
+  top: 46px;
+  left: 50%;
+  width: 60px;
+  height: 66px;
+  margin-left: -30px;
+  background: linear-gradient(#e0283f, #8e1226);
+  clip-path: polygon(50% 0, 100% 100%, 72% 90%, 50% 100%, 28% 90%, 0 100%);
+  transform-origin: top center;
+  animation: egg-cloak 2.6s ease-in-out infinite;
+}
+@keyframes egg-cloak { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+.wanderer-needle {
+  top: 20px;
+  right: -6px;
+  width: 4px;
+  height: 96px;
+  border-radius: 2px;
+  background: linear-gradient(#ffffff, #b9b4c4 60%, #6e6880);
+  transform: rotate(28deg);
+}
 
-.egg-summit .egg-art { background: linear-gradient(#120d33, #3a2b7a 55%, #b0628f); }
-.egg-art .art-summit {
-  left: 0;
-  right: 0;
-  height: 62%;
-  background: linear-gradient(#f6f2ff 0 18%, #2a1f57 18.5%);
-  clip-path: polygon(0 100%, 0 70%, 22% 46%, 34% 58%, 52% 6%, 66% 44%, 80% 32%, 100% 58%, 100% 100%);
+/* La Grieta: cristal hextech que late dentro de anillos dorados. */
+.egg-rift .egg-art { background: radial-gradient(circle at 50% 40%, #0f3b52, #061226 60%, #010a13); }
+.egg-art .ring { top: 40%; width: 86%; height: auto; aspect-ratio: 1; margin: 0; left: 7%; transform-origin: center; translate: 0 -50%; border-width: 3px; }
+.egg-art .ring-2 { width: 62%; left: 19%; border-width: 2px; }
+.art-glow {
+  left: 50%;
+  top: 40%;
+  width: 60%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(10 200 185 / 0.55), transparent 65%);
+  animation: egg-pulse 2.4s ease-in-out infinite;
 }
-.art-berry { left: 50%; top: 22%; font-size: 40px; transform: translateX(-50%); animation: egg-bob 2.4s ease-in-out infinite; }
-@keyframes egg-bob { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, -10px); } }
-.egg-art .snow { --t: 140px; }
+@keyframes egg-pulse { 0%, 100% { opacity: 0.45; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.1); } }
+.art-crystal {
+  left: 50%;
+  top: 40%;
+  width: 24%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  rotate: 45deg;
+  background: linear-gradient(135deg, #d9fffb, #0ac8b9 45%, #005a82);
+  box-shadow: 0 0 0 3px #c8aa6e, 0 0 24px rgb(10 200 185 / 0.8);
+  animation: egg-float-crystal 3s ease-in-out infinite;
+}
+@keyframes egg-float-crystal { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-4px, -4px); } }
+.art-swords { left: 50%; top: 62%; font-size: 30px; translate: -50% 0; }
+
+/* Aru: gato blanco muy peludo dormido en un cojín. Respira y abre sus ojos claros de vez en cuando. */
+.egg-aru .egg-art { background: radial-gradient(ellipse at 50% 30%, #4a3a78, #241c40 72%); }
+.art-moon { top: 18%; right: 16%; width: 40px; height: 40px; box-shadow: 10px -5px 0 0 #fff3cf; }
+.aru {
+  left: 13%;
+  bottom: 27%;
+  width: 74%;
+  aspect-ratio: 1.35;
+}
+.aru span { position: absolute; display: block; }
+.aru-cushion {
+  left: -8%;
+  right: -8%;
+  bottom: -6%;
+  height: 32%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 30%, #ffb3d4, #e5679f);
+  box-shadow: inset 0 -6px 0 rgb(0 0 0 / 0.12);
+}
+.aru-body {
+  left: 22%;
+  bottom: 10%;
+  width: 72%;
+  height: 60%;
+  border-radius: 52% 48% 44% 44%;
+  background: radial-gradient(ellipse at 45% 30%, #ffffff, #f2eff8 65%, #ddd6ea);
+  transform-origin: bottom center;
+  animation: egg-breathe 3.6s ease-in-out infinite;
+}
+/* Mechones de pelo: el gato es muy peludo. */
+.aru-body::before,
+.aru-body::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: #fbfaff;
+}
+.aru-body::before { top: -10%; left: 16%; width: 34%; height: 34%; box-shadow: 30px 2px 0 -2px #fbfaff, 60px 10px 0 -4px #f6f3fb; }
+.aru-body::after { right: -6%; top: 22%; width: 26%; height: 30%; box-shadow: -2px 24px 0 -3px #f4f1fa; }
+@keyframes egg-breathe { 0%, 100% { transform: scale(1, 1); } 50% { transform: scale(1.025, 1.06); } }
+.aru-tail {
+  left: 30%;
+  bottom: 4%;
+  width: 66%;
+  height: 22%;
+  border-radius: 50%;
+  background: linear-gradient(#ffffff, #ece8f3);
+  box-shadow: 0 2px 0 #d6cfe4;
+  transform: rotate(-5deg);
+}
+.aru-head {
+  left: 0;
+  bottom: 18%;
+  width: 46%;
+  aspect-ratio: 1.12;
+  border-radius: 50% 50% 46% 46%;
+  background: radial-gradient(circle at 50% 38%, #ffffff, #f0ecf6 72%, #ddd6ea);
+  box-shadow: -6px 10px 0 -4px #f7f5fb, 8px 12px 0 -5px #f7f5fb;
+  animation: egg-nod 3.6s ease-in-out infinite;
+}
+@keyframes egg-nod { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(2px) rotate(-1deg); } }
+.aru-ear {
+  top: -20%;
+  width: 32%;
+  aspect-ratio: 0.9;
+  background: linear-gradient(#ffffff, #f2eff8);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+.aru-ear::after {
+  content: "";
+  position: absolute;
+  inset: 34% 26% 4%;
+  background: #ffc4da;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+.aru-ear-l { left: 4%; transform: rotate(-16deg); }
+.aru-ear-r { right: 4%; transform: rotate(16deg); }
+/* Ojos claros: casi siempre cerrados (una rayita) y cada pocos segundos se abren un momento. */
+.aru-eye {
+  top: 46%;
+  width: 20%;
+  height: 16%;
+  border-radius: 50%;
+  border: 2px solid #8b8fa8;
+  background: radial-gradient(circle, #2f3c52 0 26%, #bfe6ff 30% 100%);
+  transform: scaleY(0.12);
+  animation: egg-peek 9s ease-in-out infinite;
+}
+.aru-eye-l { left: 18%; }
+.aru-eye-r { right: 18%; }
+@keyframes egg-peek {
+  0%, 62% { transform: scaleY(0.12); }
+  66%, 78% { transform: scaleY(1); }
+  82%, 100% { transform: scaleY(0.12); }
+}
+.aru-nose {
+  left: 50%;
+  top: 64%;
+  width: 11%;
+  aspect-ratio: 1.3;
+  translate: -50% 0;
+  background: #ffa3c4;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+.egg-art .zz { left: 20%; top: 34%; font-size: 18px; }
+.egg-art .zz-2 { left: 28%; top: 30%; animation-delay: 1.5s; }
+.egg-art .zz-3 { left: 14%; top: 28%; animation-delay: 3s; font-size: 22px; }
 
 /* ── Texto bajo la carta ── */
 .egg-caption {
@@ -351,5 +575,5 @@
 
 /* Con movimiento reducido no hay escena animada: la carta aparece y se va con un fundido. */
 @media (prefers-reduced-motion: reduce) {
-  .stars, .snow, .shooting, .block-cloud, .art-orbit, .art-fire, .art-pick, .art-berry { animation: none !important; }
+  .stars, .shooting, .threads, .embers, .ring, .zz, .art-orbit, .art-fire, .art-bell, .wanderer, .wanderer-cloak, .art-glow, .art-crystal, .aru-body, .aru-head { animation: none !important; }
 }

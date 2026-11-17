@@ -14,40 +14,55 @@ export interface EasterEgg {
   codes: string[];
   /** Nombre de la carta. */
   name: string;
+  /** Rareza que se muestra arriba a la derecha. */
+  rarity: string;
   /** Línea de tipo de la carta. */
   kind: string;
   flavor: string;
-  scene: 'space' | 'blocks' | 'summit';
+  scene: 'space' | 'silk' | 'rift' | 'aru';
   song: { trackId: number; title: string; artist: string; store?: string };
 }
 
 export const EGGS: EasterEgg[] = [
   {
     id: 'outerwilds',
-    codes: ['outerwilds', 'outer wilds'],
+    codes: ['outerwilds'],
     name: 'El Viajero',
+    rarity: '★ Secreta',
     kind: 'Exploración · Fuera del tiempo',
     flavor: 'El universo vuelve a empezar cada 22 minutos. Asa un malvavisco junto al fuego y escucha.',
     scene: 'space',
     song: { trackId: 1467259940, title: 'Travelers', artist: 'Andrew Prahlow' },
   },
   {
-    id: 'minecraft',
-    codes: ['minecraft'],
-    name: 'Primer bloque',
-    kind: 'Construcción · Supervivencia',
-    flavor: 'Primero, un árbol. Después, un refugio. Y nunca caves justo hacia abajo.',
-    scene: 'blocks',
-    song: { trackId: 1867885632, title: 'Sweden', artist: 'C418' },
+    id: 'silksong',
+    codes: ['silksong', 'hollowknightsilksong'],
+    name: 'Hilo y aguja',
+    rarity: '★ Secreta',
+    kind: 'Peregrinaje · La ciudadela',
+    flavor: 'Sube hasta lo más alto. Cada campana que suena es un paso más del camino.',
+    scene: 'silk',
+    song: { trackId: 1838953941, title: 'Silksong', artist: 'Christopher Larkin' },
   },
   {
-    id: 'celeste',
-    codes: ['celeste'],
-    name: 'La cima',
-    kind: 'Escalada · Determinación',
-    flavor: 'No hace falta llegar arriba de un salto. Basta con dar el siguiente paso.',
-    scene: 'summit',
-    song: { trackId: 1544899660, title: 'First Steps', artist: 'Lena Raine' },
+    id: 'lol',
+    codes: ['lol', 'leagueoflegends'],
+    name: 'Invocador',
+    rarity: '★ Secreta',
+    kind: 'Estrategia · La Grieta',
+    flavor: '¡Bienvenidos a la Grieta del Invocador! Cinco contra cinco y un nexo que defender.',
+    scene: 'rift',
+    song: { trackId: 1833078315, title: 'Legends Never Die', artist: 'League of Legends Music & Against The Current' },
+  },
+  {
+    id: 'aru',
+    codes: ['aru'],
+    name: 'Aru',
+    rarity: '♥ Única',
+    kind: 'Gato de Abby · Dormilón',
+    flavor: 'Blanco, peludo y casi siempre dormido. Si lo despiertas, que sea con mimos.',
+    scene: 'aru',
+    song: { trackId: 1443843920, title: "Ev'rybody Wants to Be a Cat", artist: 'Los Aristogatos' },
   },
 ];
 
@@ -140,7 +155,7 @@ export function EasterEggOverlay({ active, onDone }: { active: ActiveEgg; onDone
               </div>
               <div className="egg-top">
                 <span>{egg.name}</span>
-                <span className="egg-rarity">★ Secreta</span>
+                <span className="egg-rarity">{egg.rarity}</span>
               </div>
               <div className="egg-bottom">
                 <span className="egg-kind">{egg.kind}</span>
@@ -193,22 +208,30 @@ function Scene({ scene }: { scene: EasterEgg['scene'] }) {
         <span className="shooting shooting-2" />
       </div>
     );
-  if (scene === 'blocks')
+  if (scene === 'silk')
     return (
       <div className="egg-scene" aria-hidden>
-        <span className="block-sun" />
-        <span className="block-cloud" />
-        <span className="block-cloud block-cloud-2" />
-        <span className="block-ground" />
+        <span className="embers" />
+        <span className="threads" />
+        <span className="threads threads-near" />
+        <span className="citadel" />
+      </div>
+    );
+  if (scene === 'rift')
+    return (
+      <div className="egg-scene" aria-hidden>
+        <span className="ring" />
+        <span className="ring ring-2" />
+        <span className="embers embers-gold" />
       </div>
     );
   return (
     <div className="egg-scene" aria-hidden>
       <span className="stars stars-far" />
-      <span className="summit-range" />
-      <span className="summit-range summit-range-front" />
-      <span className="snow" />
-      <span className="snow snow-near" />
+      <span className="moon" />
+      <span className="zz zz-1">z</span>
+      <span className="zz zz-2">z</span>
+      <span className="zz zz-3">Z</span>
     </div>
   );
 }
@@ -228,22 +251,54 @@ function Art({ scene }: { scene: EasterEgg['scene'] }) {
         </span>
       </>
     );
-  if (scene === 'blocks')
+  if (scene === 'silk')
     return (
       <>
-        <span className="block-sun art-block-sun" />
-        <span className="block-cloud art-block-cloud" />
-        <span className="art-grass-block" />
-        <span className="art-emoji art-pick">⛏️</span>
-        <span className="art-emoji art-tree">🌳</span>
+        <span className="embers" />
+        <span className="threads" />
+        <span className="citadel" />
+        <span className="art-bell">
+          <span className="art-emoji">🔔</span>
+        </span>
+        {/* Pequeña figura con capa roja, máscara blanca con cuernos y su aguja. */}
+        <span className="wanderer">
+          <span className="wanderer-needle" />
+          <span className="wanderer-cloak" />
+          <span className="wanderer-head" />
+        </span>
       </>
     );
+  if (scene === 'rift')
+    return (
+      <>
+        <span className="embers embers-gold" />
+        <span className="ring art-ring" />
+        <span className="ring ring-2 art-ring-2" />
+        <span className="art-glow" />
+        <span className="art-crystal" />
+        <span className="art-emoji art-swords">⚔️</span>
+      </>
+    );
+  // Aru: gato blanco y muy peludo, dormido en su cojín; de vez en cuando abre sus ojos claros.
   return (
     <>
       <span className="stars stars-far" />
-      <span className="summit-range art-summit" />
-      <span className="art-emoji art-berry">🍓</span>
-      <span className="snow" />
+      <span className="moon art-moon" />
+      <span className="aru">
+        <span className="aru-cushion" />
+        <span className="aru-body" />
+        <span className="aru-tail" />
+        <span className="aru-head">
+          <span className="aru-ear aru-ear-l" />
+          <span className="aru-ear aru-ear-r" />
+          <span className="aru-eye aru-eye-l" />
+          <span className="aru-eye aru-eye-r" />
+          <span className="aru-nose" />
+        </span>
+      </span>
+      <span className="zz zz-1">z</span>
+      <span className="zz zz-2">z</span>
+      <span className="zz zz-3">Z</span>
     </>
   );
 }
