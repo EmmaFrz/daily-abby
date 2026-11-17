@@ -166,6 +166,24 @@ los 31 logros son cromos dorados.
 - Piezas del álbum (`Sticker`, `Slot`, `StickerArt`, `Pieces`…): `src/components/Album.tsx`. El número de
   cada cromo sale del orden de la portada (`ALBUM` y `albumNumber()` en `src/minigames/meta.ts`).
 
+## Códigos promocionales (easter eggs)
+
+El botón **🎟️ Canjear código**, bajo la cabecera a la derecha, abre un cupón. Si el código existe, la pantalla
+muestra durante 20 s una escena y una carta "full art" que gira, con brillo holográfico y su canción (previa
+oficial de Apple Music, que respeta el botón de silencio). Después se va sola; también se cierra con la ✕, con
+Escape o tocando fuera.
+
+| Código | Escena | Canción |
+|---|---|---|
+| `OUTER WILDS` | Cielo estrellado con estrellas fugaces | Travelers · Andrew Prahlow |
+| `MINECRAFT` | Cielo de bloques con nubes y suelo de hierba | Sweden · C418 |
+| `CELESTE` | Montañas de noche con nieve | First Steps · Lena Raine |
+
+Los códigos no distinguen mayúsculas, tildes, espacios ni signos ("Outer Wilds!" vale). Para añadir uno, crea
+un objeto en `EGGS` (`src/components/EasterEggs.tsx`) con su `trackId` de Apple Music y una escena. Las escenas
+nuevas llevan su fondo en `<Scene>`, su ilustración en `<Art>` y sus estilos en `src/eggs.css`. Todas las
+animaciones son CSS y solo mueven `transform` y `opacity`, así que no consumen apenas rendimiento.
+
 ## Añadir un minijuego
 
 1. Añade sus datos (nombre, icono, categoría…) en `src/minigames/meta.ts`.

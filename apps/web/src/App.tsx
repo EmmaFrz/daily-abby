@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
+import { EasterEggOverlay, type ActiveEgg } from './components/EasterEggs';
 import { PreAlphaModal } from './components/PreAlphaModal';
+import { RedeemCode } from './components/RedeemCode';
 import { SocialLinks } from './components/SocialLinks';
 import { SoundToggle } from './components/SoundControls';
 import { Toasts } from './components/Toasts';
@@ -29,6 +31,7 @@ function parseHash(): { tab: Tab; game: string | null } {
 export function App() {
   const { state, today, devMode, devNextDay } = useStore();
   const [route, setRoute] = useState(parseHash);
+  const [egg, setEgg] = useState<ActiveEgg | null>(null);
 
   useEffect(() => {
     const onHash = () => {
@@ -94,7 +97,13 @@ export function App() {
         </div>
       </header>
 
-      <main key={`${route.tab}-${route.game}`} className="mx-auto w-full max-w-6xl px-4 pb-28 pt-5 md:pb-12">
+      {/* Código promocional: arriba a la derecha, bajo la cabecera. */}
+      <div className="mx-auto flex max-w-6xl justify-end px-4 pt-3">
+        <RedeemCode onRedeem={setEgg} />
+      </div>
+      {egg && <EasterEggOverlay key={egg.key} active={egg} onDone={() => setEgg(null)} />}
+
+      <main key={`${route.tab}-${route.game}`} className="mx-auto w-full max-w-6xl px-4 pb-28 pt-3 md:pb-12">
         {route.tab === 'diarios' ? (
           <DailiesPage openId={route.game} onOpen={(id) => go(id ? `diarios/${id}` : 'diarios')} />
         ) : (

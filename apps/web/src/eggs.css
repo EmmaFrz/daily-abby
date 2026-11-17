@@ -1,0 +1,355 @@
+/*
+ * Código promocional y easter eggs (components/RedeemCode.tsx y components/EasterEggs.tsx).
+ * Solo se animan transform y opacity: no hay repintados por fotograma ni JavaScript animando.
+ */
+
+/* ── Cupón: borde discontinuo; al escribir, el borde se pone rosa ── */
+.redeem-ticket {
+  border: 2px dashed var(--color-slot);
+  border-radius: 12px;
+  background: var(--color-page);
+  padding: 14px 22px;
+  transition: border-color 0.2s ease;
+}
+.redeem-ticket:focus-within { border-color: var(--color-abby); }
+.redeem-ticket input:focus-visible { outline: none; }
+
+/* ── Capa a pantalla completa ── */
+.egg {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  cursor: pointer;
+  color: #fff;
+  font-family: var(--font-sans);
+  animation: egg-in 0.8s ease both;
+}
+.egg.leaving { animation: egg-out 0.9s ease forwards; }
+@keyframes egg-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes egg-out { to { opacity: 0; } }
+
+.egg-scene,
+.egg-scene > span,
+.egg-art > span {
+  position: absolute;
+  pointer-events: none;
+}
+.egg-scene { inset: 0; }
+
+.egg-space .egg-scene { background: radial-gradient(ellipse at 70% 15%, #2c2263 0%, #0d0b24 50%, #04030b 100%); }
+.egg-blocks .egg-scene { background: linear-gradient(#5fb4ff, #9fd6ff 55%, #c9ecff); }
+.egg-summit .egg-scene { background: linear-gradient(#120d33 0%, #2c2266 45%, #8a4f93 78%, #f19a8e 100%); }
+
+/* ── Estrellas: un mosaico que se desplaza (se mueve la capa, no se repinta) ── */
+.stars {
+  --t: 240px;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: calc(100% + var(--t));
+  background-image:
+    radial-gradient(1.5px 1.5px at 22px 38px, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 87px 120px, #fff 50%, transparent 51%),
+    radial-gradient(1.3px 1.3px at 150px 60px, #dfe8ff 50%, transparent 51%),
+    radial-gradient(1px 1px at 200px 190px, #fff 50%, transparent 51%),
+    radial-gradient(2px 2px at 60px 210px, #ffe9c4 50%, transparent 51%),
+    radial-gradient(1px 1px at 120px 18px, #fff 50%, transparent 51%),
+    radial-gradient(1.4px 1.4px at 228px 110px, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 175px 230px, #cfe0ff 50%, transparent 51%);
+  background-size: var(--t) var(--t);
+  animation: egg-drift-up 60s linear infinite;
+  will-change: transform;
+}
+.stars-far { --t: 170px; opacity: 0.55; animation-duration: 90s; }
+.stars-near { animation: egg-drift-up 45s linear infinite, egg-twinkle 2.8s ease-in-out infinite alternate; }
+@keyframes egg-drift-up { to { transform: translateY(calc(-1 * var(--t))); } }
+@keyframes egg-twinkle { from { opacity: 0.55; } to { opacity: 1; } }
+
+/* Estrella fugaz: una línea que cruza cada pocos segundos. */
+.shooting {
+  top: 14%;
+  left: 62%;
+  width: 140px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #fff, transparent);
+  opacity: 0;
+  animation: egg-shoot 7s ease-in 1.5s infinite;
+}
+.shooting-2 { top: 30%; left: 18%; animation-delay: 4.5s; animation-duration: 9s; }
+@keyframes egg-shoot {
+  0% { opacity: 0; transform: rotate(-25deg) translateX(0); }
+  3% { opacity: 1; }
+  12% { opacity: 0; transform: rotate(-25deg) translateX(-360px); }
+  100% { opacity: 0; transform: rotate(-25deg) translateX(-360px); }
+}
+
+/* ── Bloques: sol cuadrado, nubes de bloques y suelo de hierba y tierra ── */
+.block-sun { top: 9%; right: 12%; width: 72px; height: 72px; background: #fff7c2; box-shadow: 0 0 0 10px rgb(255 247 194 / 0.35); }
+.block-cloud {
+  top: 18%;
+  left: 0;
+  width: 128px;
+  height: 32px;
+  background: #fff;
+  box-shadow: 32px -24px 0 #fff, 64px -24px 0 #fff, 96px 0 0 #fff, -32px 0 0 #fff;
+  opacity: 0.95;
+  animation: egg-cloud 38s linear infinite;
+  will-change: transform;
+}
+.block-cloud-2 { top: 34%; width: 96px; height: 24px; animation-duration: 55s; animation-delay: -30s; }
+@keyframes egg-cloud { from { transform: translateX(-200px); } to { transform: translateX(110vw); } }
+.block-ground {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 17vh;
+  background:
+    linear-gradient(#5fbf3a 0 22px, #4ea52f 22px 30px, transparent 30px),
+    conic-gradient(#8a5a33 25%, #7a4c2a 0 50%, #8a5a33 0 75%, #9b6a3e 0) 0 30px / 24px 24px;
+}
+
+/* ── Cumbre: cordillera recortada y nieve que cae ── */
+.summit-range {
+  left: -5%;
+  right: -5%;
+  bottom: 0;
+  height: 52%;
+  background: #2a1f57;
+  clip-path: polygon(0 100%, 0 62%, 14% 40%, 24% 55%, 40% 12%, 52% 38%, 62% 26%, 78% 52%, 90% 36%, 100% 50%, 100% 100%);
+}
+.summit-range-front {
+  height: 34%;
+  background: #18123a;
+  clip-path: polygon(0 100%, 0 40%, 20% 70%, 35% 30%, 55% 75%, 72% 45%, 88% 68%, 100% 38%, 100% 100%);
+}
+.snow {
+  --t: 200px;
+  left: 0;
+  right: 0;
+  top: calc(-1 * var(--t));
+  height: calc(100% + var(--t));
+  background-image:
+    radial-gradient(2px 2px at 30px 40px, #fff 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 110px 90px, #fff 50%, transparent 51%),
+    radial-gradient(2.5px 2.5px at 170px 20px, #fff 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 70px 160px, #fff 50%, transparent 51%),
+    radial-gradient(2px 2px at 150px 150px, #fff 50%, transparent 51%);
+  background-size: var(--t) var(--t);
+  opacity: 0.8;
+  animation: egg-fall 12s linear infinite;
+  will-change: transform;
+}
+.snow-near { --t: 320px; opacity: 0.95; animation-duration: 8s; }
+@keyframes egg-fall { to { transform: translateY(var(--t)); } }
+
+/* ── Carta ── */
+.egg-stage {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+}
+.egg-card-wrap { perspective: 1200px; }
+.egg-card {
+  position: relative;
+  width: min(290px, 72vw, 46vh);
+  aspect-ratio: 63 / 88;
+  transform-style: preserve-3d;
+  animation:
+    egg-card-in 1.4s 0.4s cubic-bezier(0.2, 0.9, 0.25, 1.12) both,
+    egg-card-float 6s 1.8s ease-in-out infinite;
+}
+.egg.leaving .egg-card { animation: egg-card-out 0.8s ease-in forwards; }
+/* Llega boca abajo desde abajo y se da la vuelta. */
+@keyframes egg-card-in {
+  0% { transform: translateY(60vh) rotateY(180deg) rotateZ(-12deg) scale(0.6); opacity: 0; }
+  35% { opacity: 1; }
+  100% { transform: translateY(0) rotateY(0) rotateZ(0) scale(1); opacity: 1; }
+}
+@keyframes egg-card-float {
+  0%, 100% { transform: translateY(0) rotateZ(-1deg); }
+  50% { transform: translateY(-10px) rotateZ(1deg); }
+}
+@keyframes egg-card-out {
+  to { transform: translateY(-40vh) rotateY(-40deg) rotateZ(10deg) scale(0.6); opacity: 0; }
+}
+
+.egg-face,
+.egg-back {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.6);
+}
+/* Marco dorado. */
+.egg-face {
+  padding: 7px;
+  background: linear-gradient(135deg, #fff1b8, #c9a24a 30%, #fff6d1 55%, #b48a35 80%, #f3dc93);
+}
+/* Brillo holográfico que barre la carta. */
+.egg-face::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(115deg, transparent 35%, rgb(255 255 255 / 0.55) 46%, transparent 57%) 0 0 / 260% 100%,
+    conic-gradient(from 200deg at 30% 30%, #ff9ad0, #9cdcff, #b6ffb0, #ffe98a, #ff9ad0);
+  mix-blend-mode: soft-light;
+  opacity: 0.8;
+  animation: egg-holo 4s linear infinite;
+}
+@keyframes egg-holo { from { background-position: -200% 0, 0 0; } to { background-position: 200% 0, 0 0; } }
+.egg-art {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 10px;
+}
+.egg-back {
+  transform: rotateY(180deg);
+  display: grid;
+  place-content: center;
+  text-align: center;
+  border: 7px solid #f3dc93;
+  background:
+    repeating-conic-gradient(from 0deg at 50% 50%, rgb(255 255 255 / 0.12) 0 10deg, transparent 10deg 20deg),
+    linear-gradient(160deg, #ff3d97, #7c4dff);
+}
+.egg-back span { font-family: var(--font-display); font-weight: 800; font-size: 46px; line-height: 1; font-variation-settings: "wdth" 80; }
+.egg-back small { font-weight: 800; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.85; }
+
+.egg-top,
+.egg-bottom {
+  position: absolute;
+  left: 7px;
+  right: 7px;
+  z-index: 1;
+  color: #fff;
+}
+.egg-top {
+  top: 7px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  padding: 10px 12px 18px;
+  border-radius: 10px 10px 0 0;
+  background: linear-gradient(rgb(10 8 26 / 0.7), transparent);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 19px;
+  text-shadow: 0 1px 2px rgb(0 0 0 / 0.4);
+}
+.egg-rarity { flex: none; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #ffe08a; }
+.egg-bottom {
+  bottom: 7px;
+  display: grid;
+  gap: 4px;
+  padding: 22px 12px 10px;
+  border-radius: 0 0 10px 10px;
+  background: linear-gradient(transparent, rgb(10 8 26 / 0.82) 30%);
+}
+.egg-kind { font-size: 10px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #ffe08a; }
+.egg-bottom p { margin: 0; font-size: 12.5px; line-height: 1.35; font-style: italic; opacity: 0.95; }
+.egg-set { display: flex; justify-content: space-between; margin-top: 2px; font-size: 9px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.7; }
+
+/* ── Ilustraciones de las cartas ── */
+.art-emoji { line-height: 1; filter: drop-shadow(0 3px 0 rgb(0 0 0 / 0.25)); }
+
+.egg-space .egg-art { background: radial-gradient(ellipse at 30% 20%, #3a2b7a, #0d0b24 70%); }
+.art-sun { top: 14%; right: -18%; width: 60%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, #fff3c0 0 20%, #ffb347 38%, rgb(255 120 60 / 0.35) 60%, transparent 70%); }
+.art-planet { left: -30%; right: -30%; bottom: -58%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 50% 20%, #7fd36a, #3e8f4a 45%, #1f4f37 75%); box-shadow: 0 -6px 30px rgb(127 211 106 / 0.35); }
+.art-fire { left: 50%; bottom: 33%; font-size: 34px; transform: translateX(-50%); animation: egg-flicker 0.9s ease-in-out infinite alternate; }
+.art-tent { left: 16%; bottom: 31%; font-size: 30px; }
+@keyframes egg-flicker { from { transform: translateX(-50%) scale(1); } to { transform: translateX(-50%) scale(1.12) rotate(3deg); } }
+.art-orbit { left: 50%; top: 44%; width: 0; height: 0; animation: egg-orbit 9s linear infinite; }
+.art-orbit .art-emoji { position: absolute; display: block; font-size: 22px; transform: translate(80px, -11px) rotate(45deg); }
+@keyframes egg-orbit { to { transform: rotate(360deg); } }
+
+.egg-blocks .egg-art { background: linear-gradient(#5fb4ff, #b9e4ff); }
+.egg-art .block-sun { width: 44px; height: 44px; top: 16%; right: 14%; box-shadow: 0 0 0 6px rgb(255 247 194 / 0.35); }
+.egg-art .block-cloud { top: 24%; width: 64px; height: 16px; box-shadow: 16px -12px 0 #fff, 32px -12px 0 #fff, 48px 0 0 #fff, -16px 0 0 #fff; animation-duration: 22s; }
+.art-grass-block {
+  left: 27%;
+  bottom: 22%;
+  width: 46%;
+  aspect-ratio: 1;
+  box-shadow: 0 10px 0 rgb(0 0 0 / 0.18);
+  background:
+    linear-gradient(#5fbf3a 0 24%, #4ea52f 24% 31%, transparent 31%),
+    conic-gradient(#8a5a33 25%, #7a4c2a 0 50%, #8a5a33 0 75%, #9b6a3e 0) 0 0 / 25% 25%;
+}
+.art-pick { left: 56%; bottom: 46%; font-size: 40px; transform: rotate(-20deg); transform-origin: 80% 80%; animation: egg-swing 1.6s ease-in-out infinite; }
+@keyframes egg-swing { 0%, 100% { transform: rotate(-20deg); } 50% { transform: rotate(-48deg); } }
+.art-tree { left: 6%; bottom: 22%; font-size: 52px; }
+
+.egg-summit .egg-art { background: linear-gradient(#120d33, #3a2b7a 55%, #b0628f); }
+.egg-art .art-summit {
+  left: 0;
+  right: 0;
+  height: 62%;
+  background: linear-gradient(#f6f2ff 0 18%, #2a1f57 18.5%);
+  clip-path: polygon(0 100%, 0 70%, 22% 46%, 34% 58%, 52% 6%, 66% 44%, 80% 32%, 100% 58%, 100% 100%);
+}
+.art-berry { left: 50%; top: 22%; font-size: 40px; transform: translateX(-50%); animation: egg-bob 2.4s ease-in-out infinite; }
+@keyframes egg-bob { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, -10px); } }
+.egg-art .snow { --t: 140px; }
+
+/* ── Texto bajo la carta ── */
+.egg-caption {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  max-width: min(420px, 90vw);
+  padding: 10px 16px 12px;
+  border-radius: 14px;
+  background: rgb(14 10 32 / 0.55);
+  text-align: center;
+  cursor: default;
+  animation: egg-in 0.6s 1.6s ease both;
+}
+.egg-caption-kicker { font-size: 11px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: #ffe08a; }
+.egg-caption-song { font-size: 13px; font-weight: 700; }
+.egg-caption-song a { color: #ffb3dc; text-decoration: underline; }
+/* Tiempo que queda: una barra que se vacía. */
+.egg-timer {
+  display: block;
+  width: 100%;
+  height: 3px;
+  margin-top: 4px;
+  border-radius: 3px;
+  background: #fff;
+  opacity: 0.6;
+  transform-origin: left;
+  animation: egg-timer 19.1s linear both;
+}
+@keyframes egg-timer { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+
+.egg-close {
+  position: absolute;
+  top: max(14px, env(safe-area-inset-top));
+  right: max(14px, env(safe-area-inset-right));
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgb(14 10 32 / 0.5);
+  color: #fff;
+  font-weight: 800;
+}
+.egg-close:hover { background: rgb(14 10 32 / 0.75); }
+
+/* Con movimiento reducido no hay escena animada: la carta aparece y se va con un fundido. */
+@media (prefers-reduced-motion: reduce) {
+  .stars, .snow, .shooting, .block-cloud, .art-orbit, .art-fire, .art-pick, .art-berry { animation: none !important; }
+}
