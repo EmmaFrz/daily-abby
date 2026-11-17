@@ -138,8 +138,9 @@
   clip-path: polygon(0 100%, 0 70%, 8% 70%, 8% 55%, 11% 38%, 14% 55%, 14% 68%, 22% 68%, 22% 45%, 26% 18%, 30% 45%, 30% 62%, 40% 62%, 40% 50%, 44% 50%, 48% 4%, 52% 50%, 56% 50%, 56% 64%, 66% 64%, 66% 38%, 70% 16%, 74% 38%, 74% 60%, 84% 60%, 84% 48%, 88% 30%, 92% 48%, 92% 72%, 100% 72%, 100% 100%);
 }
 
-/* ── La Grieta: anillos dorados que giran y chispas ── */
-.ring {
+/* ── La Grieta: anillos dorados que giran y chispas ──
+   (prefijo egg-: "ring" y "ring-2" son clases de Tailwind y se usan en la cabecera) */
+.egg-ring {
   left: 50%;
   top: 50%;
   width: 120vmin;
@@ -151,7 +152,7 @@
   border-right-color: transparent;
   animation: egg-orbit 40s linear infinite;
 }
-.ring-2 {
+.egg-ring-2 {
   width: 84vmin;
   height: 84vmin;
   margin: -42vmin 0 0 -42vmin;
@@ -393,8 +394,8 @@
 
 /* La Grieta: cristal hextech que late dentro de anillos dorados. */
 .egg-rift .egg-art { background: radial-gradient(circle at 50% 40%, #0f3b52, #061226 60%, #010a13); }
-.egg-art .ring { top: 40%; width: 86%; height: auto; aspect-ratio: 1; margin: 0; left: 7%; transform-origin: center; translate: 0 -50%; border-width: 3px; }
-.egg-art .ring-2 { width: 62%; left: 19%; border-width: 2px; }
+.egg-art .egg-ring { top: 40%; width: 86%; height: auto; aspect-ratio: 1; margin: 0; left: 7%; transform-origin: center; translate: 0 -50%; border-width: 3px; }
+.egg-art .egg-ring-2 { width: 62%; left: 19%; border-width: 2px; }
 .art-glow {
   left: 50%;
   top: 40%;
@@ -575,5 +576,5 @@
 
 /* Con movimiento reducido no hay escena animada: la carta aparece y se va con un fundido. */
 @media (prefers-reduced-motion: reduce) {
-  .stars, .shooting, .threads, .embers, .ring, .zz, .art-orbit, .art-fire, .art-bell, .wanderer, .wanderer-cloak, .art-glow, .art-crystal, .aru-body, .aru-head { animation: none !important; }
+  .stars, .shooting, .threads, .embers, .egg-ring, .zz, .art-orbit, .art-fire, .art-bell, .wanderer, .wanderer-cloak, .art-glow, .art-crystal, .aru-body, .aru-head { animation: none !important; }
 }

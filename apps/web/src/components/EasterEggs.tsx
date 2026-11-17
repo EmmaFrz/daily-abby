@@ -220,8 +220,8 @@ function Scene({ scene }: { scene: EasterEgg['scene'] }) {
   if (scene === 'rift')
     return (
       <div className="egg-scene" aria-hidden>
-        <span className="ring" />
-        <span className="ring ring-2" />
+        <span className="egg-ring" />
+        <span className="egg-ring egg-ring-2" />
         <span className="embers embers-gold" />
       </div>
     );
@@ -272,8 +272,8 @@ function Art({ scene }: { scene: EasterEgg['scene'] }) {
     return (
       <>
         <span className="embers embers-gold" />
-        <span className="ring art-ring" />
-        <span className="ring ring-2 art-ring-2" />
+        <span className="egg-ring art-ring" />
+        <span className="egg-ring egg-ring-2 art-ring-2" />
         <span className="art-glow" />
         <span className="art-crystal" />
         <span className="art-emoji art-swords">⚔️</span>
