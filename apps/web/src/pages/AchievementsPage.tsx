@@ -74,7 +74,8 @@ export function AchievementsPage() {
 
         <Card delay={120}>
           <CardTitle icon="🎮">Por minijuego</CardTitle>
-          <div className="grid gap-1.5">
+          {/* Altura fija con scroll: la lista crece con cada minijuego nuevo. */}
+          <div className="scroll-thin -mr-2 grid max-h-[22rem] gap-1.5 overflow-y-auto overscroll-contain pr-2">
             {MINIGAMES.map((m) => {
               const r = state.records[m.id];
               return (

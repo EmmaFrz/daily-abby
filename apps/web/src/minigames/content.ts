@@ -4,11 +4,14 @@
  */
 import { ANAGRAM_WORDS } from '../data/anagrams';
 import { CONNECTION_GROUPS } from '../data/connections';
+import { COUNTRIES, type Country } from '../data/countries';
+import { CRYPTIC_CLUES } from '../data/cryptic';
 import { GAMES, type Game } from '../data/games';
 import { ARTISTS, SONGS, type Song } from '../data/music';
 import { CLASSIC_WORDS, WORDS } from '../data/words';
 import { genreCatalog, type GenreId, type HeardleSong } from '../data/heardleGenres';
 import { dailyPick, puzzleNumber, seeded, shuffled } from '../lib/daily';
+import { crosswordOfDay } from './crossword';
 
 /* ───────────── Juego del día (sin repetir entre minijuegos) ───────────── */
 
@@ -232,3 +235,52 @@ export function aimTargetsOfDay(day: string): { x: number; y: number }[] {
   }
   return out;
 }
+
+/* ───────────── ¿Cuál es más grande? (países) ───────────── */
+
+export const COUNTRY_DUELS = 150;
+/** Dos países solo se enfrentan si uno es al menos un 20 % más grande que el otro. */
+export const MIN_RATIO = 1.2;
+
+/** Dificultad creciente: [ratio mínimo, ratio máximo] según la ronda. */
+function duelRange(round: number): [number, number] {
+  if (round < 5) return [3, Infinity];
+  if (round < 12) return [1.8, 8];
+  if (round < 25) return [1.4, 3.5];
+  return [MIN_RATIO, 2.2];
+}
+
+/**
+ * Duelos del día: ~190 países dan más de 15.000 parejas válidas, y cada día sale una
+ * secuencia distinta. Un país no vuelve a salir hasta pasadas unas cuantas rondas.
+ */
+export function countryDuelsOfDay(day: string): [Country, Country][] {
+  const rng = seeded('paises', day);
+  const out: [Country, Country][] = [];
+  const recent: string[] = [];
+  const pick = () => COUNTRIES[Math.floor(rng() * COUNTRIES.length)]!;
+  while (out.length < COUNTRY_DUELS) {
+    let [lo, hi] = duelRange(out.length);
+    for (let tries = 0; ; tries++) {
+      // Si cuesta encontrar pareja, se relaja el rango (sin bajar nunca del 20 %).
+      if (tries > 400) [lo, hi] = [MIN_RATIO, Infinity];
+      const a = pick();
+      const b = pick();
+      if (a.code === b.code || recent.includes(a.code) || recent.includes(b.code)) continue;
+      const ratio = Math.max(a.area, b.area) / Math.min(a.area, b.area);
+      if (ratio < lo || ratio > hi) continue;
+      out.push([a, b]);
+      recent.push(a.code, b.code);
+      if (recent.length > 16) recent.splice(0, 2);
+      break;
+    }
+  }
+  return out;
+}
+
+/* ───────────── Crucigrama y Críptico ───────────── */
+
+export { crosswordOfDay };
+
+/** Pista críptica del día: recorre todas las pistas antes de repetir ninguna. */
+export const crypticOfDay = (day: string) => dailyPick(CRYPTIC_CLUES, day, 'criptico');

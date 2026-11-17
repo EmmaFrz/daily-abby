@@ -5,11 +5,14 @@ import { Aim } from './Aim';
 import { Anagrama } from './Anagrama';
 import { Anodle } from './Anodle';
 import { Conexiones } from './Conexiones';
+import { Cripto } from './Cripto';
 import { Cronologia } from './Cronologia';
+import { Crucigrama } from './Crucigrama';
 import { Emojidle } from './Emojidle';
 import { Gamedle } from './Gamedle';
 import { MasOMenos } from './MasOMenos';
 import { Memoria } from './Memoria';
+import { Paises } from './Paises';
 import { Palabrdle } from './Palabrdle';
 import { Pixeldle } from './Pixeldle';
 import { Quiz } from './Quiz';
@@ -29,6 +32,8 @@ export const MINIGAME_COMPONENTS: Record<string, ComponentType> = {
   palabrdle: Palabrdle,
   ahorcado: Ahorcado,
   anagrama: Anagrama,
+  crucigrama: Crucigrama,
+  cripto: Cripto,
   // Un Heardle por género (heardle-pop, heardle-latino…)
   ...Object.fromEntries(
     AVAILABLE_GENRES.map((g) => {
@@ -46,4 +51,5 @@ export const MINIGAME_COMPONENTS: Record<string, ComponentType> = {
   masomenos: MasOMenos,
   memoria: Memoria,
   aim: Aim,
+  paises: Paises,
 };

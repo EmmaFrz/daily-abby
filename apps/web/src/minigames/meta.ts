@@ -37,6 +37,8 @@ export const MINIGAMES: MinigameMeta[] = [
   { id: 'palabrdle', name: 'Palabrdle', icon: '🔤', tagline: 'Wordle gamer: palabras del mundo stream', category: 'Palabras', gradient: 'from-pink-500 to-rose-500', lowerIsBetter: true, formatScore: tries },
   { id: 'ahorcado', name: 'Ahorcado', icon: '🪢', tagline: 'Descubre el juego letra a letra', category: 'Palabras', gradient: 'from-rose-500 to-red-600', lowerIsBetter: true, formatScore: fails },
   { id: 'anagrama', name: 'Anagrama', icon: '🔀', tagline: 'Ordena las letras revueltas', category: 'Palabras', gradient: 'from-indigo-500 to-purple-600', lowerIsBetter: true, formatScore: tries },
+  { id: 'crucigrama', name: 'Crucigrama', icon: '✍️', tagline: 'Mini crucigrama de cultura pop', category: 'Palabras', gradient: 'from-amber-400 to-rose-500', lowerIsBetter: true, formatScore: (n) => (n === 0 ? 'sin ayudas' : `${n} ${n === 1 ? 'ayuda' : 'ayudas'}`) },
+  { id: 'cripto', name: 'Críptico', icon: '🕵️', tagline: 'Una pista con definición y juego de palabras', category: 'Palabras', gradient: 'from-emerald-500 to-teal-700', lowerIsBetter: false, formatScore: (n) => `${n} pts` },
   ...AVAILABLE_GENRES.map(
     (g): MinigameMeta => ({
       id: `heardle-${g.id}`,
@@ -59,6 +61,7 @@ export const MINIGAMES: MinigameMeta[] = [
   { id: 'masomenos', name: '¿Antes o después?', icon: '↕️', tagline: '¿Qué juego salió antes? Llega a 10', category: 'Lógica', gradient: 'from-lime-400 to-emerald-500', lowerIsBetter: false, formatScore: (n) => `${n}/10` },
   { id: 'memoria', name: 'Memoria', icon: '🃏', tagline: 'Encuentra las 8 parejas', category: 'Habilidad', gradient: 'from-pink-400 to-fuchsia-600', lowerIsBetter: true, formatScore: (n) => `${n} movimientos` },
   { id: 'aim', name: 'Rage Aim', icon: '🎯', tagline: '20 dianas lo más rápido posible', category: 'Habilidad', gradient: 'from-red-500 to-orange-500', lowerIsBetter: true, formatScore: (n) => `${(n / 1000).toFixed(2).replace('.', ',')} s` },
+  { id: 'paises', name: '¿Cuál es más grande?', icon: '🌍', tagline: 'Elige el país con más superficie: 60 segundos', category: 'Habilidad', gradient: 'from-sky-400 to-emerald-500', lowerIsBetter: false, formatScore: (n) => `${n} ${n === 1 ? 'acierto' : 'aciertos'}` },
 ];
 
 export const META: Record<string, MinigameMeta> = Object.fromEntries(MINIGAMES.map((m) => [m.id, m]));

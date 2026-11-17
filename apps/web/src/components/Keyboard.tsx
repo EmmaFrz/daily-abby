@@ -43,10 +43,13 @@ export function Keyboard({
   states,
   onKey,
   withEnter = true,
+  enterLabel = 'ENVIAR',
 }: {
   states: Record<string, KeyState>;
   onKey: (k: string) => void;
   withEnter?: boolean;
+  /** Texto del botón ENTER (p. ej. "SIGUIENTE" en el Crucigrama). */
+  enterLabel?: string;
 }) {
   return (
     <div className="mx-auto grid w-full max-w-lg gap-1.5">
@@ -54,7 +57,7 @@ export function Keyboard({
         <div key={row} className="flex justify-center gap-1">
           {ri === 2 && withEnter && (
             <button className="btn rounded-lg bg-gradient-to-r from-abby to-twitch px-2 py-3 text-xs" onClick={() => onKey('ENTER')}>
-              ENVIAR
+              {enterLabel}
             </button>
           )}
           {[...row].map((k) => {

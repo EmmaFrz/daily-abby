@@ -1,6 +1,6 @@
 # Abby · Diarios
 
-Juego diario de navegador, para un solo jugador, con **24 retos nuevos cada día** con la temática de
+Juego diario de navegador, para un solo jugador, con **27 retos nuevos cada día** con la temática de
 **Abby ([twitch.tv/abby_](https://www.twitch.tv/abby_))**, streamer de Twitch, y del mundo gamer. Todo el mundo recibe los mismos retos cada día:
 salen de la fecha con una semilla fija.
 
@@ -14,6 +14,8 @@ salen de la fecha con una semilla fija.
 | | 🔤 Palabrdle | Wordle gamer: palabras del mundo stream |
 | | 🪢 Ahorcado | Descubre el nombre de un juego letra a letra |
 | | 🔀 Anagrama | Ordena las letras revueltas de una palabra gamer, con pistas |
+| | ✍️ Crucigrama | Mini crucigrama (máx. 9×9) de cultura pop: música, series, pelis, juegos e internet |
+| | 🕵️ Críptico | Una pista críptica al día: una frase con definición + juego de palabras (anagrama, palabra oculta, charada…) |
 | 🎵 Música | 🎧 Heardle (7 géneros) | Pop, Latino, Rock, Hip-Hop, K-Pop, EDM y España (solo artistas españoles). Cada género es un reto de 5 fases (5 canciones); cada canción suena por tramos de 1, 2, 4, 7, 11 y 16 s |
 | | 📻 ¿Quién canta? | 5 fragmentos de 5 s: elige al artista entre 4 opciones |
 | | 🎤 Artistdle | Adivina el artista por país, género, década de debut, formato e idioma |
@@ -24,9 +26,26 @@ salen de la fecha con una semilla fija.
 | | ↕️ ¿Antes o después? | ¿Qué juego salió antes? Llega a 10 seguidos |
 | ⚡ Habilidad | 🃏 Memoria | Encuentra las 8 parejas en los menos movimientos posibles |
 | | 🎯 Rage Aim | 20 dianas lo más rápido posible |
+| | 🌍 ¿Cuál es más grande? | 60 s para elegir el país con más superficie en cada pareja; cada fallo resta 5 s |
 
 Cada minijuego guarda tu racha, tu récord y un resultado para compartir con cuadritos de colores, como Wordle.
-La pestaña **Logros** reúne 28 logros y las estadísticas por juego.
+La pestaña **Logros** reúne 31 logros y las estadísticas por juego.
+
+### Crucigrama, Críptico y países
+
+- **Crucigrama**: cada día se genera solo a partir de `popclues.ts` (~160 pistas), cruzando 5-7 palabras sin que
+  aparezcan palabras accidentales. Para añadir pistas, añade pares `[RESPUESTA, pista]` (una palabra, sin tildes,
+  de 3 a 10 letras). Comprobar y revelar letras cuentan como ayudas; resolverlo sin ayudas da un logro.
+- **Críptico**: una pista críptica al día, al estilo de los crucigramas crípticos. La frase tiene una *definición*
+  (al principio o al final) y un *juego de palabras*: un *indicador* dice qué hacer con el *material* (anagrama,
+  palabra oculta, inversión, charada, resta, iniciales, contenedor, doble definición, homófono, traducción,
+  abreviaturas). Hay 5 intentos y 5 pistas (mecanismo, definición, indicador, material y primera letra) que resaltan
+  la frase por colores. Puntos: 100 a la primera; cada intento fallado y cada pista restan 10. Al terminar se
+  muestra el desglose. Para añadir pistas, usa `c(tipo, frase, RESPUESTA, definición, indicador, material, explicación)`
+  en `cryptic.ts`: los tres trozos deben copiarse tal cual de la frase.
+- **¿Cuál es más grande?**: ~190 países dan más de 15.000 parejas posibles; solo se comparan países que se
+  diferencian al menos un 20 % (así las diferencias entre fuentes no cambian la respuesta) y la dificultad sube
+  con cada ronda. Las banderas se cargan de flagcdn.com.
 
 ### Audio de los juegos de música
 
@@ -123,6 +142,9 @@ Para añadir un efecto, crea una receta en `RECIPES` y llámala con `sfx('nombre
 | `apps/web/src/data/games.ts` | Catálogo de juegos (alimenta Gamedle, Emojidle, Pixeldle, Añodle, Ahorcado, Cronología, Quiz, ¿Antes o después? y Memoria) |
 | `apps/web/src/data/words.ts` | Palabras de 5 letras del Wordle (`CLASSIC_WORDS`) y del Palabrdle (`WORDS`) |
 | `apps/web/src/data/anagrams.ts` | Palabras del Anagrama |
+| `apps/web/src/data/popclues.ts` | Pistas de cultura pop del Crucigrama |
+| `apps/web/src/data/cryptic.ts` | Pistas del Críptico (con su definición, indicador, material y explicación) |
+| `apps/web/src/data/countries.ts` | Países con su superficie (km²) para ¿Cuál es más grande? |
 | `apps/web/src/data/music.ts` | Canciones (con su `trackId` de Apple Music y pistas de emojis) y artistas del Artistdle |
 | `apps/web/src/data/connections.ts` | Grupos de Conexiones (ningún elemento puede encajar en dos grupos) |
 | `apps/web/src/data/achievements.ts` | Logros |
@@ -138,7 +160,7 @@ Para añadir un efecto, crea una receta en `RECIPES` y llámala con `sfx('nombre
 
 ```
 apps/web/src/
-  minigames/  los 18 minijuegos (los de música en minigames/music/), su contenido diario (content.ts) y el registro
+  minigames/  los minijuegos (los de música en minigames/music/), su contenido diario (content.ts) y el registro
   data/       juegos, palabras, grupos, logros
   state/      progreso: partidas del día, rachas, récords, logros (localStorage)
   pages/      Diarios (portada + juego) y Logros

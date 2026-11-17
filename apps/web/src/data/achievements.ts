@@ -31,6 +31,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   { id: 'palabrdle-2', icon: '🔤', title: 'Diccionario andante', desc: 'Resuelve el Palabrdle en 2 intentos o menos.', check: flag('palabrdle-2') },
   { id: 'ahorcado-clean', icon: '🪢', title: 'Sin un rasguño', desc: 'Gana el Ahorcado sin fallar ninguna letra.', check: flag('ahorcado-clean') },
   { id: 'anagrama-clean', icon: '🔀', title: 'Sin pistas', desc: 'Resuelve el Anagrama a la primera y sin pistas.', check: flag('anagrama-clean') },
+  { id: 'crucigrama-clean', icon: '✍️', title: 'Bolígrafo de tinta', desc: 'Resuelve el Crucigrama sin comprobar ni revelar nada.', check: flag('crucigrama-clean') },
+  { id: 'cripto-clean', icon: '🕵️', title: 'Código Enigma', desc: 'Resuelve el Críptico a la primera y sin pistas (100 puntos).', check: flag('cripto-clean') },
   { id: 'conexiones-perfect', icon: '🧩', title: 'Todo conectado', desc: 'Resuelve Conexiones sin fallos.', check: flag('conexiones-perfect') },
   { id: 'cronologia-1', icon: '⏳', title: 'Libro de historia', desc: 'Ordena la Cronología al primer intento.', check: flag('cronologia-1') },
   { id: 'quiz-5', icon: '❓', title: 'Cerebrito', desc: 'Acierta las 5 preguntas del Quiz.', check: flag('quiz-5') },
@@ -61,6 +63,7 @@ export const ACHIEVEMENTS: Achievement[] = [
       return music.every((r) => r?.status === 'won' && r.day === day);
     },
   },
+  { id: 'paises-25', icon: '🌍', title: 'Atlas humano', desc: 'Consigue 25 aciertos en ¿Cuál es más grande?', check: flag('paises-25') },
   { id: 'aim-fast', icon: '🎯', title: 'Reflejos de pro', desc: 'Termina Rage Aim en menos de 10 segundos.', check: flag('aim-fast') },
 ];
 
