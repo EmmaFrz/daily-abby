@@ -1,85 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { EGGS, type EasterEgg } from '../data/eggs';
+import type { TrackInfo } from '../lib/itunes';
+import { soundSettings } from '../lib/sound';
 
 /**
- * Easter eggs de los códigos promocionales: una escena de fondo, una carta "full art" que gira y una
- * canción (previa oficial de Apple Music). Todo se anima con CSS (transform/opacity) y dura DURATION ms.
- *
- * Para añadir uno: un objeto en EGGS (los códigos se comparan sin mayúsculas, tildes, espacios ni
- * signos) y, si quieres una escena nueva, su fondo en <Scene> y su ilustración en <Art>.
+ * Easter eggs de los códigos promocionales (datos en src/data/eggs.ts): una escena de fondo, una carta
+ * "full art" que gira y una canción (previa oficial de Apple Music). Todo se anima con CSS
+ * (transform/opacity) y dura DURATION ms. Una escena nueva lleva su fondo en <Scene>, su ilustración en
+ * <Art> y sus estilos en src/eggs.css.
  */
-
-export interface EasterEgg {
-  id: string;
-  /** Códigos que lo activan (se normalizan con normalizeCode). */
-  codes: string[];
-  /** Nombre de la carta. */
-  name: string;
-  /** Rareza que se muestra arriba a la derecha. */
-  rarity: string;
-  /** Línea de tipo de la carta. */
-  kind: string;
-  flavor: string;
-  scene: 'space' | 'silk' | 'rift' | 'aru';
-  song: { trackId: number; title: string; artist: string; store?: string };
-}
-
-export const EGGS: EasterEgg[] = [
-  {
-    id: 'outerwilds',
-    codes: ['outerwilds'],
-    name: 'El Viajero',
-    rarity: '★ Secreta',
-    kind: 'Exploración · Fuera del tiempo',
-    flavor: 'El universo vuelve a empezar cada 22 minutos. Asa un malvavisco junto al fuego y escucha.',
-    scene: 'space',
-    song: { trackId: 1467259940, title: 'Travelers', artist: 'Andrew Prahlow' },
-  },
-  {
-    id: 'silksong',
-    codes: ['silksong', 'hollowknightsilksong'],
-    name: 'Hilo y aguja',
-    rarity: '★ Secreta',
-    kind: 'Peregrinaje · La ciudadela',
-    flavor: 'Sube hasta lo más alto. Cada campana que suena es un paso más del camino.',
-    scene: 'silk',
-    song: { trackId: 1838953941, title: 'Silksong', artist: 'Christopher Larkin' },
-  },
-  {
-    id: 'lol',
-    codes: ['lol', 'leagueoflegends'],
-    name: 'Invocador',
-    rarity: '★ Secreta',
-    kind: 'Estrategia · La Grieta',
-    flavor: '¡Bienvenidos a la Grieta del Invocador! Cinco contra cinco y un nexo que defender.',
-    scene: 'rift',
-    song: { trackId: 1833078315, title: 'Legends Never Die', artist: 'League of Legends Music & Against The Current' },
-  },
-  {
-    id: 'aru',
-    codes: ['aru'],
-    name: 'Aru',
-    rarity: '♥ Única',
-    kind: 'Gato de Abby · Dormilón',
-    flavor: 'Blanco, peludo y casi siempre dormido. Si lo despiertas, que sea con mimos.',
-    scene: 'aru',
-    song: { trackId: 1443843920, title: "Ev'rybody Wants to Be a Cat", artist: 'Los Aristogatos' },
-  },
-];
-
-/** Minúsculas, sin tildes, espacios ni signos: "Outer Wilds!" → "outerwilds". */
-export function normalizeCode(raw: string): string {
-  return raw
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .toLowerCase()
-    .replace(/[^a-z0-9ñ]/g, '');
-}
-
-export function findEgg(raw: string): EasterEgg | undefined {
-  const code = normalizeCode(raw);
-  if (!code) return undefined;
-  return EGGS.find((e) => e.codes.some((c) => normalizeCode(c) === code));
-}
 
 /** Duración total en pantalla y de la animación de salida (ms). */
 const DURATION = 20_000;
@@ -88,10 +17,10 @@ const FADE_MS = 2_000;
 
 export interface ActiveEgg {
   egg: EasterEgg;
-  /** Audio ya "desbloqueado" en el clic de canjear (los navegadores móviles lo exigen). */
+  /** Audio "desbloqueado" en el clic de canjear (los navegadores móviles lo exigen); null si está silenciado. */
   audio: HTMLAudioElement | null;
-  /** Enlace a Apple Music cuando la previa ha cargado. */
-  link: Promise<string | null>;
+  /** Previa de Apple Music (null si no hay conexión: el easter egg sale igual, sin música). */
+  track: Promise<TrackInfo | null>;
   key: number;
 }
 
@@ -111,7 +40,17 @@ export function EasterEggOverlay({ active, onDone }: { active: ActiveEgg; onDone
 
   useEffect(() => {
     let alive = true;
-    void active.link.then((l) => alive && setLink(l));
+    // La canción empieza aquí y no en el clic: si React desmonta y vuelve a montar el efecto (modo
+    // estricto en desarrollo), la limpieza la pausa y esta parte la vuelve a poner. Antes, al canjear un
+    // código por segunda vez la previa ya estaba en caché, sonaba al instante y la limpieza la paraba.
+    void active.track.then((info) => {
+      if (!alive || !info) return;
+      setLink(info.url);
+      if (!audio) return;
+      if (audio.src !== info.previewUrl) audio.src = info.previewUrl;
+      audio.volume = Math.max(0.05, soundSettings().volume);
+      void audio.play().catch(() => {});
+    });
     const t = timers.current;
     t.push(window.setTimeout(leave, DURATION - LEAVE));
     // La música baja de volumen los últimos segundos.
@@ -133,14 +72,12 @@ export function EasterEggOverlay({ active, onDone }: { active: ActiveEgg; onDone
     return () => {
       alive = false;
       t.forEach(window.clearTimeout);
+      t.length = 0;
       window.clearInterval(fade.current);
       window.removeEventListener('keydown', onKey);
-      if (audio) {
-        audio.pause();
-        audio.src = '';
-      }
+      audio?.pause();
     };
-  }, [active.link, audio, leave]);
+  }, [active.track, audio, leave]);
 
   return (
     <div className={`egg egg-${egg.scene} ${leaving ? 'leaving' : ''}`} role="dialog" aria-label={`Easter egg: ${egg.name}`} onClick={leave}>
@@ -197,6 +134,16 @@ export function EasterEggOverlay({ active, onDone }: { active: ActiveEgg; onDone
   );
 }
 
+/** Hojas de arce del Subathon: [posición %, duración s, retraso s]. */
+const LEAVES: [number, number, number][] = [
+  [6, 11, -2],
+  [18, 14, -9],
+  [33, 12, -5],
+  [61, 13, -1],
+  [78, 10, -7],
+  [92, 15, -11],
+];
+
 /** Fondo de pantalla de cada escena. */
 function Scene({ scene }: { scene: EasterEgg['scene'] }) {
   if (scene === 'space')
@@ -223,6 +170,33 @@ function Scene({ scene }: { scene: EasterEgg['scene'] }) {
         <span className="egg-ring" />
         <span className="egg-ring egg-ring-2" />
         <span className="embers embers-gold" />
+      </div>
+    );
+  if (scene === 'valorant')
+    return (
+      <div className="egg-scene" aria-hidden>
+        <span className="vlr-lines" />
+        <span className="vlr-slash" />
+        <span className="vlr-slash vlr-slash-2" />
+        <span className="vlr-shard" />
+        <span className="vlr-shard vlr-shard-2" />
+        <span className="vlr-shard vlr-shard-3" />
+      </div>
+    );
+  if (scene === 'subathon')
+    return (
+      <div className="egg-scene" aria-hidden>
+        <span className="sub-mountains" />
+        <span className="sub-mountains sub-mountains-near" />
+        <span className="sub-foliage" />
+        {LEAVES.map((l, i) => (
+          <span key={i} className="sub-leaf" style={{ left: `${l[0]}%`, animationDuration: `${l[1]}s`, animationDelay: `${l[2]}s` }}>
+            🍁
+          </span>
+        ))}
+        <span className="sub-alert">+1 sub · +2:00</span>
+        <span className="sub-alert sub-alert-2">+5 subs · +10:00</span>
+        <span className="sub-alert sub-alert-3">+1 sub · +2:00</span>
       </div>
     );
   return (
@@ -277,6 +251,70 @@ function Art({ scene }: { scene: EasterEgg['scene'] }) {
         <span className="art-glow" />
         <span className="art-crystal" />
         <span className="art-emoji art-swords">⚔️</span>
+      </>
+    );
+  if (scene === 'valorant')
+    return (
+      <>
+        <span className="vlr-lines" />
+        <span className="vlr-slash art-vlr-band" />
+        <span className="vlr-cross">
+          <i />
+          <i />
+          <i />
+          <i />
+        </span>
+        <span className="art-vlr-tag">1 vs 5</span>
+        <span className="art-vlr-ace">ACE</span>
+      </>
+    );
+  if (scene === 'subathon')
+    return (
+      <>
+        <span className="sub-mountains" />
+        <span className="pagoda">
+          <i className="pg-roof pg-1" />
+          <i className="pg-body pg-b1" />
+          <i className="pg-roof pg-2" />
+          <i className="pg-body pg-b2" />
+          <i className="pg-roof pg-3" />
+          <i className="pg-body pg-b3" />
+        </span>
+        <span className="sub-tree art-tree-l" />
+        <span className="sub-tree art-tree-r" />
+        {/* El contador: cuenta atrás con tiras de dígitos animadas solo con CSS. */}
+        <span className="sub-timer">
+          <span className="sub-timer-label">● En directo</span>
+          <span className="sub-timer-clock">
+            47:59:
+            <span className="dg">
+              <span className="dg-strip dg-tens">543210</span>
+            </span>
+            <span className="dg">
+              <span className="dg-strip dg-ones">9876543210</span>
+            </span>
+          </span>
+        </span>
+        <span className="sub-pop">+1 sub · +2:00</span>
+        {/* Selfie de las tres amigas delante de la pagoda. */}
+        <span className="friends">
+          <span className="friend friend-l">
+            <i className="hair" />
+            <i className="face" />
+            <i className="bangs" />
+          </span>
+          <span className="friend friend-r">
+            <i className="hair" />
+            <i className="face" />
+            <i className="bangs" />
+          </span>
+          <span className="friend friend-c">
+            <i className="hair" />
+            <i className="face" />
+            <i className="bangs" />
+          </span>
+          <span className="art-emoji friend-peace">✌️</span>
+        </span>
       </>
     );
   // Aru: gato blanco y muy peludo, dormido en su cojín; de vez en cuando abre sus ojos claros.

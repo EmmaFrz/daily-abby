@@ -178,10 +178,13 @@ Escape o tocando fuera.
 | `OUTER WILDS` | Cielo estrellado con estrellas fugaces; planeta con hoguera y un cohete en órbita | Travelers · Andrew Prahlow |
 | `SILKSONG` | Hilos de seda que caen, brasas y una ciudadela; figura con capa roja, aguja y campana | Silksong · Christopher Larkin |
 | `LOL` | Azul marino y dorado con anillos que giran; cristal hextech que late | Legends Never Die · League of Legends Music & Against The Current |
+| `VALORANT` | Azul marino con un corte rojo en diagonal y fragmentos angulosos; mira sobre "ACE" | Die For You · VALORANT Music & Grabbitz |
 | `ARU` | Noche con luna y "z z Z"; Aru, el gato de Abby (blanco, muy peludo y dormilón), durmiendo en su cojín y abriendo sus ojos claros de vez en cuando | Ev'rybody Wants to Be a Cat · Los Aristogatos |
+| `SUBATHON` | Cielo de Corea con montañas, otoño, hojas de arce y avisos de subs; pagoda, contador en cuenta atrás y el selfie de Abby, Jesskiu y Pausenpai | APT. · ROSÉ & Bruno Mars |
 
-Los códigos no distinguen mayúsculas, tildes, espacios ni signos ("Outer Wilds!" vale). Para añadir uno, crea
-un objeto en `EGGS` (`src/components/EasterEggs.tsx`) con su `trackId` de Apple Music y una escena. Las escenas
+Los códigos no distinguen mayúsculas, tildes, espacios ni signos ("Outer Wilds!" vale). Cada código canjeado se
+guarda en el progreso y, al canjearlos todos, se desbloquea el logro **Cazador de códigos**. Para añadir uno, crea
+un objeto en `EGGS` (`src/data/eggs.ts`) con su `trackId` de Apple Music y una escena. Las escenas
 nuevas llevan su fondo en `<Scene>`, su ilustración en `<Art>` y sus estilos en `src/eggs.css`. Todas las
 animaciones son CSS y solo mueven `transform` y `opacity`, así que no consumen apenas rendimiento.
 

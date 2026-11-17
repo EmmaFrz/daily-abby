@@ -1,7 +1,10 @@
 import { useState, type FormEvent } from 'react';
+import { withAchievements } from '../data/achievements';
+import { codeFlag, findEgg } from '../data/eggs';
 import { fetchTrack } from '../lib/itunes';
 import { sfx, soundSettings } from '../lib/sound';
-import { findEgg, type ActiveEgg } from './EasterEggs';
+import { useStore } from '../state/store';
+import type { ActiveEgg } from './EasterEggs';
 import { Modal } from './ui';
 
 /** WAV vacío: se reproduce dentro del clic para que el navegador deje sonar la canción después. */
@@ -9,6 +12,7 @@ const SILENCE = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfA
 
 /** Botón "Canjear código" y su ventana, como un código promocional. */
 export function RedeemCode({ onRedeem }: { onRedeem: (egg: ActiveEgg) => void }) {
+  const { act } = useStore();
   const [open, setOpen] = useState(false);
   const [code, setCode] = useState('');
   const [error, setError] = useState(false);
@@ -30,28 +34,21 @@ export function RedeemCode({ onRedeem }: { onRedeem: (egg: ActiveEgg) => void })
       return;
     }
 
-    // El audio se crea aquí, dentro del clic: si no, los móviles no dejan reproducirlo.
-    const { enabled, volume } = soundSettings();
+    // El audio se desbloquea aquí, dentro del clic (si no, los móviles no lo dejan sonar).
+    // La canción la pone el easter egg cuando la previa está lista.
     let audio: HTMLAudioElement | null = null;
-    if (enabled) {
+    if (soundSettings().enabled) {
       audio = new Audio(SILENCE);
       void audio.play().catch(() => {});
     }
-    const link = fetchTrack(egg.song.trackId, egg.song.store).then(
-      (info) => {
-        if (audio) {
-          audio.src = info.previewUrl;
-          audio.volume = Math.max(0.05, volume);
-          void audio.play().catch(() => {});
-        }
-        return info.url;
-      },
-      () => null, // sin conexión: el easter egg sale igual, sin música
-    );
+    const track = fetchTrack(egg.song.trackId, egg.song.store).catch(() => null);
+
+    // Guarda el código canjeado: con todos se gana el logro "Cazador de códigos".
+    act((s) => (s.flags.includes(codeFlag(egg.id)) ? s : withAchievements({ ...s, flags: [...s.flags, codeFlag(egg.id)] })));
 
     sfx('achievement');
     close();
-    onRedeem({ egg, audio, link, key: Date.now() });
+    onRedeem({ egg, audio, track, key: Date.now() });
   };
 
   return (

@@ -1,4 +1,5 @@
 import { MINIGAMES } from '../minigames/meta';
+import { EGGS, codeFlag } from './eggs';
 import type { SaveState } from '../state/types';
 
 export interface Achievement {
@@ -65,6 +66,13 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   { id: 'paises-25', icon: '🌍', title: 'Atlas humano', desc: 'Consigue 25 aciertos en ¿Cuál es más grande?', check: flag('paises-25') },
   { id: 'aim-fast', icon: '🎯', title: 'Reflejos de pro', desc: 'Termina Rage Aim en menos de 10 segundos.', check: flag('aim-fast') },
+  {
+    id: 'codigos',
+    icon: '🎟️',
+    title: 'Cazador de códigos',
+    desc: `Canjea los ${EGGS.length} códigos secretos.`,
+    check: (s) => EGGS.every((e) => s.flags.includes(codeFlag(e.id))),
+  },
 ];
 
 /** Devuelve el estado con los logros nuevos añadidos (puro). */

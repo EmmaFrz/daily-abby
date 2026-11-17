@@ -10,7 +10,7 @@ const TONES = {
 export function Toasts() {
   const { toasts, dismissToast } = useStore();
   return (
-    <div className="pointer-events-none fixed inset-x-0 top-20 z-[80] flex flex-col items-center gap-2 px-4">
+    <div className="pointer-events-none fixed inset-x-0 top-20 z-[95] flex flex-col items-center gap-2 px-4">
       {toasts.map((t) => (
         <button
           key={t.id}
