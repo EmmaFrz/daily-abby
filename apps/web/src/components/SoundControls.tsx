@@ -10,7 +10,7 @@ export function SoundToggle() {
         setSoundEnabled(!enabled);
         if (!enabled) sfx('pop');
       }}
-      className="grid h-8 w-8 place-items-center rounded-full border border-white/10 bg-white/6 text-base transition hover:bg-white/12"
+      className="grid h-8 w-8 place-items-center rounded-full border border-slot bg-paper text-base transition hover:bg-page"
       title={enabled ? 'Silenciar' : 'Activar sonido'}
       aria-label={enabled ? 'Silenciar' : 'Activar sonido'}
       aria-pressed={!enabled}
@@ -26,7 +26,7 @@ export function SoundSettingsCard({ delay = 0 }: { delay?: number }) {
   return (
     <Card delay={delay}>
       <CardTitle icon="🔊">Sonido</CardTitle>
-      <label className="flex items-center justify-between gap-3 rounded-2xl bg-white/5 px-3 py-2.5">
+      <label className="flex items-center justify-between gap-3 rounded-xl bg-paper px-3 py-2.5 shadow-[0_1px_0_var(--color-slot)]">
         <span className="font-bold">Efectos de sonido y vibración</span>
         <button
           role="switch"
@@ -35,12 +35,12 @@ export function SoundSettingsCard({ delay = 0 }: { delay?: number }) {
             setSoundEnabled(!enabled);
             if (!enabled) sfx('pop');
           }}
-          className={`relative h-7 w-12 shrink-0 rounded-full transition ${enabled ? 'bg-gradient-to-r from-abby to-twitch' : 'bg-white/15'}`}
+          className={`relative h-7 w-12 shrink-0 rounded-full transition ${enabled ? 'bg-abby' : 'bg-white/20'}`}
         >
-          <span className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-all ${enabled ? 'left-6' : 'left-1'}`} />
+          <span className={`absolute top-1 h-5 w-5 rounded-full bg-paper shadow transition-all ${enabled ? 'left-6' : 'left-1'}`} />
         </button>
       </label>
-      <div className={`mt-3 flex items-center gap-3 rounded-2xl bg-white/5 px-3 py-2.5 ${enabled ? '' : 'opacity-40'}`}>
+      <div className={`mt-3 flex items-center gap-3 rounded-xl bg-paper px-3 py-2.5 shadow-[0_1px_0_var(--color-slot)] ${enabled ? '' : 'opacity-40'}`}>
         <span>🔈</span>
         <input
           type="range"
@@ -51,7 +51,7 @@ export function SoundSettingsCard({ delay = 0 }: { delay?: number }) {
           onChange={(e) => setSoundVolume(Number(e.target.value) / 100)}
           onPointerUp={() => sfx('ok')}
           onKeyUp={() => sfx('ok')}
-          className="h-2 flex-1 cursor-pointer accent-[#ff4fa3]"
+          className="h-2 flex-1 cursor-pointer accent-[#ff3d97]"
           aria-label="Volumen"
         />
         <span>🔊</span>

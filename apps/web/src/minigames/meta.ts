@@ -67,3 +67,34 @@ export const MINIGAMES: MinigameMeta[] = [
 export const META: Record<string, MinigameMeta> = Object.fromEntries(MINIGAMES.map((m) => [m.id, m]));
 
 export const CATEGORIES: Category[] = ['Adivina', 'Palabras', 'Música', 'Lógica', 'Habilidad'];
+
+/** Color del cromo de cada categoría (variable CSS de index.css). */
+export const CATEGORY_COLOR: Record<Category, string> = {
+  Adivina: 'var(--color-cat-adivina)',
+  Palabras: 'var(--color-cat-palabras)',
+  Música: 'var(--color-cat-musica)',
+  Lógica: 'var(--color-cat-logica)',
+  Habilidad: 'var(--color-cat-habilidad)',
+};
+
+/**
+ * Orden del álbum: un cromo por tarjeta de la portada (los Heardle comparten el cromo de su grupo),
+ * numerados desde 1 en el orden de las categorías.
+ */
+export const ALBUM: { id: string; category: Category }[] = CATEGORIES.flatMap((cat) =>
+  MINIGAMES.filter((m) => m.category === cat)
+    .filter((m, i, list) => !m.parent || list.findIndex((x) => x.parent === m.parent) === i)
+    .map((m) => ({ id: m.parent ?? m.id, category: cat })),
+);
+
+/** Número de cromo de un reto o grupo (los géneros del Heardle dan el número de su grupo). */
+export function albumNumber(id: string): number {
+  const key = META[id]?.parent ?? id;
+  return ALBUM.findIndex((a) => a.id === key) + 1;
+}
+
+/** Color del cromo de un reto o grupo. */
+export function albumColor(id: string): string {
+  const cat = META[id]?.category ?? ALBUM.find((a) => a.id === id)?.category ?? 'Música';
+  return CATEGORY_COLOR[cat];
+}

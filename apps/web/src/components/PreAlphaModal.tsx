@@ -51,7 +51,7 @@ export function PreAlphaModal() {
         {points.map(([icon, title, text], i) => (
           <li
             key={title}
-            className="animate-rise flex gap-3 rounded-2xl border border-white/10 bg-white/5 p-3"
+            className="animate-rise flex gap-3 rounded-xl border border-slot/70 bg-page p-3"
             style={{ animationDelay: `${150 + i * 90}ms` }}
           >
             <span className="text-2xl">{icon}</span>
@@ -64,7 +64,7 @@ export function PreAlphaModal() {
       </ul>
 
       <button className="btn btn-primary mt-6 w-full py-3 text-lg" onClick={close} autoFocus>
-        ¡Entendido, a jugar! 💜
+        ¡Entendido, a jugar!
       </button>
     </Modal>
   );

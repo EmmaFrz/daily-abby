@@ -149,6 +149,21 @@ Para añadir un efecto, crea una receta en `RECIPES` y llámala con `sfx('nombre
 | `apps/web/src/data/connections.ts` | Grupos de Conexiones (ningún elemento puede encajar en dos grupos) |
 | `apps/web/src/data/achievements.ts` | Logros |
 
+## Diseño: álbum de cromos
+
+La web es un álbum. Cada día llega un "sobre" (#número del reto) y cada reto es un cromo numerado: los que
+no has jugado son huecos con borde discontinuo y los que terminas se pegan (en gris y con sello si se fallaron;
+con la esquina despegada si están a medias). El Heardle es un cromo de 7 piezas, una por género. En **Logros**,
+los 31 logros son cromos dorados.
+
+- Colores y fuentes (Bricolage Grotesque + Figtree): `@theme` de `src/index.css`. Cada categoría tiene su color
+  (`--color-cat-*`), que es el fondo del cromo.
+- Los minijuegos usan clases pensadas para fondo oscuro (`text-white/60`, `bg-white/10`…). En vez de
+  reescribirlas, `index.css` reasigna `white` → tinta, `black` → blanco papel e `ink` → fondo del álbum. Para
+  un blanco de verdad usa `paper` (`bg-paper`, `text-paper`).
+- Piezas del álbum (`Sticker`, `Slot`, `StickerArt`, `Pieces`…): `src/components/Album.tsx`. El número de
+  cada cromo sale del orden de la portada (`ALBUM` y `albumNumber()` en `src/minigames/meta.ts`).
+
 ## Añadir un minijuego
 
 1. Añade sus datos (nombre, icono, categoría…) en `src/minigames/meta.ts`.

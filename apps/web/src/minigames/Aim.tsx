@@ -92,11 +92,11 @@ export function Aim() {
           haptic(40);
           setMisses((m) => m + 1);
         }}
-        className="relative aspect-[4/5] select-none overflow-hidden rounded-3xl border border-red-400/30 bg-[radial-gradient(circle_at_center,#3b0f2a,#140a1f)] sm:aspect-video"
+        className="relative aspect-[4/5] select-none overflow-hidden rounded-3xl border-2 border-dashed border-slot bg-paper sm:aspect-video"
         style={{ cursor: phase === 'run' ? 'crosshair' : 'default' }}
       >
         <div
-          className="absolute inset-0 opacity-15"
+          className="absolute inset-0 opacity-[0.12]"
           style={{
             backgroundImage: 'linear-gradient(rgb(255 80 120) 1px, transparent 1px), linear-gradient(90deg, rgb(255 80 120) 1px, transparent 1px)',
             backgroundSize: '40px 40px',
@@ -106,7 +106,7 @@ export function Aim() {
           <button
             key={hit}
             onPointerDown={shoot}
-            className="animate-pop absolute grid h-16 w-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-4 border-white bg-[radial-gradient(circle,#ff4fa3_0%,#ff4fa3_30%,white_31%,white_45%,#ef4444_46%)] text-xl shadow-[0_0_30px_rgb(255_79_163/0.8)]"
+            className="animate-pop absolute grid h-16 w-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-4 border-paper bg-[radial-gradient(circle,#ff4fa3_0%,#ff4fa3_30%,white_31%,white_45%,#ef4444_46%)] text-xl shadow-[0_6px_16px_-4px_rgb(42_26_60/0.45)]"
             style={{ left: `${target.x}%`, top: `${target.y}%` }}
             aria-label="Diana"
           />

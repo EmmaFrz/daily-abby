@@ -28,9 +28,9 @@ export function scoreWord(guessRaw: string, answerRaw: string): KeyState[] {
 }
 
 const TILE: Record<KeyState, string> = {
-  ok: 'border-emerald-300/50 bg-gradient-to-br from-emerald-400 to-emerald-600 shadow-[0_0_16px_rgb(52_211_153/0.4)]',
-  present: 'border-amber-200/50 bg-gradient-to-br from-amber-400 to-orange-500',
-  absent: 'border-white/5 bg-white/10 text-white/70',
+  ok: 'border-transparent bg-ok text-paper shadow-[0_2px_0_rgb(42_26_60/0.15)]',
+  present: 'border-transparent bg-present text-paper shadow-[0_2px_0_rgb(42_26_60/0.15)]',
+  absent: 'border-transparent bg-absent text-paper shadow-[0_2px_0_rgb(42_26_60/0.15)]',
 };
 const SQ: Record<KeyState, string> = { ok: '🟩', present: '🟨', absent: '⬛' };
 
@@ -96,7 +96,7 @@ export function WordleBoard({ id, answer, intro, flag }: { id: string; answer: s
 
   return (
     <div className="flex flex-col items-center">
-      <p className="mb-4 text-center text-sm text-white/65">{intro} 🟩 en su sitio · 🟨 está pero en otro sitio · ⬛ no está</p>
+      <p className="mb-4 text-center text-sm text-dim">{intro} 🟩 en su sitio · 🟨 está pero en otro sitio · ⬛ no está</p>
       <div className="grid gap-1.5">
         {rows.map((row, r) => (
           <div key={`${r}-${row.current ? shake : 0}`} className={`grid grid-cols-5 gap-1.5 ${row.current && shake ? 'animate-shake' : ''}`}>
@@ -108,7 +108,7 @@ export function WordleBoard({ id, answer, intro, flag }: { id: string; answer: s
                 <div
                   key={i}
                   className={`grid h-13 w-13 place-items-center rounded-xl border-2 font-display text-2xl font-bold sm:h-15 sm:w-15 sm:text-3xl ${
-                    sc ? TILE[sc] : ch ? 'animate-pop border-abby/60 bg-white/8' : 'border-white/12 bg-white/3'
+                    sc ? TILE[sc] : ch ? 'animate-pop border-abby/60 bg-paper' : 'border-dashed border-slot bg-paper/60'
                   } ${justPlayed ? 'animate-flip' : ''}`}
                   style={justPlayed ? { animationDelay: `${i * 160}ms` } : undefined}
                 >

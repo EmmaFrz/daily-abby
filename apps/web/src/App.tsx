@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Background } from './components/Background';
 import { PreAlphaModal } from './components/PreAlphaModal';
 import { SocialLinks } from './components/SocialLinks';
 import { SoundToggle } from './components/SoundControls';
 import { Toasts } from './components/Toasts';
 import { ABBY } from './config/abby';
 import { sfx } from './lib/sound';
+import { ACHIEVEMENTS } from './data/achievements';
 import { MINIGAMES } from './minigames/meta';
 import { AchievementsPage } from './pages/AchievementsPage';
 import { DailiesPage } from './pages/DailiesPage';
@@ -15,7 +15,7 @@ import { useStore } from './state/store';
 type Tab = 'diarios' | 'logros';
 
 const TABS: { id: Tab; icon: string; label: string }[] = [
-  { id: 'diarios', icon: '🧩', label: 'Diarios' },
+  { id: 'diarios', icon: '📒', label: 'Diarios' },
   { id: 'logros', icon: '🏆', label: 'Logros' },
 ];
 
@@ -50,47 +50,44 @@ export function App() {
 
   return (
     <>
-      <Background />
       <Toasts />
       <PreAlphaModal />
-      <header className="sticky top-0 z-40 border-b border-white/8 bg-ink/60 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
-          <button onClick={() => go('diarios')} className="flex items-center gap-2 text-left">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-abby to-twitch text-lg shadow-[0_0_20px_rgb(255_79_163/0.5)]">
-              💜
+      <header className="sticky top-0 z-40 border-b border-slot/70 bg-page/90 backdrop-blur-md">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2.5">
+          <button onClick={() => go('diarios')} className="flex items-center gap-2.5 text-left">
+            <span className="font-display text-2xl font-extrabold leading-none tracking-tight text-abby [font-variation-settings:'wdth'_80]">
+              {ABBY.name}
             </span>
-            <span className="hidden leading-none sm:block">
-              <span className="block font-display text-lg font-bold">
-                <span className="text-gradient">{ABBY.name}</span> · Diarios
-              </span>
-              <span className="text-xs font-bold text-white/45">twitch.tv/{ABBY.handle}</span>
+            <span className="hidden leading-tight sm:block">
+              <span className="block text-[11px] font-extrabold uppercase tracking-[0.12em] text-dim">Álbum de diarios</span>
+              <span className="block text-xs font-semibold text-dim">twitch.tv/{ABBY.handle}</span>
             </span>
           </button>
 
-          <nav className="hidden items-center gap-1 rounded-2xl border border-white/10 bg-white/5 p-1 md:flex">
+          <nav className="hidden items-center gap-1 md:flex">
             {TABS.map((t) => (
               <button
                 key={t.id}
                 onClick={() => go(t.id)}
-                className={`relative rounded-xl px-4 py-1.5 font-display text-sm font-semibold transition ${
-                  route.tab === t.id ? 'bg-gradient-to-r from-abby to-twitch text-white shadow-lg' : 'text-white/65 hover:bg-white/8 hover:text-white'
+                className={`relative rounded-full px-4 py-1.5 font-display text-sm font-bold transition ${
+                  route.tab === t.id ? 'bg-white text-paper' : 'text-dim hover:bg-white/6 hover:text-white'
                 }`}
               >
-                {t.icon} {t.label}
-                {t.id === 'diarios' && pending && <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-abby ring-2 ring-ink" />}
+                {t.label}
+                {t.id === 'diarios' && pending && <span className="absolute -right-0.5 top-0 h-2.5 w-2.5 rounded-full bg-abby ring-2 ring-page" />}
               </button>
             ))}
           </nav>
 
-          <div className="flex items-center gap-1.5 text-sm font-extrabold tabular-nums">
-            <span className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/6 px-3 py-1" title="Retos completados hoy">
-              ✅ <span className="text-emerald-200">{done}/{MINIGAMES.length}</span>
+          <div className="flex items-center gap-3 text-xs font-semibold text-dim">
+            <span title="Retos completados hoy">
+              <b className="num-display text-base text-white">{done}</b>/{MINIGAMES.length} <span className="hidden sm:inline">cromos</span>
             </span>
-            <span className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/6 px-3 py-1" title="Días seguidos jugando">
-              🔥 <span className="text-orange-200">{streak}</span>
+            <span title="Días seguidos jugando">
+              <b className="num-display text-base text-white">{streak}</b> {streak === 1 ? 'día' : 'días'}
             </span>
-            <span className="hidden items-center gap-1.5 rounded-full border border-white/10 bg-white/6 px-3 py-1 sm:flex" title="Logros">
-              🏆 <span className="text-amber-200">{state.achievements.length}</span>
+            <span className="hidden sm:inline" title="Logros">
+              <b className="num-display text-base text-white">{state.achievements.length}</b>/{ACHIEVEMENTS.length} logros
             </span>
             <SoundToggle />
           </div>
@@ -105,36 +102,35 @@ export function App() {
         )}
       </main>
 
-      <footer className="mx-auto max-w-6xl px-4 pb-28 text-center text-xs font-bold text-white/30 md:pb-8">
+      <footer className="mx-auto max-w-6xl px-4 pb-28 text-center text-xs font-bold text-dim md:pb-8">
         <div className="mb-3">
           <SocialLinks compact />
         </div>
-        Juego fan hecho con 💜 para{' '}
-        <a href={ABBY.twitchUrl} target="_blank" rel="noreferrer" className="text-abby-soft/70 hover:text-abby-soft">
+        Juego fan hecho con cariño para{' '}
+        <a href={ABBY.twitchUrl} target="_blank" rel="noreferrer" className="text-abby-soft hover:underline">
           {ABBY.name}
         </a>{' '}
         · Tu progreso se guarda en este navegador
         {devMode && (
-          <button onClick={devNextDay} className="ml-3 rounded-lg bg-amber-400/20 px-2 py-1 text-amber-200">
+          <button onClick={devNextDay} className="ml-3 rounded-lg bg-amber-400/25 px-2 py-1 text-amber-200">
             🛠️ Dev: avanzar día ({today})
           </button>
         )}
       </footer>
 
-      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-ink/80 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl md:hidden">
-        <div className="mx-auto grid max-w-xs grid-cols-2">
+      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-slot/70 bg-page/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md md:hidden">
+        <div className="mx-auto grid max-w-xs grid-cols-2 gap-2 px-3 py-2">
           {TABS.map((t) => (
             <button
               key={t.id}
               onClick={() => go(t.id)}
-              className={`relative flex flex-col items-center gap-0.5 py-2 text-[11px] font-extrabold transition ${
-                route.tab === t.id ? 'text-white' : 'text-white/45'
+              className={`relative flex items-center justify-center gap-1.5 rounded-full py-2 font-display text-sm font-bold transition ${
+                route.tab === t.id ? 'bg-white text-paper' : 'text-dim'
               }`}
             >
-              <span className={`text-xl ${route.tab === t.id ? 'drop-shadow-[0_0_8px_rgb(255_79_163/0.9)]' : ''}`}>{t.icon}</span>
+              <span aria-hidden>{t.icon}</span>
               {t.label}
-              {t.id === 'diarios' && pending && <span className="absolute right-[30%] top-1.5 h-2 w-2 rounded-full bg-abby" />}
-              {route.tab === t.id && <span className="absolute inset-x-8 top-0 h-0.5 rounded-full bg-gradient-to-r from-abby to-twitch" />}
+              {t.id === 'diarios' && pending && <span className="absolute right-3 top-1.5 h-2 w-2 rounded-full bg-abby" />}
             </button>
           ))}
         </div>

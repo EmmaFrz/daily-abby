@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react';
+import { StickerArt, StickerNumber, tilt } from '../components/Album';
 import { SoundSettingsCard } from '../components/SoundControls';
 import { Card, CardTitle } from '../components/ui';
 import { ACHIEVEMENTS } from '../data/achievements';
@@ -20,51 +22,64 @@ export function AchievementsPage() {
   ] as const;
 
   return (
-    <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_380px]">
-      <Card>
-        <CardTitle icon="🏆" right={<span className="chip bg-white/10 text-white/75">{unlocked.size}/{ACHIEVEMENTS.length}</span>}>
-          Logros
-        </CardTitle>
-        <div className="mb-4 h-2 overflow-hidden rounded-full bg-white/10">
-          <div
-            className="h-full rounded-full bg-gradient-to-r from-amber-300 via-abby to-twitch transition-[width] duration-700"
-            style={{ width: `${(unlocked.size / ACHIEVEMENTS.length) * 100}%` }}
-          />
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
+      <section className="min-w-0">
+        <div className="glass mb-5 flex flex-wrap items-end gap-x-6 gap-y-3 rounded-[20px] p-5">
+          <div>
+            <p className="text-xs font-extrabold uppercase tracking-[0.12em] text-dim">Álbum de logros</p>
+            <h1 className="font-display text-3xl font-extrabold leading-tight [font-variation-settings:'wdth'_85]">
+              <span className="text-abby">{unlocked.size}</span> de {ACHIEVEMENTS.length} cromos dorados
+            </h1>
+          </div>
+          <div className="grid min-w-[180px] flex-1 grid-cols-[repeat(31,minmax(0,1fr))] gap-[3px] pb-1.5" aria-hidden>
+            {ACHIEVEMENTS.map((a) => (
+              <span
+                key={a.id}
+                className={`aspect-[3/4] rounded-[2px] ${unlocked.has(a.id) ? 'bg-gold' : 'border-[1.5px] border-dashed border-slot'}`}
+              />
+            ))}
+          </div>
         </div>
-        <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-4">
           {ACHIEVEMENTS.map((a, i) => {
             const ok = unlocked.has(a.id);
-            return (
+            const n = i + 1;
+            return ok ? (
               <div
                 key={a.id}
-                className={`animate-rise flex min-w-0 items-center gap-3 rounded-2xl border p-3 ${
-                  ok ? 'border-amber-300/30 bg-gradient-to-r from-amber-300/15 to-fuchsia-500/10' : 'border-white/8 bg-white/3'
-                }`}
-                style={{ animationDelay: `${i * 25}ms` }}
+                className="sticker animate-rise min-w-0"
+                style={{ '--r': `${tilt(n)}deg`, animationDelay: `${i * 20}ms` } as CSSProperties}
               >
-                <span className={`grid h-12 w-12 shrink-0 place-items-center rounded-xl text-2xl ${ok ? 'bg-white/15' : 'bg-white/5 opacity-40 grayscale'}`}>
-                  {ok ? a.icon : '🔒'}
-                </span>
-                <span className="min-w-0">
-                  <span className={`block font-display font-semibold ${ok ? '' : 'text-white/55'}`}>{a.title}</span>
-                  <span className="block text-xs text-white/50">{a.desc}</span>
-                </span>
+                <StickerNumber n={n} className="absolute left-3 top-3 z-10" />
+                <StickerArt icon={a.icon} color="linear-gradient(135deg, #ffd66b, #ffad2e 55%, #ff8a3d)" className="h-20 text-4xl" />
+                <span className="mx-1 mt-2 block font-display text-[15px] font-bold leading-tight">{a.title}</span>
+                <span className="mx-1 mt-0.5 block text-xs font-semibold leading-snug text-dim">{a.desc}</span>
+              </div>
+            ) : (
+              <div
+                key={a.id}
+                className="slot animate-rise flex min-h-[148px] min-w-0 flex-col p-3"
+                style={{ animationDelay: `${i * 20}ms` }}
+              >
+                <span className="num-display text-5xl text-slot">{n}</span>
+                <span className="mt-auto block font-display text-[15px] font-bold leading-tight text-white/70">{a.title}</span>
+                <span className="mt-0.5 block text-xs font-semibold leading-snug text-dim">{a.desc}</span>
               </div>
             );
           })}
         </div>
-      </Card>
+      </section>
 
       <div className="grid min-w-0 grid-cols-1 content-start gap-4">
         <Card delay={60}>
           <CardTitle icon="📊">Estadísticas</CardTitle>
           <div className="grid grid-cols-2 gap-2">
             {stats.map(([icon, label, value]) => (
-              <div key={label} className="rounded-2xl bg-white/5 p-3">
-                <div className="font-display text-xl font-bold">
-                  {icon} {value}
+              <div key={label} className="rounded-xl bg-paper p-3 shadow-[0_1px_0_var(--color-slot)]">
+                <div className="num-display text-2xl">{value}</div>
+                <div className="text-[11px] font-bold text-dim">
+                  {icon} {label}
                 </div>
-                <div className="text-[11px] font-bold text-white/50">{label}</div>
               </div>
             ))}
           </div>
@@ -82,7 +97,7 @@ export function AchievementsPage() {
                 <a
                   key={m.id}
                   href={`#diarios/${m.id}`}
-                  className="flex items-center gap-2 rounded-xl bg-white/4 px-3 py-2 text-sm transition hover:bg-white/10"
+                  className="flex items-center gap-2 rounded-xl bg-paper px-3 py-2 text-sm shadow-[0_1px_0_var(--color-slot)] transition hover:bg-page"
                 >
                   <span className="text-lg">{m.icon}</span>
                   <span className="min-w-0 flex-1 truncate font-bold">{m.name}</span>

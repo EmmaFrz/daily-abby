@@ -79,7 +79,7 @@ export function Anodle() {
               max={MAX_YEAR}
               onChange={(e) => setYear(Number(e.target.value) || MIN_YEAR)}
               onKeyDown={(e) => e.key === 'Enter' && submit()}
-              className="w-28 rounded-2xl border border-white/15 bg-black/30 py-2 text-center font-display text-3xl font-bold outline-none focus:border-amber-300/70"
+              className="w-28 rounded-2xl border-2 border-slot bg-paper py-2 text-center font-display text-3xl font-bold outline-none focus:border-amber-300/70"
             />
             <button className="btn btn-ghost px-3" onClick={() => nudge(1)}>
               +1

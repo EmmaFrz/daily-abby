@@ -228,7 +228,7 @@ export function Crucigrama() {
       )}
 
       <div className="flex flex-col items-center gap-5 md:flex-row md:items-start md:justify-center">
-        <div className="grid gap-[3px] rounded-2xl bg-black/30 p-2" style={{ gridTemplateColumns: `repeat(${cols}, auto)` }}>
+        <div className="grid gap-[3px] rounded-xl bg-white p-1.5 shadow-[0_6px_16px_-8px_rgb(42_26_60/0.5)]" style={{ gridTemplateColumns: `repeat(${cols}, auto)` }}>
           {solution.map((s, i) => {
             if (!s) return <div key={i} className={size} />;
             const letter = playing ? data.letters[i] : s;
@@ -242,16 +242,16 @@ export function Crucigrama() {
                 disabled={!playing}
                 className={`relative grid place-items-center rounded-md font-display font-bold transition ${size} ${
                   isSel
-                    ? 'bg-amber-300 text-ink'
+                    ? 'bg-amber-300 text-white'
                     : isWrong
-                      ? 'bg-rose-500/70 text-white'
+                      ? 'bg-rose-500 text-paper'
                       : highlight.has(i) && playing
-                        ? 'bg-emerald-300/40 text-white'
+                        ? 'bg-[#c9f0dd] text-white'
                         : locked.has(i)
-                          ? 'bg-sky-400/30 text-sky-100'
+                          ? 'bg-[#cfe6fb] text-sky-100'
                           : userWrong
-                            ? 'bg-rose-500/30 text-rose-100'
-                            : 'bg-white/90 text-ink'
+                            ? 'bg-[#fbd3da] text-rose-100'
+                            : 'bg-paper text-white'
                 }`}
               >
                 {numbers[i] && <span className="absolute left-0.5 top-0 text-[9px] leading-none opacity-70 sm:text-[10px]">{numbers[i]}</span>}

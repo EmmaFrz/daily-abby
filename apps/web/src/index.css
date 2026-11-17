@@ -1,15 +1,62 @@
 @import "tailwindcss";
 
+/*
+ * Tema "Álbum de cromos": papel lila claro, cromos blancos y un color por categoría.
+ *
+ * Los componentes se escribieron para un fondo oscuro (text-white/60, bg-white/10…). En vez de reescribir
+ * cada clase, aquí se reasignan los colores base:
+ *   white  → tinta del álbum (texto y superficies sutiles: bg-white/5 es un velo de tinta sobre el papel)
+ *   black  → blanco papel (los "pozos" bg-black/30 de inputs y tableros se ven como papel más claro)
+ *   ink    → color de fondo del álbum
+ *   paper  → blanco de verdad (cromos, teclas, texto sobre colores)
+ * Los tonos pastel (emerald-200, amber-200…) se oscurecen para que el texto se lea sobre papel.
+ */
 @theme {
-  --color-abby: #ff4fa3;
-  --color-abby-soft: #ff9ad0;
-  --color-twitch: #9146ff;
-  --color-neon: #5ce1ff;
-  --color-ink: #0b0716;
-  --color-ink-2: #150e26;
+  --color-white: #2a1a3c;
+  --color-black: #ffffff;
+  --color-ink: #efe9f6;
+  --color-ink-2: #e6def0;
+  --color-paper: #ffffff;
+  --color-page: #f8f5fb;
+  --color-slot: #d6cbe4;
+  --color-dim: #7d6e8f;
 
-  --font-display: "Fredoka", ui-rounded, system-ui, sans-serif;
-  --font-sans: "Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --color-abby: #ff3d97;
+  --color-abby-soft: #d81b7a;
+  --color-twitch: #7c4dff;
+  --color-neon: #0b9bb8;
+  --color-gold: #ffb020;
+
+  /* Un color por categoría: es el fondo del cromo. */
+  --color-cat-adivina: #8a66ff;
+  --color-cat-palabras: #22bd85;
+  --color-cat-musica: #ff5aac;
+  --color-cat-logica: #ffad2e;
+  --color-cat-habilidad: #3aa0ff;
+
+  /* Estados de letra (Wordle, Palabrdle, Crucigrama). */
+  --color-ok: #22bd85;
+  --color-present: #ffb020;
+  --color-absent: #b8adc6;
+
+  /* Pasteles pensados para fondo oscuro → tonos que se leen sobre papel. */
+  --color-emerald-50: #0b6b47;
+  --color-emerald-100: #0b6b47;
+  --color-emerald-200: #0f7a50;
+  --color-amber-50: #8a5300;
+  --color-amber-100: #8a5300;
+  --color-amber-200: #9a5d00;
+  --color-orange-200: #c2410c;
+  --color-rose-50: #b4233f;
+  --color-rose-100: #b4233f;
+  --color-rose-200: #c42b48;
+  --color-sky-100: #0369a1;
+  --color-sky-200: #0369a1;
+  --color-cyan-100: #0e7490;
+  --color-pink-100: #be185d;
+
+  --font-display: "Bricolage Grotesque", "Arial Black", system-ui, sans-serif;
+  --font-sans: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
 
   --animate-float: float 9s ease-in-out infinite;
   --animate-float-slow: float 14s ease-in-out infinite;
@@ -22,6 +69,7 @@
   --animate-pulse-live: pulse-live 1.6s ease-in-out infinite;
   --animate-shimmer: shimmer 3s linear infinite;
   --animate-bounce-in: bounce-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  --animate-stick: stick 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 
   @keyframes float {
     0%, 100% { transform: translate(0, 0) scale(1); }
@@ -61,6 +109,12 @@
     0% { transform: scale(0.3) rotate(-8deg); opacity: 0; }
     100% { transform: scale(1) rotate(0); opacity: 1; }
   }
+  /* El cromo cae y se pega: grande e inclinado → su sitio. */
+  @keyframes stick {
+    0% { transform: scale(1.6) rotate(-14deg); opacity: 0; }
+    60% { transform: scale(0.96) rotate(var(--r, -2deg)); opacity: 1; }
+    100% { transform: scale(1) rotate(var(--r, -2deg)); opacity: 1; }
+  }
 }
 
 @keyframes confetti-fall {
@@ -69,7 +123,7 @@
 }
 
 html {
-  color-scheme: dark;
+  color-scheme: light;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -79,43 +133,48 @@ body,
   min-height: 100%;
 }
 
+/* Página de álbum: papel lila con una trama de puntos. */
 body {
-  background: var(--color-ink);
-  color: #f6f0ff;
+  background-color: var(--color-ink);
+  background-image: radial-gradient(var(--color-slot) 1px, transparent 1.3px);
+  background-size: 18px 18px;
+  background-attachment: fixed;
+  color: var(--color-white);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
 
 ::selection {
-  background: rgb(255 79 163 / 0.45);
+  background: rgb(255 61 151 / 0.25);
+}
+
+:focus-visible {
+  outline: 3px solid rgb(255 61 151 / 0.55);
+  outline-offset: 2px;
 }
 
 /* ───────── Piezas reutilizables ───────── */
 
 @layer components {
+  /* Hoja del álbum: superficie lisa, sin cristal. (Se mantiene el nombre para no tocar cada juego.) */
   .glass {
-    background: linear-gradient(160deg, rgb(255 255 255 / 0.085), rgb(255 255 255 / 0.03));
-    border: 1px solid rgb(255 255 255 / 0.1);
+    background: var(--color-page);
+    border: 1px solid rgb(42 26 60 / 0.06);
     box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.08),
-      0 20px 50px -24px rgb(0 0 0 / 0.7);
-    backdrop-filter: blur(18px) saturate(140%);
-    -webkit-backdrop-filter: blur(18px) saturate(140%);
+      0 1px 0 rgb(42 26 60 / 0.06),
+      0 12px 28px -22px rgb(42 26 60 / 0.45);
   }
 
   .glass-strong {
-    background: linear-gradient(160deg, rgb(40 22 70 / 0.92), rgb(20 12 38 / 0.94));
-    border: 1px solid rgb(255 255 255 / 0.12);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
+    background: var(--color-paper);
+    border: 1px solid rgb(42 26 60 / 0.08);
+    box-shadow: 0 24px 60px -24px rgb(42 26 60 / 0.5);
   }
 
+  /* Antes era un degradado de neón; en el álbum, el rosa de Abby a secas. */
   .text-gradient {
-    background: linear-gradient(100deg, #ff9ad0 0%, #ff4fa3 35%, #b18cff 70%, #5ce1ff 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    color: var(--color-abby);
   }
 
   .btn {
@@ -123,16 +182,17 @@ body {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    border-radius: 1rem;
-    padding: 0.7rem 1.15rem;
+    border-radius: 999px;
+    padding: 0.7rem 1.2rem;
     font-family: var(--font-display);
-    font-weight: 600;
-    letter-spacing: 0.01em;
-    transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease, background 0.2s ease;
+    font-weight: 700;
+    letter-spacing: 0;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.2s ease, background 0.2s ease;
     user-select: none;
   }
   .btn:active:not(:disabled) {
-    transform: scale(0.96);
+    transform: translateY(2px);
+    box-shadow: none;
   }
   .btn:disabled {
     opacity: 0.4;
@@ -141,26 +201,26 @@ body {
   }
 
   .btn-primary {
-    color: white;
-    background: linear-gradient(120deg, #ff4fa3, #b14bff 60%, #7c5cff);
-    box-shadow: 0 10px 30px -10px rgb(255 79 163 / 0.75), inset 0 1px 0 rgb(255 255 255 / 0.3);
+    color: var(--color-paper);
+    background: var(--color-abby);
+    box-shadow: 0 3px 0 #c8166e;
   }
   .btn-primary:hover:not(:disabled) {
-    filter: brightness(1.1);
-    box-shadow: 0 14px 38px -10px rgb(255 79 163 / 0.95), inset 0 1px 0 rgb(255 255 255 / 0.3);
+    filter: brightness(1.06);
   }
 
   .btn-ghost {
-    color: #f6f0ff;
-    background: rgb(255 255 255 / 0.07);
-    border: 1px solid rgb(255 255 255 / 0.12);
+    color: var(--color-white);
+    background: var(--color-paper);
+    border: 1px solid var(--color-slot);
+    box-shadow: 0 2px 0 var(--color-slot);
   }
   .btn-ghost:hover:not(:disabled) {
-    background: rgb(255 255 255 / 0.13);
+    background: var(--color-page);
   }
 
   .shine {
-    background-image: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / 0.18) 50%, transparent 70%);
+    background-image: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / 0.4) 50%, transparent 70%);
     background-size: 200% 100%;
     animation: shimmer 3s linear infinite;
   }
@@ -178,7 +238,95 @@ body {
 
   .scroll-thin {
     scrollbar-width: thin;
-    scrollbar-color: rgb(255 255 255 / 0.2) transparent;
+    scrollbar-color: rgb(42 26 60 / 0.25) transparent;
+  }
+
+  /* ── Cromos ── */
+
+  /* Cromo pegado: tarjeta blanca con borde de troquel e inclinación propia (--r). */
+  .sticker {
+    position: relative;
+    display: block;
+    border-radius: 14px;
+    background: var(--color-paper);
+    padding: 7px 7px 11px;
+    transform: rotate(var(--r, 0deg));
+    box-shadow:
+      0 1px 0 rgb(42 26 60 / 0.08),
+      0 9px 18px -9px rgb(42 26 60 / 0.38);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  button.sticker:hover,
+  a.sticker:hover {
+    transform: rotate(0deg) translateY(-3px);
+    box-shadow:
+      0 1px 0 rgb(42 26 60 / 0.08),
+      0 16px 26px -12px rgb(42 26 60 / 0.42);
+  }
+
+  /* Ilustración del cromo: fondo de color con brillo diagonal. */
+  .sticker-art {
+    position: relative;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border-radius: 9px;
+    background: var(--c, var(--color-abby));
+  }
+  .sticker-art::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg, transparent 38%, rgb(255 255 255 / 0.42) 50%, transparent 62%);
+    pointer-events: none;
+  }
+
+  /* Esquina despegada (reto a medias). */
+  .sticker-peel::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 0 14px 0 8px;
+    background: linear-gradient(225deg, var(--color-ink) 50%, #e9e2f1 50%);
+    box-shadow: -2px 2px 4px rgb(42 26 60 / 0.18);
+  }
+
+  /* Hueco vacío del álbum: borde discontinuo y el número grande. */
+  .slot {
+    position: relative;
+    display: block;
+    border-radius: 14px;
+    border: 2px dashed var(--color-slot);
+    background: rgb(255 255 255 / 0.5);
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+  button.slot:hover,
+  a.slot:hover {
+    border-color: var(--color-abby);
+    background: rgb(255 255 255 / 0.85);
+  }
+
+  .stamp {
+    border: 2px solid #e5484d;
+    color: #e5484d;
+    background: rgb(255 255 255 / 0.88);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    transform: rotate(-12deg);
+  }
+
+  .num-display {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-variation-settings: "wdth" 75;
+    line-height: 1;
   }
 }
 

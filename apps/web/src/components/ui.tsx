@@ -57,10 +57,10 @@ export function StatBar({
           <span className="text-white/40">/{max}</span>
         </span>
       </div>
-      <div className="h-2.5 overflow-hidden rounded-full bg-white/8">
+      <div className="h-2.5 overflow-hidden rounded-full bg-white/10">
         <div
           className="relative h-full rounded-full transition-[width] duration-700 ease-out"
-          style={{ width: `${pct}%`, background: `linear-gradient(90deg, ${from}, ${to})`, boxShadow: `0 0 12px ${to}88` }}
+          style={{ width: `${pct}%`, background: `linear-gradient(90deg, ${from}, ${to})`, boxShadow: `0 1px 0 ${to}55` }}
         >
           <div className="shine absolute inset-0 rounded-full" />
         </div>
@@ -92,7 +92,7 @@ export function Modal({
   if (!open) return null;
   return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-end justify-center bg-black/65 p-3 backdrop-blur-sm sm:items-center sm:p-6"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-[rgb(42_26_60/0.45)] p-3 backdrop-blur-[2px] sm:items-center sm:p-6"
       onClick={dismissable ? onClose : undefined}
     >
       <div

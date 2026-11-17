@@ -70,7 +70,7 @@ export function SearchPicker({
             } else if (e.key === 'Escape') setQ('');
           }}
           placeholder={placeholder}
-          className="w-full min-w-0 rounded-2xl border border-white/15 bg-black/30 px-4 py-3 font-bold text-white outline-none transition placeholder:text-white/35 focus:border-abby/70 focus:shadow-[0_0_0_4px_rgb(255_79_163/0.15)] disabled:opacity-50"
+          className="w-full min-w-0 rounded-2xl border-2 border-slot bg-paper px-4 py-3 font-bold text-white outline-none transition placeholder:text-white/35 focus:border-abby/70 focus:shadow-[0_0_0_4px_rgb(255_79_163/0.15)] disabled:opacity-50"
         />
         <button className="btn btn-primary shrink-0" disabled={disabled || !options[active]} onClick={() => choose(options[active])}>
           Probar

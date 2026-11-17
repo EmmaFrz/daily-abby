@@ -7,9 +7,9 @@ export type KeyState = 'ok' | 'present' | 'absent';
 const ROWS = ['QWERTYUIOP', 'ASDFGHJKLÑ', 'ZXCVBNM'];
 
 const KEY: Record<KeyState, string> = {
-  ok: 'bg-emerald-500 text-white',
-  present: 'bg-amber-500 text-white',
-  absent: 'bg-white/5 text-white/25',
+  ok: 'bg-ok text-paper',
+  present: 'bg-present text-paper',
+  absent: 'bg-white/8 text-white/30',
 };
 
 /**
@@ -56,7 +56,7 @@ export function Keyboard({
       {ROWS.map((row, ri) => (
         <div key={row} className="flex justify-center gap-1">
           {ri === 2 && withEnter && (
-            <button className="btn rounded-lg bg-gradient-to-r from-abby to-twitch px-2 py-3 text-xs" onClick={() => onKey('ENTER')}>
+            <button className="rounded-lg bg-abby px-2 py-3 font-display text-xs font-bold text-paper shadow-[0_2px_0_#c8166e] active:translate-y-0.5 active:shadow-none" onClick={() => onKey('ENTER')}>
               {enterLabel}
             </button>
           )}
@@ -71,7 +71,7 @@ export function Keyboard({
                 }}
                 disabled={!withEnter && !!st}
                 className={`h-12 min-w-0 flex-1 rounded-lg font-display text-base font-bold transition active:scale-95 sm:max-w-11 ${
-                  st ? KEY[st] : 'bg-white/14 text-white hover:bg-white/22'
+                  st ? KEY[st] : 'bg-paper text-white shadow-[0_2px_0_var(--color-slot)] hover:bg-page'
                 }`}
               >
                 {k}
@@ -80,7 +80,7 @@ export function Keyboard({
           })}
           {ri === 2 && withEnter && (
             <button
-              className="btn rounded-lg bg-white/14 px-2.5 py-3 text-base"
+              className="rounded-lg bg-paper px-2.5 py-3 text-base shadow-[0_2px_0_var(--color-slot)] active:translate-y-0.5"
               onClick={() => {
                 sfx('tap', { pitch: 0.8 });
                 onKey('BORRAR');
