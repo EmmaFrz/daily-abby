@@ -167,6 +167,8 @@ function Scene({ scene }: { scene: EasterEgg['scene'] }) {
   if (scene === 'rift')
     return (
       <div className="egg-scene" aria-hidden>
+        <span className="lol-beam" />
+        <span className="lol-beam lol-beam-2" />
         <span className="egg-ring" />
         <span className="egg-ring egg-ring-2" />
         <span className="embers embers-gold" />
@@ -246,11 +248,18 @@ function Art({ scene }: { scene: EasterEgg['scene'] }) {
     return (
       <>
         <span className="embers embers-gold" />
-        <span className="egg-ring art-ring" />
-        <span className="egg-ring egg-ring-2 art-ring-2" />
-        <span className="art-glow" />
-        <span className="art-crystal" />
-        <span className="art-emoji art-swords">⚔️</span>
+        {/* Minimapa de la Grieta: bases, calles, río, jungla, Barón, dragón, un ping y dos campeones. */}
+        <span className="lol-map">
+          <i className="lol-lanes" />
+          <i className="lol-nexus lol-nexus-blue" />
+          <i className="lol-nexus lol-nexus-red" />
+          <i className="lol-baron" />
+          <i className="art-emoji lol-drake">🐉</i>
+          <i className="lol-ping" />
+          <i className="lol-champ lol-champ-blue" />
+          <i className="lol-champ lol-champ-red" />
+        </span>
+        <span className="art-emoji lol-crown">👑</span>
       </>
     );
   if (scene === 'valorant')

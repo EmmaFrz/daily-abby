@@ -46,12 +46,12 @@ export const EGGS: EasterEgg[] = [
   {
     id: 'lol',
     codes: ['lol', 'leagueoflegends'],
-    name: 'Invocador',
+    name: 'La Grieta',
     rarity: '★ Secreta',
-    kind: 'Estrategia · La Grieta',
-    flavor: '¡Bienvenidos a la Grieta del Invocador! Cinco contra cinco y un nexo que defender.',
+    kind: 'MOBA · Grieta del Invocador',
+    flavor: 'Tres calles, una jungla y un nexo que defender. Pesada es la corona de quien llega a lo más alto.',
     scene: 'rift',
-    song: { trackId: 1833078315, title: 'Legends Never Die', artist: 'League of Legends Music & Against The Current' },
+    song: { trackId: 1766137053, title: 'Heavy Is the Crown', artist: 'LINKIN PARK' },
   },
   {
     id: 'valorant',

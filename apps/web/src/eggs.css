@@ -392,34 +392,56 @@
   transform: rotate(28deg);
 }
 
-/* La Grieta: cristal hextech que late dentro de anillos dorados. */
-.egg-rift .egg-art { background: radial-gradient(circle at 50% 40%, #0f3b52, #061226 60%, #010a13); }
-.egg-art .egg-ring { top: 40%; width: 86%; height: auto; aspect-ratio: 1; margin: 0; left: 7%; transform-origin: center; translate: 0 -50%; border-width: 3px; }
-.egg-art .egg-ring-2 { width: 62%; left: 19%; border-width: 2px; }
-.art-glow {
+/* La Grieta: minimapa con bases, calles, río y jungla, coronado con una corona dorada. */
+.egg-rift .egg-art { background: radial-gradient(circle at 50% 35%, #12324a, #061226 60%, #010a13); }
+.lol-map {
   left: 50%;
-  top: 40%;
-  width: 60%;
+  top: 21%;
+  width: 70%;
   aspect-ratio: 1;
-  translate: -50% -50%;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgb(10 200 185 / 0.55), transparent 65%);
-  animation: egg-pulse 2.4s ease-in-out infinite;
+  translate: -50% 0;
+  border: 3px solid #c8aa6e;
+  box-shadow: 0 0 0 1px #010a13, 0 0 0 4px #785a28, 0 12px 26px rgb(0 0 0 / 0.55);
+  background:
+    radial-gradient(circle at 0 100%, #1e5fa8 0 22%, transparent 22.5%),
+    radial-gradient(circle at 100% 0, #a8322b 0 22%, transparent 22.5%),
+    linear-gradient(-45deg, transparent 47%, #c9b88a 47% 53%, transparent 53%),
+    linear-gradient(45deg, transparent 43%, #2f7fa6 43% 57%, transparent 57%),
+    radial-gradient(circle, #2f6343 0 3px, transparent 4px) 0 0 / 14px 14px,
+    #234a32;
 }
-@keyframes egg-pulse { 0%, 100% { opacity: 0.45; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.1); } }
-.art-crystal {
-  left: 50%;
-  top: 40%;
-  width: 24%;
-  aspect-ratio: 1;
-  translate: -50% -50%;
-  rotate: 45deg;
-  background: linear-gradient(135deg, #d9fffb, #0ac8b9 45%, #005a82);
-  box-shadow: 0 0 0 3px #c8aa6e, 0 0 24px rgb(10 200 185 / 0.8);
-  animation: egg-float-crystal 3s ease-in-out infinite;
+.lol-map i { position: absolute; display: block; font-style: normal; }
+/* Calle superior e inferior: un marco por dentro del mapa. */
+.lol-lanes { inset: 8%; border: 5px solid #c9b88a; }
+.lol-nexus { width: 12%; aspect-ratio: 1; rotate: 45deg; border: 2px solid #f0e6d2; animation: lol-nexus 2.4s ease-in-out infinite; }
+.lol-nexus-blue { left: 5%; bottom: 5%; background: #49a3ff; box-shadow: 0 0 10px #49a3ff; }
+.lol-nexus-red { right: 5%; top: 5%; background: #ff5a4f; box-shadow: 0 0 10px #ff5a4f; animation-delay: -1.2s; }
+@keyframes lol-nexus { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+.lol-baron { left: 26%; top: 26%; width: 12%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, #c39bff, #5a2a9c 70%); box-shadow: 0 0 10px #8a4dff; }
+.lol-drake { left: 63%; top: 62%; font-size: 18px; }
+.lol-ping { left: 41%; top: 41%; width: 18%; aspect-ratio: 1; border-radius: 50%; border: 2px solid #f6d36b; animation: lol-ping 2.2s ease-out infinite; }
+@keyframes lol-ping { from { transform: scale(0.2); opacity: 1; } to { transform: scale(1.6); opacity: 0; } }
+.lol-champ { width: 8%; aspect-ratio: 1; border-radius: 50%; border: 2px solid #f0e6d2; }
+.lol-champ-blue { left: 20%; top: 70%; background: #49a3ff; animation: lol-push-blue 6s ease-in-out infinite; }
+.lol-champ-red { left: 70%; top: 20%; background: #ff5a4f; animation: lol-push-red 6s ease-in-out infinite; }
+@keyframes lol-push-blue { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(38px, -38px); } }
+@keyframes lol-push-red { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-38px, 38px); } }
+.lol-crown { left: 50%; top: 13.5%; translate: -50% 0; font-size: 30px; filter: drop-shadow(0 0 10px rgb(240 217 160 / 0.8)); }
+
+/* Focos del escenario que barren el fondo. */
+.lol-beam {
+  left: 28%;
+  bottom: -10%;
+  width: 34vmin;
+  height: 125vh;
+  margin-left: -17vmin;
+  transform-origin: 50% 100%;
+  background: linear-gradient(to top, rgb(240 217 160 / 0.28), transparent 75%);
+  clip-path: polygon(42% 100%, 58% 100%, 100% 0, 0 0);
+  animation: lol-sweep 7s ease-in-out infinite alternate;
 }
-@keyframes egg-float-crystal { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-4px, -4px); } }
-.art-swords { left: 50%; top: 62%; font-size: 30px; translate: -50% 0; }
+.lol-beam-2 { left: 72%; animation-delay: -3.5s; }
+@keyframes lol-sweep { from { transform: rotate(-18deg); } to { transform: rotate(18deg); } }
 
 /* Aru: gato blanco muy peludo dormido en un cojín. Respira y abre sus ojos claros de vez en cuando. */
 .egg-aru .egg-art { background: radial-gradient(ellipse at 50% 30%, #4a3a78, #241c40 72%); }
@@ -794,5 +816,5 @@
 
 /* Con movimiento reducido no hay escena animada: la carta aparece y se va con un fundido. */
 @media (prefers-reduced-motion: reduce) {
-  .stars, .shooting, .threads, .embers, .egg-ring, .zz, .vlr-slash, .vlr-shard, .vlr-cross, .art-vlr-ace, .sub-leaf, .sub-alert, .sub-pop, .dg-strip, .art-orbit, .art-fire, .art-bell, .wanderer, .wanderer-cloak, .art-glow, .art-crystal, .aru-body, .aru-head { animation: none !important; }
+  .stars, .shooting, .threads, .embers, .egg-ring, .zz, .vlr-slash, .vlr-shard, .vlr-cross, .art-vlr-ace, .sub-leaf, .sub-alert, .sub-pop, .dg-strip, .art-orbit, .art-fire, .art-bell, .wanderer, .wanderer-cloak, .lol-beam, .lol-ping, .lol-champ, .lol-nexus, .aru-body, .aru-head { animation: none !important; }
 }

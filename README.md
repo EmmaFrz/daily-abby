@@ -177,7 +177,7 @@ Escape o tocando fuera.
 |---|---|---|
 | `OUTER WILDS` | Cielo estrellado con estrellas fugaces; planeta con hoguera y un cohete en órbita | Travelers · Andrew Prahlow |
 | `SILKSONG` | Hilos de seda que caen, brasas y una ciudadela; figura con capa roja, aguja y campana | Silksong · Christopher Larkin |
-| `LOL` | Azul marino y dorado con anillos que giran; cristal hextech que late | Legends Never Die · League of Legends Music & Against The Current |
+| `LOL` | Escenario de Worlds con focos dorados que barren y anillos; minimapa de la Grieta (bases, calles, río, Barón, dragón, un ping y dos campeones) con una corona encima | Heavy Is the Crown · LINKIN PARK |
 | `VALORANT` | Azul marino con un corte rojo en diagonal y fragmentos angulosos; mira sobre "ACE" | Die For You · VALORANT Music & Grabbitz |
 | `ARU` | Noche con luna y "z z Z"; Aru, el gato de Abby (blanco, muy peludo y dormilón), durmiendo en su cojín y abriendo sus ojos claros de vez en cuando | Ev'rybody Wants to Be a Cat · Los Aristogatos |
 | `SUBATHON` | Cielo de Corea con montañas, otoño, hojas de arce y avisos de subs; pagoda, contador en cuenta atrás y el selfie de Abby, Jesskiu y Pausenpai | APT. · ROSÉ & Bruno Mars |
