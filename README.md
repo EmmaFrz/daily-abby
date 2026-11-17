@@ -180,7 +180,7 @@ Escape o tocando fuera.
 | `LOL` | Escenario de Worlds con focos dorados que barren y anillos; minimapa de la Grieta (bases, calles, río, Barón, dragón, un ping, dos campeones e Irelia, la campeona de Abby, en la calle superior) con una corona encima | Heavy Is the Crown · LINKIN PARK |
 | `VALORANT` | Azul marino con un corte rojo en diagonal y fragmentos angulosos; mira sobre "ACE" | Die For You · VALORANT Music & Grabbitz |
 | `ARU` | Noche con luna y "z z Z"; Aru, el gato de Abby (blanco, muy peludo y dormilón), durmiendo en su cojín y abriendo sus ojos claros de vez en cuando | Ev'rybody Wants to Be a Cat · Los Aristogatos |
-| `SUBATHON` | Cielo de Corea con montañas, otoño, hojas de arce y avisos de subs; pagoda, contador en cuenta atrás y el selfie de Abby, Jesskiu y Pausenpai | APT. · ROSÉ & Bruno Mars |
+| `SUBATHON` | Cielo de Corea con montañas, otoño, hojas de arce y avisos de subs; pagoda, contador en cuenta atrás y el selfie de Abby, Jesskiu y Pausenpai | BESO BRUMA · Ralphie Choo |
 
 Los códigos no distinguen mayúsculas, tildes, espacios ni signos ("Outer Wilds!" vale). Cada código canjeado se
 guarda en el progreso y, al canjearlos todos, se desbloquea el logro **Cazador de códigos**. Para añadir uno, crea

@@ -81,7 +81,7 @@ export const EGGS: EasterEgg[] = [
     kind: 'Directo sin fin · Corea del Sur',
     flavor: 'Cada sub suma tiempo y el directo no acaba hasta llegar a cero. Edición Corea, con Jesskiu y Pausenpai.',
     scene: 'subathon',
-    song: { trackId: 1773452221, title: 'APT.', artist: 'ROSÉ & Bruno Mars' },
+    song: { trackId: 1703712321, title: 'BESO BRUMA', artist: 'Ralphie Choo' },
   },
 ];
 
