@@ -248,7 +248,7 @@ function Art({ scene }: { scene: EasterEgg['scene'] }) {
     return (
       <>
         <span className="embers embers-gold" />
-        {/* Minimapa de la Grieta: bases, calles, río, jungla, Barón, dragón, un ping y dos campeones. */}
+        {/* Minimapa de la Grieta: bases, calles, río, jungla, Barón, dragón, un ping, dos campeones e Irelia. */}
         <span className="lol-map">
           <i className="lol-lanes" />
           <i className="lol-nexus lol-nexus-blue" />
@@ -258,6 +258,12 @@ function Art({ scene }: { scene: EasterEgg['scene'] }) {
           <i className="lol-ping" />
           <i className="lol-champ lol-champ-blue" />
           <i className="lol-champ lol-champ-red" />
+          {/* La campeona de Abby en la calle superior: retrato propio (no el arte de Riot) y su nombre. */}
+          <i className="lol-hero">
+            <i className="lol-hero-pulse" />
+            <i className="lol-hero-face">🗡️</i>
+            <i className="lol-hero-tag">Irelia</i>
+          </i>
         </span>
         <span className="art-emoji lol-crown">👑</span>
       </>

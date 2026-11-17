@@ -49,7 +49,7 @@ export const EGGS: EasterEgg[] = [
     name: 'La Grieta',
     rarity: '★ Secreta',
     kind: 'MOBA · Grieta del Invocador',
-    flavor: 'Tres calles, una jungla y un nexo que defender. Pesada es la corona de quien llega a lo más alto.',
+    flavor: 'Abby sube por la calle superior con Irelia, su campeona de siempre. Pesada es la corona de quien llega a lo más alto.',
     scene: 'rift',
     song: { trackId: 1766137053, title: 'Heavy Is the Crown', artist: 'LINKIN PARK' },
   },
