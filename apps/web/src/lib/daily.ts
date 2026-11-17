@@ -53,6 +53,11 @@ export function puzzleNumber(key: string): number {
   return daysBetween(EPOCH, key) + 1;
 }
 
+/** Día del año (1 de enero = 1, 31 de diciembre = 365 o 366): es el número del sobre del día. */
+export function dayOfYear(key: string): number {
+  return daysBetween(`${key.slice(0, 4)}-01-01`, key) + 1;
+}
+
 export function msUntilNextDay(): number {
   const n = now();
   const next = new Date(n);

@@ -151,7 +151,9 @@ Para añadir un efecto, crea una receta en `RECIPES` y llámala con `sfx('nombre
 
 ## Diseño: álbum de cromos
 
-La web es un álbum. Cada día llega un "sobre" (#número del reto) y cada reto es un cromo numerado: los que
+La web es un álbum. Cada día llega un sobre con el número del día del año (17 de noviembre → #321). Cada día
+tiene una edición de colores y un patrón distintos, que salen de la fecha (`src/components/BoosterPack.tsx`:
+añade ediciones a `EDITIONS` o patrones a `PATTERNS`). Cada reto es un cromo numerado: los que
 no has jugado son huecos con borde discontinuo y los que terminas se pegan (en gris y con sello si se fallaron;
 con la esquina despegada si están a medias). El Heardle es un cromo de 7 piezas, una por género. En **Logros**,
 los 31 logros son cromos dorados.

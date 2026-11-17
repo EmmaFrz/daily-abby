@@ -1,12 +1,13 @@
 import type { ComponentType, CSSProperties } from 'react';
 import { PageHeader, Pieces, Slot, Sticker, StickerArt, StickerNumber, tilt } from '../components/Album';
 import { Avatar } from '../components/Avatar';
+import { BoosterPack } from '../components/BoosterPack';
 import { SocialLinks } from '../components/SocialLinks';
 import { Card } from '../components/ui';
 import { ABBY } from '../config/abby';
 import { CHARTS_DATE } from '../data/heardleGenres';
 import { useCountdown } from '../hooks/useCountdown';
-import { puzzleNumber } from '../lib/daily';
+import { dayOfYear, puzzleNumber } from '../lib/daily';
 import { MINIGAME_COMPONENTS } from '../minigames';
 import { ALBUM, CATEGORIES, CATEGORY_COLOR, HEARDLE_GROUP, META, MINIGAMES, albumColor, albumNumber, type MinigameMeta } from '../minigames/meta';
 import { doneToday, liveStreak } from '../state/progress';
@@ -31,8 +32,6 @@ function useStatus() {
     return run && run.day === today ? run.status : 'new';
   };
 }
-
-const MONTHS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
 
 /** Un reto en el álbum: hueco si no se ha jugado, cromo si sí. */
 function GameCard({ m, n, delay, onOpen }: { m: MinigameMeta; n: number | string; delay: number; onOpen: (id: string) => void }) {
@@ -149,23 +148,14 @@ function Hub({ onOpen }: { onOpen: (id: string) => void }) {
   const total = MINIGAMES.length;
   const left = total - done;
   const streak = liveStreak(state.streak, state.lastPlayDay, today);
-  const date = new Date(`${today}T12:00:00`);
-  const rawDate = date.toLocaleDateString('es', { weekday: 'long', day: 'numeric', month: 'long' });
+  const rawDate = new Date(`${today}T12:00:00`).toLocaleDateString('es', { weekday: 'long', day: 'numeric', month: 'long' });
   const dateLabel = rawDate.charAt(0).toUpperCase() + rawDate.slice(1);
-  const num = puzzleNumber(today);
 
   return (
     <div className="grid grid-cols-1 gap-7">
       <section className="glass animate-rise grid grid-cols-1 items-center gap-6 rounded-[20px] p-5 sm:grid-cols-[auto_minmax(0,1fr)] sm:p-6">
-        {/* El sobre del día */}
-        <div className="relative mx-auto hidden aspect-[3/4] w-28 -rotate-[5deg] place-content-center overflow-hidden rounded-xl bg-gradient-to-br from-abby to-twitch text-center text-paper shadow-[0_12px_24px_-10px_rgb(124_77_255/0.7)] sm:grid">
-          <span className="absolute inset-x-0 top-0 h-3.5 bg-[repeating-linear-gradient(90deg,rgb(255_255_255/0.55)_0_6px,transparent_6px_12px)]" />
-          <span className="text-[10px] font-extrabold uppercase tracking-[0.16em] opacity-85">Sobre</span>
-          <span className="num-display text-[42px]">#{num}</span>
-          <span className="text-[10px] font-extrabold uppercase tracking-[0.16em] opacity-85">
-            {date.getDate()} {MONTHS[date.getMonth()]}
-          </span>
-        </div>
+        {/* El sobre del día: número = día del año; colores y patrón cambian cada día. */}
+        <BoosterPack today={today} total={total} className="mx-auto" />
 
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2.5">
@@ -175,7 +165,7 @@ function Hub({ onOpen }: { onOpen: (id: string) => void }) {
             </span>
           </div>
           <p className="mt-3 text-xs font-extrabold text-dim">
-            {dateLabel} · sobre #{num}
+            {dateLabel} · sobre #{dayOfYear(today)}
             {streak > 0 && <span> · {streak} {streak === 1 ? 'día' : 'días'} seguidos</span>}
           </p>
           <h1 className="mt-1 font-display text-3xl font-extrabold leading-[1.05] tracking-tight [font-variation-settings:'wdth'_85] sm:text-4xl">
