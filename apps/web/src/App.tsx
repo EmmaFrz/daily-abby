@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { BugReport } from './components/BugReport';
 import { EasterEggOverlay, type ActiveEgg } from './components/EasterEggs';
 import { PreAlphaModal } from './components/PreAlphaModal';
 import { RedeemCode } from './components/RedeemCode';
@@ -55,6 +56,7 @@ export function App() {
     <>
       <Toasts />
       <PreAlphaModal />
+      <BugReport />
       <header className="sticky top-0 z-40 border-b border-slot/70 bg-page/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2.5">
           <button onClick={() => go('diarios')} className="flex items-center gap-2.5 text-left">
