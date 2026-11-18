@@ -5,10 +5,16 @@
  *   npm run musica:actualizar            → todos los géneros
  *   npm run musica:actualizar -- edm     → solo los géneros indicados (el resto se conserva)
  *
+ *   npm run musica:actualizar -- --dry   → solo muestra qué canciones pasarían el filtro (sin iTunes ni guardar)
+ *
  * Por cada género:
  *  1. Busca los "clásicos" de ANCHORS en el catálogo de cada artista (versión original).
- *  2. Añade las listas "Top Songs" del género en varias tiendas.
- * Descarta karaokes, covers, remixes y duplicados, y guarda el resultado en src/data/heardle-charts.json.
+ *  2. Toma candidatas de playlists editoriales de Deezer (éxitos de varias décadas) y de los primeros
+ *     puestos de las listas "Top Songs" de Apple (novedades).
+ *  3. Filtro de renombre (API pública de Deezer, sin clave): el artista debe tener muchos fans y la canción
+ *     debe estar entre las más escuchadas de ese artista. Así no se cuelan desconocidos ni "caras B".
+ *  4. Busca cada candidata en iTunes (la previa sale de Apple) y se queda con su edición más antigua.
+ * Descarta karaokes, covers, remixes, villancicos y duplicados, y guarda el resultado en src/data/heardle-charts.json.
  * El juego usa esa "foto" para que todo el mundo reciba las mismas canciones cada día.
  */
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
@@ -16,21 +22,69 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const OUT = join(dirname(fileURLToPath(import.meta.url)), '..', 'src', 'data', 'heardle-charts.json');
-const STORES = ['us', 'mx', 'es', 'gb'];
 const MAX_PER_GENRE = 150;
+/** Solo los primeros puestos de las listas de ventas de Apple: más abajo hay sobre todo relleno. */
+const CHART_TOP = 25;
+/** Fans mínimos en Deezer del artista de una novedad de Apple. */
+const MIN_FANS = 300_000;
+/** Fans mínimos del artista de una canción de playlist editorial (ya elegida como éxito). */
+const MIN_FANS_LIST = 100_000;
+/** Una novedad de Apple debe estar entre las N canciones más escuchadas del artista en Deezer. */
+const TOP_N = 15;
 
-/** id del género en el juego → ids de género de Apple. */
+/**
+ * Por género del juego:
+ *  - apple: ids de género de Apple para la lista "Top Songs" (novedades).
+ *  - stores: tiendas de Apple donde mirar esa lista y buscar las canciones (la primera es la preferida).
+ *  - deezer: playlists editoriales de Deezer (éxitos de varias décadas).
+ *  - minFans / topN: para afinar el filtro de renombre en un género.
+ */
 const GENRES = {
-  pop: [14],
-  latino: [12, 1119],
-  rock: [21],
-  hiphop: [18],
-  kpop: [51],
-  edm: [17, 7], // Dance + Electronic
-  espana: [], // Sin lista de Apple: solo la selección de ANCHORS (artistas de España)
+  pop: {
+    apple: [14],
+    stores: ['us', 'gb'],
+    // Pop Essentials, 80s Hits, 90s Hits, 00s Hits, 00s Pop, 10s Hits, 10s Pop
+    deezer: [1036183001, 867825522, 878989033, 248297032, 8326097522, 14917741483, 8282573142],
+  },
+  latino: {
+    apple: [12, 1119],
+    stores: ['us', 'mx'],
+    // Reggaeton Classics, Fuego Latino Essentials, Latin Classics, 00s/10s/20s Latin Music, Esenciales Pop en español, Reggaeton Hits
+    deezer: [789123393, 13288040963, 5104249748, 6987556164, 5174094184, 13668653381, 9185904182, 1273315391],
+  },
+  rock: {
+    apple: [21],
+    stores: ['us', 'gb'],
+    // Rock Essentials, Modern Rock Essentials, Hard Rock Essentials, 80s Rock, 90s Rock, 2000s Rock, 2010s Rock, Grunge Essentials
+    deezer: [1306931615, 11335739484, 761604441, 8621268482, 1728093421, 1419215845, 1057779131, 1431800665],
+  },
+  hiphop: {
+    apple: [18],
+    stores: ['us'],
+    // East Coast Essentials, West Coast Essentials, '90s Rap, 2000s Rap, '10s Rap, 2020s Rap, Rap Bangers
+    deezer: [1976915302, 2979302822, 1724212365, 4676818664, 7662551722, 12547421383, 1996494362],
+  },
+  kpop: {
+    apple: [51],
+    stores: ['us'],
+    // K-Pop Essentials, Top K-Pop, 2010s K-Pop Hits, K-Pop 2nd/3rd/4th Generation
+    deezer: [873660353, 4096400722, 9001527742, 10738561582, 11012274682, 11012482922],
+    // Los fandoms de K-Pop están en otras plataformas: en Deezer tienen muchos menos fans que en Occidente.
+    minFansList: 30_000,
+    minFans: 100_000,
+  },
+  edm: {
+    apple: [17, 7], // Dance + Electronic
+    stores: ['us', 'gb'],
+    // Electronic Hits, Dance Essentials, 90s Dance, 00s Dance, 10s Dance, Dance Party Classics
+    // (la de festival "Mainstage" traía temas poco conocidos)
+    deezer: [1902101402, 4613753548, 4135981802, 4135818362, 2159765062, 6237312204],
+  },
+  // Sin listas: solo la selección de ANCHORS (artistas de España).
+  espana: { apple: [], stores: ['es'], deezer: [] },
   // Apple tiene el subgénero "Video Game" (100032), pero su lista trae sobre todo versiones de fans y pistas
   // poco conocidas. Para que se pueda adivinar, solo usamos la selección de ANCHORS (versiones originales).
-  juegos: [],
+  juegos: { apple: [], stores: ['us'], deezer: [] },
 };
 
 /** Tienda donde buscar los clásicos de cada género (por defecto EE. UU.). */
@@ -183,10 +237,14 @@ const ANCHORS = {
   ],
 };
 
-const BAD = /karaoke|cover|tribute|instrumental|remix|rmx|versi[oó]n|version|live|en vivo|en directo|sped up|slowed|lullaby|8[- ]bit|medley|acoustic|ac[uú]stic|piano|orchestra|kidz bop|rockabye|8d audio|bass boosted|extended|nightcore/i;
+/** Títulos o discos que delatan una versión que no es la original (o un villancico de temporada). */
+const BAD =
+  /karaoke|\bcover\b|tribute|instrumental|remix|rmx|\bversi[oó]n\b|\bversion\b|\blive\b|en vivo|en directo|sped up|slowed|lullaby|8[- ]bit|medley|acoustic|ac[uú]stic|kidz bop|8d audio|bass boosted|extended|nightcore|christmas|navidad|xmas|jingle bell|villancico|\bdemo\b|\bmixed\b|dj mix|cast recording/i;
+/** Artistas que hacen versiones de canciones ajenas. */
+const BAD_ARTIST = /karaoke|tribute|kidz bop|rockabye|lullaby|8d audio|nightcore|bass boosted|\bcovers?\b|string quartet|piano guys/i;
 /** "(Deep House)", "(Afro House)", "(Techno Bootleg)"…: suelen ser versiones de otra canción. */
 const BAD_TAG = /[([][^)\]]*\b(\w*house|techno|bootleg|rework|flip|phonk|hardstyle|vip)\b[^)\]]*[)\]]/i;
-const isBad = (title, artist) => BAD.test(title) || BAD.test(artist) || BAD_TAG.test(title);
+const isBad = (title, artist) => BAD.test(title) || BAD_ARTIST.test(artist) || BAD_TAG.test(title);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const norm = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
 
@@ -194,7 +252,7 @@ const norm = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').rep
  * Deja solo el nombre de la canción: quita "(feat. X)", "[with X]", "(From …)",
  * "(2018 Remaster)", "[K-Mix]", "(Radio Edit)", "(Japanese Ver.)", "- Remastered 2011"…
  */
-const EXTRA = /\b(?:feat|ft|with|con|from|remaster\w*|mix|edit|version|sessions?|official|single|bonus|prod|interludio|original)\b|\bver\./i;
+const EXTRA = /\b(?:feat|ft|with|con|from|remaster\w*|mix|edit|edited|clean|version|edition|anniversary|sessions?|official|single|bonus|prod|interludio|original)\b|\bver\./i;
 const dropIfExtra = (m, inner) => (EXTRA.test(inner) ? '' : m);
 const cleanTitle = (t) =>
   t
@@ -254,10 +312,152 @@ async function resolveAnchor(artist, title, store) {
   return { t: cleanTitle(hit.trackName), a: hit.artistName, id: hit.trackId, c: store, y: Number(hit.releaseDate?.slice(0, 4)) || null };
 }
 
+/** Artista principal: "Bad Bunny & Jhay Cortez" → "Bad Bunny". */
+const mainArtist = (a) => a.split(/,|&| x | y | feat\.? | ft\.? | with /i)[0].trim();
+/** Mismo título, admitiendo coletillas: "levels" ≈ "levels radio edit". */
+const sameTitle = (a, b) => a === b || a.startsWith(`${b} `) || b.startsWith(`${a} `);
+const titleKey = (t) => norm(cleanTitle(t));
+
+/** Busca una canción en iTunes por artista y título y devuelve su edición más antigua (no la de un recopilatorio). */
+async function resolveSearch(artist, title, stores) {
+  const want = titleKey(title);
+  const who = norm(mainArtist(artist));
+  for (const store of stores) {
+    const j = await getJson(`https://itunes.apple.com/search?${new URLSearchParams({ term: `${mainArtist(artist)} ${cleanTitle(title)}`, entity: 'song', limit: '25', country: store })}`);
+    await sleep(3200);
+    const hits = (j?.results ?? [])
+      .filter(
+        (r) =>
+          r.wrapperType === 'track' &&
+          r.previewUrl &&
+          sameTitle(titleKey(r.trackName), want) &&
+          (norm(r.artistName).includes(who) || who.includes(norm(mainArtist(r.artistName)))) &&
+          !isBad(r.trackName, r.artistName) &&
+          !BAD.test(r.collectionName ?? ''),
+      )
+      .sort((a, b) => String(a.releaseDate).localeCompare(String(b.releaseDate)));
+    const hit = hits[0];
+    if (hit) return { t: cleanTitle(hit.trackName), a: hit.artistName, id: hit.trackId, c: store, y: Number(hit.releaseDate?.slice(0, 4)) || null };
+  }
+  // Con éxitos muy versionados ("Creep", "Boulevard of Broken Dreams") la búsqueda devuelve solo covers y karaokes:
+  // entonces buscamos la canción en el catálogo del propio artista.
+  for (const store of stores) {
+    const hit = (await songsOf(mainArtist(artist), store))
+      .filter(
+        (r) =>
+          sameTitle(titleKey(r.trackName), want) &&
+          (norm(r.artistName).includes(who) || who.includes(norm(mainArtist(r.artistName)))) &&
+          !isBad(r.trackName, r.artistName) &&
+          !BAD.test(r.collectionName ?? ''),
+      )
+      .sort((a, b) => String(a.releaseDate).localeCompare(String(b.releaseDate)))[0];
+    if (hit) return { t: cleanTitle(hit.trackName), a: hit.artistName, id: hit.trackId, c: store, y: Number(hit.releaseDate?.slice(0, 4)) || null };
+  }
+  return null;
+}
+
+/* ───────────── Deezer: filtro de renombre ───────────── */
+
+let lastDeezer = 0;
+/** API pública de Deezer (límite: 50 peticiones cada 5 s). */
+async function deezer(path) {
+  const wait = 130 - (Date.now() - lastDeezer);
+  if (wait > 0) await sleep(wait);
+  lastDeezer = Date.now();
+  const j = await getJson(`https://api.deezer.com/${path}`);
+  if (j?.error?.code === 4) {
+    await sleep(5000); // cuota superada: esperamos y repetimos
+    return deezer(path);
+  }
+  return j?.error ? null : j;
+}
+
+/** Fans y canciones más escuchadas de un artista de Deezer (cacheado). */
+const dzArtists = new Map();
+function dzArtist(id) {
+  if (!dzArtists.has(id)) {
+    dzArtists.set(
+      id,
+      (async () => {
+        const a = await deezer(`artist/${id}`);
+        const top = await deezer(`artist/${id}/top?limit=50`);
+        const titles = [...new Set((top?.data ?? []).map((t) => titleKey(t.title_short ?? t.title)))];
+        return { name: a?.name ?? '?', fans: a?.nb_fan ?? 0, top: titles };
+      })(),
+    );
+  }
+  return dzArtists.get(id);
+}
+
+/**
+ * Id de Deezer de un artista por su nombre: de los perfiles con ese nombre exacto, el de más fans
+ * (Deezer tiene perfiles duplicados casi vacíos). Prueba el nombre completo y luego el artista principal.
+ */
+const dzByName = new Map();
+async function dzArtistId(name) {
+  for (const q of [...new Set([name, mainArtist(name)])]) {
+    const key = norm(q);
+    if (!dzByName.has(key)) {
+      const j = await deezer(`search/artist?limit=10&q=${encodeURIComponent(q)}`);
+      const best = (j?.data ?? []).filter((a) => norm(a.name) === key).sort((a, b) => (b.nb_fan ?? 0) - (a.nb_fan ?? 0))[0];
+      dzByName.set(key, best?.id ?? null);
+    }
+    if (dzByName.get(key)) return dzByName.get(key);
+  }
+  return null;
+}
+
+/**
+ * ¿Es una canción conocida? Devuelve null si pasa, o el motivo por el que no.
+ *  - De una playlist editorial: el editor ya eligió el éxito; basta con que el artista sea conocido.
+ *  - Novedad de Apple: además debe estar entre las más escuchadas del artista (el "top" de Deezer
+ *    refleja lo que se escucha ahora, así que solo sirve para novedades).
+ */
+async function renown(c, cfg, editorial) {
+  const ids = [...new Set([c.dzArtistId, await dzArtistId(c.a)].filter(Boolean))];
+  if (!ids.length) return 'artista no está en Deezer';
+  const infos = await Promise.all(ids.map(dzArtist));
+  const info = infos.sort((a, b) => b.fans - a.fans)[0];
+  const minFans = editorial ? (cfg.minFansList ?? MIN_FANS_LIST) : (cfg.minFans ?? MIN_FANS);
+  if (info.fans < minFans) return `pocos fans (${info.fans.toLocaleString('es')})`;
+  if (editorial) return null;
+  const want = titleKey(c.t);
+  const pos = info.top.findIndex((t) => sameTitle(t, want));
+  if (pos < 0 || pos >= (cfg.topN ?? TOP_N)) return pos < 0 ? 'no está en el top del artista' : `puesto ${pos + 1} del artista`;
+  return null;
+}
+
+/** Candidatas de una playlist de Deezer, de más a menos escuchada. */
+async function playlistCandidates(id) {
+  const j = await deezer(`playlist/${id}/tracks?limit=300`);
+  return (j?.data ?? [])
+    .filter((t) => t.readable !== false)
+    .sort((a, b) => (b.rank ?? 0) - (a.rank ?? 0))
+    .map((t) => ({ t: t.title_short ?? t.title, a: t.artist?.name ?? '', dzArtistId: t.artist?.id }));
+}
+
+/** Candidatas de los primeros puestos de la lista "Top Songs" de Apple (ya traen su trackId). */
+async function appleCandidates(store, genre) {
+  const entries = (await chart(store, genre)).slice(0, CHART_TOP);
+  await sleep(1200);
+  return entries
+    .filter((e) => [].concat(e.link ?? []).some((l) => l.attributes?.rel === 'enclosure'))
+    .map((e) => ({
+      t: e['im:name']?.label ?? '',
+      a: e['im:artist']?.label ?? '',
+      id: Number(e.id?.attributes?.['im:id']) || null,
+      c: store,
+      y: Number(e['im:releaseDate']?.label?.slice(0, 4)) || null,
+    }));
+}
+
 /* ───────────── Main ───────────── */
 
-const only = process.argv.slice(2).filter((a) => a in GENRES);
-const unknown = process.argv.slice(2).filter((a) => !(a in GENRES));
+const args = process.argv.slice(2);
+const DRY = args.includes('--dry');
+const names = args.filter((a) => !a.startsWith('--'));
+const only = names.filter((a) => a in GENRES);
+const unknown = names.filter((a) => !(a in GENRES));
 if (unknown.length) console.warn(`Géneros desconocidos (se ignoran): ${unknown.join(', ')}. Válidos: ${Object.keys(GENRES).join(', ')}`);
 const targets = only.length ? only : Object.keys(GENRES);
 
@@ -265,46 +465,73 @@ const previous = existsSync(OUT) ? JSON.parse(readFileSync(OUT, 'utf8')) : { gen
 const result = { generatedAt: new Date().toISOString().slice(0, 10), genres: { ...previous.genres } };
 
 for (const id of targets) {
+  const cfg = GENRES[id];
   const songs = [];
   const seen = new Set();
+  const keyOf = (s) => `${titleKey(s.t)}|${norm(mainArtist(s.a))}`;
   const add = (s) => {
-    const key = `${norm(s.t)}|${norm(s.a.split(/,|&| x | y /)[0])}`;
-    if (seen.has(key) || seen.has(String(s.id)) || songs.length >= MAX_PER_GENRE) return;
+    const key = keyOf(s);
+    if (seen.has(key) || seen.has(String(s.id)) || songs.length >= MAX_PER_GENRE) return false;
     seen.add(key);
     seen.add(String(s.id));
     songs.push(s);
+    return true;
   };
 
-  for (const [artist, title, game] of ANCHORS[id] ?? []) {
-    const s = await resolveAnchor(artist, title, ANCHOR_STORE[id] ?? 'us');
-    if (s) add(game ? { ...s, g: game } : s);
+  if (!DRY) {
+    for (const [artist, title, game] of ANCHORS[id] ?? []) {
+      const s = await resolveAnchor(artist, title, ANCHOR_STORE[id] ?? 'us');
+      if (s) add(game ? { ...s, g: game } : s);
+    }
   }
-  const anchors = songs.length;
+  const anchors = DRY ? (ANCHORS[id] ?? []).length : songs.length;
 
-  // Intercalamos tiendas: primero el nº 1 de cada una, luego el nº 2…
+  // Fuentes: novedades de Apple y playlists editoriales de Deezer, intercaladas (el nº 1 de cada una, luego el nº 2…).
   const lists = [];
-  for (const g of GENRES[id]) {
-    for (const store of STORES) {
-      lists.push({ store, entries: await chart(store, g) });
-      await sleep(1200);
+  for (const g of cfg.apple) for (const store of cfg.stores) lists.push(await appleCandidates(store, g));
+  for (const p of cfg.deezer) lists.push(await playlistCandidates(p));
+  // Si una novedad de Apple también está en una playlist editorial, cuenta como elegida por el editor.
+  const editorialKeys = new Set(lists.flat().filter((c) => c.dzArtistId).map(keyOf));
+  const queue = [];
+  const queued = new Set(seen);
+  for (let rank = 0; rank < Math.max(0, ...lists.map((l) => l.length)); rank++) {
+    for (const l of lists) {
+      const c = l[rank];
+      if (!c || !c.t || isBad(c.t, c.a) || queued.has(keyOf(c))) continue;
+      queued.add(keyOf(c));
+      queue.push(c);
     }
   }
-  const longest = Math.max(0, ...lists.map((l) => l.entries.length));
-  for (let rank = 0; rank < longest; rank++) {
-    for (const { store, entries } of lists) {
-      const e = entries[rank];
-      if (!e) continue;
-      const title = e['im:name']?.label ?? '';
-      const artist = e['im:artist']?.label ?? '';
-      const trackId = Number(e.id?.attributes?.['im:id']);
-      const hasPreview = [].concat(e.link ?? []).some((l) => l.attributes?.rel === 'enclosure');
-      if (!trackId || !hasPreview || isBad(title, artist)) continue;
-      add({ t: cleanTitle(title), a: artist, id: trackId, c: store, y: Number(e['im:releaseDate']?.label?.slice(0, 4)) || null });
+
+  const rejected = {};
+  const reject = (why, c) => (rejected[why.replace(/\(.*\)|\d+/g, '').trim()] ??= []).push(`${c.t} — ${c.a}${why.includes('(') || /\d/.test(why) ? ` [${why}]` : ''}`);
+  let accepted = anchors;
+  let checked = 0;
+  for (const c of queue) {
+    if (accepted >= MAX_PER_GENRE) break;
+    checked++;
+    const why = await renown(c, cfg, editorialKeys.has(keyOf(c)));
+    if (why) {
+      reject(why, c);
+      continue;
     }
+    if (DRY) {
+      songs.push(c);
+      accepted++;
+      continue;
+    }
+    const s = c.id ? c : await resolveSearch(c.a, c.t, cfg.stores);
+    if (!s) reject('no encontrada en iTunes', c);
+    else if (add({ ...s, t: cleanTitle(s.t) })) accepted++;
   }
-  result.genres[id] = songs;
-  console.log(`${id.padEnd(8)} ${songs.length} canciones (${anchors} clásicos) · ej.: ${songs.slice(0, 3).map((s) => `${s.t} — ${s.a}`).join(' | ')}`);
+
+  console.log(`\n${id.padEnd(8)} ${accepted} canciones (${anchors} clásicos, ${checked} de ${queue.length} candidatas revisadas)`);
+  for (const [why, list] of Object.entries(rejected)) console.log(`  ✗ ${why}: ${list.length} · ej.: ${list.slice(0, 6).join(' | ')}`);
+  if (DRY) console.log(`  ✓ ej.: ${songs.filter((_, i) => i % 6 === 0).slice(0, 20).map((s) => `${s.t} — ${s.a}`).join(' | ')}`);
+  else result.genres[id] = songs;
 }
 
-writeFileSync(OUT, JSON.stringify(result, null, 0) + '\n');
-console.log(`\nGuardado en ${OUT}`);
+if (!DRY) {
+  writeFileSync(OUT, JSON.stringify(result, null, 0) + '\n');
+  console.log(`\nGuardado en ${OUT}`);
+}
