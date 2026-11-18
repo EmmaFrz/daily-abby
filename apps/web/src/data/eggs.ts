@@ -3,7 +3,7 @@
  * (componente en src/components/EasterEggs.tsx, estilos en src/eggs.css).
  *
  * Los códigos se comparan sin mayúsculas, tildes, espacios ni signos. Al canjear uno se guarda la
- * hazaña `code-<id>`; con todos se desbloquea el logro "Cazador de códigos".
+ * hazaña `code-<id>`; hay logros por canjear 1, 3, 5, 10 y todos ("Cazador de códigos").
  */
 
 export interface EasterEgg {
@@ -17,7 +17,7 @@ export interface EasterEgg {
   /** Línea de tipo de la carta. */
   kind: string;
   flavor: string;
-  scene: 'space' | 'silk' | 'rift' | 'valorant' | 'aru' | 'subathon';
+  scene: 'space' | 'silk' | 'rift' | 'valorant' | 'aru' | 'subathon' | 'blocks' | 'soul' | 'farm' | 'taopunk' | 'twilight' | 'boxing' | 'sakura';
   /** Previa oficial de Apple Music (trackId del enlace de music.apple.com, tras ?i=). */
   song: { trackId: number; title: string; artist: string; store?: string };
 }
@@ -82,6 +82,76 @@ export const EGGS: EasterEgg[] = [
     flavor: 'Cada sub suma tiempo y el directo no acaba hasta llegar a cero. Edición Corea, con Jesskiu y Pausenpai.',
     scene: 'subathon',
     song: { trackId: 1703712321, title: 'BESO BRUMA', artist: 'Ralphie Choo' },
+  },
+  {
+    id: 'minecraft',
+    codes: ['minecraft'],
+    name: 'Primer día',
+    rarity: '★ Secreta',
+    kind: 'Supervivencia · Bloque a bloque',
+    flavor: 'Un árbol, un pico de madera y el sol que ya baja. Antes de la primera noche hay que tener un techo.',
+    scene: 'blocks',
+    song: { trackId: 1867885632, title: 'Sweden', artist: 'C418' },
+  },
+  {
+    id: 'undertale',
+    codes: ['undertale'],
+    name: 'Determinación',
+    rarity: '★ Secreta',
+    kind: 'RPG · Nadie tiene que morir',
+    flavor: 'Un corazón rojo esquivando todo lo que cae. Puedes luchar… o puedes perdonar.',
+    scene: 'soul',
+    song: { trackId: 6813343186, title: 'Megalovania', artist: 'Toby Fox' },
+  },
+  {
+    id: 'stardew',
+    codes: ['stardew', 'stardewvalley'],
+    name: 'La granja',
+    rarity: '★ Secreta',
+    kind: 'Granja · Pueblo Pelícano',
+    flavor: 'Una granja heredada, un pueblo pequeño y días que vuelan. Riega, cosecha y a la cama antes de las 2.',
+    scene: 'farm',
+    song: { trackId: 1158129392, title: 'Stardew Valley Overture', artist: 'ConcernedApe' },
+  },
+  {
+    id: 'ninesols',
+    codes: ['ninesols'],
+    name: 'Nueve soles',
+    rarity: '★ Secreta',
+    kind: 'Taopunk · Parar y contraatacar',
+    flavor: 'Nueve soles gobiernan la ciudad de Nuevo Kunlun. Un talismán, un parry perfecto y uno menos.',
+    scene: 'taopunk',
+    song: { trackId: 1753190933, title: "The Path for Us All (Yi's Theme)", artist: 'FFXX' },
+  },
+  {
+    id: 'zelda',
+    codes: ['zelda'],
+    name: 'Crepúsculo',
+    rarity: '★ Secreta',
+    kind: 'Aventura · Twilight Princess',
+    flavor: 'El crepúsculo cubre Hyrule y el héroe aúlla como un lobo. La espada espera en su pedestal.',
+    scene: 'twilight',
+    song: { trackId: 763234117, title: "Midna's Lament", artist: 'Taylor Davis' },
+  },
+  {
+    id: 'velada',
+    codes: ['velada'],
+    name: 'Campeona',
+    rarity: '★ Velada del Año',
+    kind: 'Boxeo · La Velada del Año',
+    flavor: 'Guantes rosas, trenzas y el brazo en alto: Abby subió al ring de la Velada y bajó con el cinturón.',
+    scene: 'boxing',
+    song: { trackId: 254685026, title: 'Eye of the Tiger', artist: 'Survivor' },
+  },
+  {
+    id: 'sakura',
+    codes: ['sakura'],
+    name: 'Sakura FC',
+    rarity: '♥ Presidenta',
+    kind: 'Fútbol 7 · Queens League',
+    flavor: 'Abby preside el Sakura FC en la Queens League. Pétalos rosas, botas puestas y a por la copa.',
+    scene: 'sakura',
+    song: { trackId: 370711731, title: 'Waka Waka (Esto es África)', artist: 'Shakira' },
   },
 ];
 

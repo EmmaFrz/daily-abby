@@ -29,7 +29,7 @@ salen de la fecha con una semilla fija.
 | | 🌍 ¿Cuál es más grande? | 60 s para elegir el país con más superficie en cada pareja; cada fallo resta 5 s |
 
 Cada minijuego guarda tu racha, tu récord y un resultado para compartir con cuadritos de colores, como Wordle.
-La pestaña **Logros** reúne 31 logros y las estadísticas por juego.
+La pestaña **Logros** reúne 36 logros y las estadísticas por juego.
 
 ### Crucigrama, Críptico y países
 
@@ -162,7 +162,7 @@ tiene una edición de colores y un patrón distintos, que salen de la fecha (`sr
 añade ediciones a `EDITIONS` o patrones a `PATTERNS`). Cada reto es un cromo numerado: los que
 no has jugado son huecos con borde discontinuo y los que terminas se pegan (en gris y con sello si se fallaron;
 con la esquina despegada si están a medias). El Heardle es un cromo de 7 piezas, una por género. En **Logros**,
-los 31 logros son cromos dorados.
+los 36 logros son cromos dorados.
 
 - Colores y fuentes (Bricolage Grotesque + Figtree): `@theme` de `src/index.css`. Cada categoría tiene su color
   (`--color-cat-*`), que es el fondo del cromo.
@@ -187,9 +187,17 @@ Escape o tocando fuera.
 | `VALORANT` | Azul marino con un corte rojo en diagonal y fragmentos angulosos; mira sobre "ACE" | Die For You · VALORANT Music & Grabbitz |
 | `ARU` | Noche con luna y "z z Z"; Aru, el gato de Abby (blanco, muy peludo y dormilón), durmiendo en su cojín y abriendo sus ojos claros de vez en cuando | Ev'rybody Wants to Be a Cat · Los Aristogatos |
 | `SUBATHON` | Cielo de Corea con montañas, otoño, hojas de arce y avisos de subs; pagoda, contador en cuenta atrás y el selfie de Abby, Jesskiu y Pausenpai | BESO BRUMA · Ralphie Choo |
+| `MINECRAFT` | Amanecer de bloques con sol cuadrado, nubes de bloques y colinas escalonadas; un árbol y un bloque de hierba que se agrieta mientras un pico lo pica | Sweden · C418 |
+| `UNDERTALE` | Fondo negro con disparos blancos que caen, un corazón rojo que late y "* Eso te llena de DETERMINACIÓN."; caja de combate con el corazón esquivando y el menú (Piedad parpadea) | Megalovania · Toby Fox |
+| `STARDEW` | Mañana de primavera con colinas, campo arado y pétalos; granero, cartel "Día 1 · Primavera", cultivos que crecen y una gallina que va y viene | Stardew Valley Overture · ConcernedApe |
+| `NINE SOLS` | Taopunk en rojo y jade: rejilla de circuitos, anillos que giran y talismanes que caen; nueve soles orbitando un núcleo y dos talismanes colgando | The Path for Us All (Yi's Theme) · FFXX |
+| `ZELDA` | Cielo del crepúsculo de *Twilight Princess* con motas negras que suben y la silueta de un castillo; trifuerza, la espada en su pedestal y un lobo | Midna's Lament · Taylor Davis (versión en violín: Nintendo no publica su música en Apple Music) |
+| `VELADA` | Estadio a oscuras con focos rosas, flashes del público, cuerdas del ring y confeti; el guante rosa en alto y el cinturón de campeona de Abby en La Velada del Año | Eye of the Tiger · Survivor |
+| `SAKURA` | Negro y turquesa con focos del estadio, el campo y pétalos de cerezo; flor de cerezo con hojas turquesa, "Sakura FC" y "Presidenta · Abby" (su equipo de la Queens League) | Waka Waka (Esto es África) · Shakira |
 
 Los códigos no distinguen mayúsculas, tildes, espacios ni signos ("Outer Wilds!" vale). Cada código canjeado se
-guarda en el progreso y, al canjearlos todos, se desbloquea el logro **Cazador de códigos**. Para añadir uno, crea
+guarda en el progreso y da logros al canjear 1 (**Primer código**), 3 (**Buscatesoros**), 5 (**Llave maestra**),
+10 (**Coleccionista**) y todos (**Cazador de códigos**). Solo cuentan los códigos que siguen en `EGGS`. Para añadir uno, crea
 un objeto en `EGGS` (`src/data/eggs.ts`) con su `trackId` de Apple Music y una escena. Las escenas
 nuevas llevan su fondo en `<Scene>`, su ilustración en `<Art>` y sus estilos en `src/eggs.css`. Todas las
 animaciones son CSS y solo mueven `transform` y `opacity`, así que no consumen apenas rendimiento.

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
 import { EGGS, type EasterEgg } from '../data/eggs';
 import type { TrackInfo } from '../lib/itunes';
 import { soundSettings } from '../lib/sound';
@@ -30,13 +30,21 @@ export function EasterEggOverlay({ active, onDone }: { active: ActiveEgg; onDone
   const [link, setLink] = useState<string | null>(null);
   const timers = useRef<number[]>([]);
   const fade = useRef(0);
+  const left = useRef(false);
+  // onDone llega como función nueva en cada render de App. Se guarda en una ref para que `leave` sea
+  // estable: si no, un render de App mientras la carta se va (p. ej., al quitarse el aviso de un logro)
+  // reiniciaba el efecto, borraba el temporizador de salida y la capa quedaba invisible tapando la página.
+  const doneRef = useRef(onDone);
+  useEffect(() => {
+    doneRef.current = onDone;
+  });
 
   const leave = useCallback(() => {
-    setLeaving((was) => {
-      if (!was) timers.current.push(window.setTimeout(onDone, LEAVE));
-      return true;
-    });
-  }, [onDone]);
+    if (left.current) return;
+    left.current = true;
+    setLeaving(true);
+    timers.current.push(window.setTimeout(() => doneRef.current(), LEAVE));
+  }, []);
 
   useEffect(() => {
     let alive = true;
@@ -134,7 +142,7 @@ export function EasterEggOverlay({ active, onDone }: { active: ActiveEgg; onDone
   );
 }
 
-/** Hojas de arce del Subathon: [posición %, duración s, retraso s]. */
+/** Hojas de arce del Subathon, pétalos de la granja y del Sakura y talismanes de Nine Sols: [posición %, duración s, retraso s]. */
 const LEAVES: [number, number, number][] = [
   [6, 11, -2],
   [18, 14, -9],
@@ -199,6 +207,90 @@ function Scene({ scene }: { scene: EasterEgg['scene'] }) {
         <span className="sub-alert">+1 sub · +2:00</span>
         <span className="sub-alert sub-alert-2">+5 subs · +10:00</span>
         <span className="sub-alert sub-alert-3">+1 sub · +2:00</span>
+      </div>
+    );
+  if (scene === 'blocks')
+    return (
+      <div className="egg-scene" aria-hidden>
+        <span className="mc-sun" />
+        <span className="mc-cloud" />
+        <span className="mc-cloud mc-cloud-2" />
+        <span className="mc-cloud mc-cloud-3" />
+        <span className="mc-hills" />
+        <span className="mc-ground" />
+      </div>
+    );
+  if (scene === 'soul')
+    return (
+      <div className="egg-scene" aria-hidden>
+        <span className="ut-heart ut-heart-bg" />
+        <span className="ut-pellets" />
+        <span className="ut-pellets ut-pellets-near" />
+        <span className="ut-line">* Eso te llena de DETERMINACIÓN.</span>
+      </div>
+    );
+  if (scene === 'taopunk')
+    return (
+      <div className="egg-scene" aria-hidden>
+        <span className="ns-grid" />
+        <span className="ns-halo" />
+        <span className="egg-ring ns-ring" />
+        <span className="egg-ring egg-ring-2 ns-ring" />
+        {LEAVES.map((l, i) => (
+          <span key={i} className="ns-fu" style={{ left: `${l[0]}%`, animationDuration: `${l[1]}s`, animationDelay: `${l[2]}s` }}>
+            敕令
+          </span>
+        ))}
+      </div>
+    );
+  if (scene === 'twilight')
+    return (
+      <div className="egg-scene" aria-hidden>
+        <span className="tw-sun" />
+        <span className="tw-castle" />
+        <span className="tw-motes" />
+        <span className="tw-motes tw-motes-near" />
+      </div>
+    );
+  if (scene === 'boxing')
+    return (
+      <div className="egg-scene" aria-hidden>
+        <span className="vd-flash" />
+        <span className="vd-flash vd-flash-2" />
+        <span className="vd-beam" />
+        <span className="vd-beam vd-beam-2" />
+        <span className="vd-beam vd-beam-3" />
+        <span className="vd-ropes" />
+        <span className="vd-canvas" />
+        <span className="vd-confetti" />
+        <span className="vd-confetti vd-confetti-near" />
+      </div>
+    );
+  if (scene === 'sakura')
+    return (
+      <div className="egg-scene" aria-hidden>
+        <span className="sk-slash" />
+        <span className="sk-light sk-light-l" />
+        <span className="sk-light sk-light-r" />
+        <span className="sk-pitch" />
+        {LEAVES.map((l, i) => (
+          <span key={i} className="sub-leaf sk-petal" style={{ left: `${l[0]}%`, animationDuration: `${l[1]}s`, animationDelay: `${l[2]}s` }} />
+        ))}
+      </div>
+    );
+  if (scene === 'farm')
+    return (
+      <div className="egg-scene" aria-hidden>
+        <span className="fm-sun" />
+        <span className="fm-cloud" />
+        <span className="fm-cloud fm-cloud-2" />
+        <span className="fm-hills" />
+        <span className="fm-field" />
+        {LEAVES.map((l, i) => (
+          <span key={i} className="sub-leaf" style={{ left: `${l[0]}%`, animationDuration: `${l[1] + 4}s`, animationDelay: `${l[2]}s` }}>
+            🌸
+          </span>
+        ))}
       </div>
     );
   return (
@@ -331,6 +423,141 @@ function Art({ scene }: { scene: EasterEgg['scene'] }) {
           </span>
           <span className="art-emoji friend-peace">✌️</span>
         </span>
+      </>
+    );
+  if (scene === 'blocks')
+    return (
+      <>
+        <span className="mc-sun" />
+        <span className="mc-cloud" />
+        <span className="mc-tree">
+          <i className="mc-leaves" />
+          <i className="mc-trunk" />
+        </span>
+        <span className="mc-ground" />
+        {/* Un bloque de hierba que se agrieta mientras el pico lo pica, y sus trocitos saltando. */}
+        <span className="mc-block" />
+        <span className="mc-bits" />
+        <span className="art-emoji mc-pick">⛏️</span>
+      </>
+    );
+  if (scene === 'soul')
+    return (
+      <>
+        {/* Caja de combate: el corazón esquiva los disparos (no se dibuja a ningún personaje). */}
+        <span className="ut-box">
+          <i className="ut-shot ut-shot-1" />
+          <i className="ut-shot ut-shot-2" />
+          <i className="ut-shot ut-shot-3" />
+          <i className="ut-heart" />
+        </span>
+        <span className="ut-hp">
+          ABBY&nbsp;&nbsp;NV 19&nbsp;&nbsp;PV <i className="ut-bar" /> 20 / 20
+        </span>
+        <span className="ut-menu">
+          <i>Luchar</i>
+          <i>Actuar</i>
+          <i>Objeto</i>
+          <i>Piedad</i>
+        </span>
+      </>
+    );
+  if (scene === 'taopunk')
+    return (
+      <>
+        <span className="ns-grid" />
+        {/* Nueve soles girando alrededor de un núcleo, y dos talismanes colgando (no se dibuja a Yi). */}
+        <span className="ns-core" />
+        <span className="ns-orbit">
+          {Array.from({ length: 9 }, (_, i) => (
+            <i key={i} style={{ '--i': i } as CSSProperties} />
+          ))}
+        </span>
+        <span className="ns-charm ns-charm-l">敕令</span>
+        <span className="ns-charm ns-charm-r">敕令</span>
+      </>
+    );
+  if (scene === 'twilight')
+    return (
+      <>
+        <span className="tw-sun" />
+        <span className="tw-motes" />
+        <span className="tw-triforce">
+          <i />
+          <i />
+          <i />
+        </span>
+        {/* La espada clavada en su pedestal y el lobo (emoji, no se dibuja a Link). */}
+        <span className="tw-sword">
+          <i className="tw-grip" />
+          <i className="tw-guard" />
+          <i className="tw-blade" />
+        </span>
+        <span className="tw-stone" />
+        <span className="art-emoji tw-wolf">🐺</span>
+      </>
+    );
+  if (scene === 'boxing')
+    return (
+      <>
+        <span className="vd-beam" />
+        <span className="vd-confetti" />
+        <span className="art-emoji vd-glove">🥊</span>
+        <span className="art-emoji vd-spark">✨</span>
+        <span className="art-emoji vd-spark vd-spark-2">✨</span>
+        {/* El cinturón de campeona: correa blanca con ribete rosa, placas doradas y la placa central rosa. */}
+        <span className="vd-belt">
+          <i className="vd-strap" />
+          <i className="vd-side vd-side-l" />
+          <i className="vd-side vd-side-r" />
+          <i className="vd-plate">
+            <b>★</b>
+            <b>Campeona</b>
+          </i>
+        </span>
+        <span className="vd-tag">La Velada del Año</span>
+      </>
+    );
+  if (scene === 'sakura')
+    return (
+      <>
+        <span className="sk-slash" />
+        {/* Escudo propio: flor de cerezo de cinco pétalos con hojas turquesa (inspirado en el del equipo). */}
+        <span className="sk-flower">
+          <i className="sk-leaf sk-leaf-l" />
+          <i className="sk-leaf sk-leaf-r" />
+          {Array.from({ length: 5 }, (_, i) => (
+            <i key={i} className="sk-petal-big" style={{ '--i': i } as CSSProperties} />
+          ))}
+          <i className="sk-core" />
+        </span>
+        <span className="sk-name">
+          Sakura <small>FC</small>
+        </span>
+        <span className="sk-badge">Presidenta · Abby</span>
+        <span className="art-emoji sk-ball">⚽</span>
+      </>
+    );
+  if (scene === 'farm')
+    return (
+      <>
+        <span className="fm-sun" />
+        <span className="fm-cloud" />
+        <span className="fm-hills" />
+        <span className="fm-field" />
+        <span className="fm-barn">
+          <i className="fm-roof" />
+          <i className="fm-wall" />
+          <i className="fm-door" />
+        </span>
+        <span className="fm-sign">Día 1 · Primavera</span>
+        <span className="fm-crops">
+          <i className="art-emoji">🌱</i>
+          <i className="art-emoji">🥕</i>
+          <i className="art-emoji">🌱</i>
+          <i className="art-emoji">🎃</i>
+        </span>
+        <span className="art-emoji fm-chicken">🐓</span>
       </>
     );
   // Aru: gato blanco y muy peludo, dormido en su cojín; de vez en cuando abre sus ojos claros.

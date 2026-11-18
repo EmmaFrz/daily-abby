@@ -43,8 +43,9 @@ export function RedeemCode({ onRedeem }: { onRedeem: (egg: ActiveEgg) => void })
     }
     const track = fetchTrack(egg.song.trackId, egg.song.store).catch(() => null);
 
-    // Guarda el código canjeado: con todos se gana el logro "Cazador de códigos".
-    act((s) => (s.flags.includes(codeFlag(egg.id)) ? s : withAchievements({ ...s, flags: [...s.flags, codeFlag(egg.id)] })));
+    // Guarda el código canjeado y da los logros de códigos (1, 3, 5, 10 y todos). Los logros se revisan
+    // también al repetir un código, para que quien ya los tenía canjeados reciba los logros nuevos.
+    act((s) => withAchievements(s.flags.includes(codeFlag(egg.id)) ? s : { ...s, flags: [...s.flags, codeFlag(egg.id)] }));
 
     sfx('achievement');
     close();

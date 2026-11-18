@@ -13,6 +13,8 @@ export interface Achievement {
 const HEARDLE_COUNT = MINIGAMES.filter((m) => m.parent === 'heardle').length;
 const flag = (f: string) => (s: SaveState) => s.flags.includes(f);
 const played = (s: SaveState) => MINIGAMES.filter((m) => (s.records[m.id]?.played ?? 0) > 0).length;
+/** Códigos secretos canjeados (solo cuenta los que siguen existiendo en EGGS). */
+const redeemed = (s: SaveState) => EGGS.filter((e) => s.flags.includes(codeFlag(e.id))).length;
 
 export const ACHIEVEMENTS: Achievement[] = [
   { id: 'first-win', icon: '🌱', title: 'Primer reto', desc: 'Gana tu primer minijuego.', check: (s) => s.totalWins >= 1 },
@@ -66,13 +68,12 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   { id: 'paises-25', icon: '🌍', title: 'Atlas humano', desc: 'Consigue 25 aciertos en ¿Cuál es más grande?', check: flag('paises-25') },
   { id: 'aim-fast', icon: '🎯', title: 'Reflejos de pro', desc: 'Termina Rage Aim en menos de 10 segundos.', check: flag('aim-fast') },
-  {
-    id: 'codigos',
-    icon: '🎟️',
-    title: 'Cazador de códigos',
-    desc: `Canjea los ${EGGS.length} códigos secretos.`,
-    check: (s) => EGGS.every((e) => s.flags.includes(codeFlag(e.id))),
-  },
+  { id: 'codigos-1', icon: '🎟️', title: 'Primer código', desc: 'Canjea tu primer código secreto.', check: (s) => redeemed(s) >= 1 },
+  { id: 'codigos-3', icon: '🔍', title: 'Buscatesoros', desc: 'Canjea 3 códigos secretos.', check: (s) => redeemed(s) >= 3 },
+  { id: 'codigos-5', icon: '🗝️', title: 'Llave maestra', desc: 'Canjea 5 códigos secretos.', check: (s) => redeemed(s) >= 5 },
+  { id: 'codigos-10', icon: '🎴', title: 'Coleccionista', desc: 'Canjea 10 códigos secretos.', check: (s) => redeemed(s) >= 10 },
+  // Conserva el id 'codigos' para que quien ya lo tenía no lo pierda.
+  { id: 'codigos', icon: '🏆', title: 'Cazador de códigos', desc: `Canjea los ${EGGS.length} códigos secretos.`, check: (s) => redeemed(s) >= EGGS.length },
 ];
 
 /** Devuelve el estado con los logros nuevos añadidos (puro). */
