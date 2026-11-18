@@ -3,9 +3,11 @@ import { ACHIEVEMENTS } from '../data/achievements';
 import { dayOffset, setDayOffset, todayKey } from '../lib/daily';
 import { sfx } from '../lib/sound';
 import { createSave } from './progress';
+import { sanitizeSave } from './sanitize';
 import type { SaveState } from './types';
 
 const SAVE_KEY = 'abby-diarios:v2';
+const DEV_KEY = 'abby-dev';
 
 export interface Toast {
   id: number;
@@ -35,8 +37,8 @@ function load(today: string): SaveState {
     localStorage.removeItem('abby-modo-carrera:v1'); // partida de la versión anterior
     const raw = localStorage.getItem(SAVE_KEY);
     if (raw) {
-      const parsed = JSON.parse(raw) as SaveState;
-      if (parsed.version === 2) return parsed;
+      const save = sanitizeSave(JSON.parse(raw), today);
+      if (save) return save;
     }
   } catch {
     /* partida corrupta o almacenamiento bloqueado: empezamos de cero */
@@ -44,10 +46,20 @@ function load(today: string): SaveState {
   return createSave(today);
 }
 
+/**
+ * "Avanzar día" para pruebas: se activa con ?dev, pero solo donde existen las herramientas
+ * de prueba (`npm run dev` y vistas previas). En producción un enlace con ?dev no hace nada.
+ */
 function detectDevMode(): boolean {
   try {
-    if (new URLSearchParams(location.search).has('dev')) localStorage.setItem('abby-dev', '1');
-    return localStorage.getItem('abby-dev') === '1';
+    if (!__DEV_TOOLS__) {
+      // Antes ?dev funcionaba también en producción: se limpia lo que pudiera haber quedado.
+      localStorage.removeItem(DEV_KEY);
+      setDayOffset(0);
+      return false;
+    }
+    if (new URLSearchParams(location.search).has('dev')) localStorage.setItem(DEV_KEY, '1');
+    return localStorage.getItem(DEV_KEY) === '1';
   } catch {
     return false;
   }

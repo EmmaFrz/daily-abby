@@ -9,7 +9,7 @@ Requisitos: **Node 22+**.
 
 ```bash
 npm install
-cp .env.example .env     # y cambia HOST_KEY
+cp .env.example .env     # y pon una HOST_KEY larga
 npm run dev
 ```
 
@@ -20,7 +20,9 @@ npm run dev
 | http://localhost:5173/abby | Abby | Pad privado para responder (celular/tablet, fuera de cámara) |
 | http://localhost:5173/admin | Equipo | Panel de administración (fase 2) |
 
-`/host` y `/abby` piden la clave `HOST_KEY` del `.env`.
+`/host` y `/abby` piden la clave `HOST_KEY` del `.env`. Si no hay ninguna (o es la de ejemplo), el servidor genera
+una aleatoria en cada arranque y la muestra en la consola. Tras 20 claves incorrectas desde la misma IP, esa IP
+queda bloqueada 10 minutos.
 
 Para probar sin estar en directo, deja `CHAT_SOURCE=simulator`: cientos de espectadores falsos votan en cada pregunta.
 Desde `/host` se cambia en vivo a **Twitch** (lee el chat de `TWITCH_CHANNEL`, en modo anónimo y solo lectura).

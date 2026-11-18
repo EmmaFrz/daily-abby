@@ -1,5 +1,6 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
+import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { defineConfig, loadEnv, type Plugin } from 'vite';
 
@@ -25,11 +26,22 @@ function devBugReportApi(): Plugin {
         }
         const chunks: Buffer[] = [];
         for await (const c of req) chunks.push(c as Buffer);
+
+        // Las mismas cabeceras que recibiría en Vercel: la función comprueba el origen con ellas.
+        const headers = new Headers();
+        for (const name of ['content-type', 'origin', 'sec-fetch-site', 'user-agent']) {
+          const value = req.headers[name];
+          if (typeof value === 'string') headers.set(name, value);
+        }
+        const ip = req.socket.remoteAddress ?? '127.0.0.1';
+        headers.set('x-real-ip', ip);
+        headers.set('x-forwarded-for', ip);
+
         const { POST } = await import(new URL('../../api/report-bug.js', import.meta.url).href);
         const response: Response = await POST(
-          new Request('http://localhost/api/report-bug', {
+          new Request(`http://${req.headers.host ?? 'localhost'}/api/report-bug`, {
             method: 'POST',
-            headers: { 'content-type': 'application/json', 'x-forwarded-for': req.socket.remoteAddress ?? 'local' },
+            headers,
             body: Buffer.concat(chunks),
           }),
         );
@@ -41,7 +53,25 @@ function devBugReportApi(): Plugin {
   };
 }
 
-export default defineConfig({
+/**
+ * Cabeceras de seguridad de vercel.json (CSP, anti-iframe…). `npm run preview`
+ * las aplica también, para probar en local que la CSP no rompe nada antes de publicar.
+ */
+function securityHeaders(): Record<string, string> {
+  const vercel = JSON.parse(readFileSync(new URL('../../vercel.json', import.meta.url), 'utf8')) as {
+    headers?: { source: string; headers: { key: string; value: string }[] }[];
+  };
+  const all = vercel.headers?.find((h) => h.source === '/(.*)')?.headers ?? [];
+  return Object.fromEntries(all.map((h) => [h.key, h.value]));
+}
+
+export default defineConfig(({ command }) => ({
   plugins: [react(), tailwindcss(), devBugReportApi()],
+  define: {
+    // Herramientas de prueba ("avanzar día"): solo en `npm run dev` y en despliegues de vista
+    // previa de Vercel. En producción no existen, así que un enlace con ?dev no hace nada.
+    __DEV_TOOLS__: JSON.stringify(command === 'serve' || process.env.VERCEL_ENV === 'preview'),
+  },
   server: { port: 5173 },
-});
+  preview: { headers: securityHeaders() },
+}));

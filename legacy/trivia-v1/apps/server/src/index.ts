@@ -12,8 +12,9 @@ import {
   type Role,
   type ServerToClientEvents,
 } from '@abby/shared';
+import { createKeyChecker } from './auth';
 import { ChatManager } from './chat/manager';
-import { config, DEFAULT_HOST_KEY } from './config';
+import { config, hostKeyGenerated, MIN_HOST_KEY_LENGTH } from './config';
 import { GameEngine, GameError } from './game/engine';
 import { sampleQuestions } from './game/sampleQuestions';
 
@@ -38,11 +39,12 @@ interface SocketData {
 }
 
 const io = new Server<ClientToServerEvents, ServerToClientEvents, Record<string, never>, SocketData>(app.server);
+const checkKey = createKeyChecker(config.hostKey);
 
 io.use((socket, next) => {
   const auth = socket.handshake.auth as Partial<HandshakeAuth>;
   const role: Role = auth.role === 'host' || auth.role === 'abby' ? auth.role : 'stage';
-  if (role !== 'stage' && auth.key !== config.hostKey) return next(new Error(AUTH_ERROR));
+  if (role !== 'stage' && !checkKey(auth.key, socket.handshake.address)) return next(new Error(AUTH_ERROR));
   socket.data.role = role;
   next();
 });
@@ -110,6 +112,9 @@ chat.use(config.chatSource);
 await app.listen({ port: config.port, host: '0.0.0.0' });
 console.log(`🎮 Servidor del juego escuchando en http://localhost:${config.port}`);
 console.log(`💬 Chat: ${config.chatSource}${config.chatSource === 'twitch' ? ` (#${config.twitchChannel})` : ''}`);
-if (config.hostKey === DEFAULT_HOST_KEY) {
-  console.warn('⚠️  HOST_KEY usa el valor por defecto. Cámbiala en .env antes de usarlo en directo.');
+if (hostKeyGenerated) {
+  console.warn(`🔑 HOST_KEY no está configurada: clave temporal de esta sesión → ${config.hostKey}`);
+  console.warn('   Ponla en .env (HOST_KEY=...) si quieres que no cambie en cada arranque.');
+} else if (config.hostKey.length < MIN_HOST_KEY_LENGTH) {
+  console.warn(`⚠️  HOST_KEY es corta (menos de ${MIN_HOST_KEY_LENGTH} caracteres). Usa una más larga antes de ir en directo.`);
 }

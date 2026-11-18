@@ -3,6 +3,7 @@
  * Se piden por trackId para obtener siempre la versión original.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { appleUrl } from './appleUrl';
 import { soundSettings } from './sound';
 
 export interface TrackInfo {
@@ -19,18 +20,21 @@ export function fetchTrack(trackId: number, store = 'us'): Promise<TrackInfo> {
   const key = `${store}:${trackId}`;
   let p = cache.get(key);
   if (!p) {
-    p = fetch(`https://itunes.apple.com/lookup?id=${trackId}&country=${store}`)
+    const query = new URLSearchParams({ id: String(trackId), country: store });
+    p = fetch(`https://itunes.apple.com/lookup?${query}`)
       .then((r) => {
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
-        return r.json() as Promise<{ results?: { previewUrl?: string; artworkUrl100?: string; trackViewUrl?: string }[] }>;
+        return r.json() as Promise<{ results?: { previewUrl?: unknown; artworkUrl100?: unknown; trackViewUrl?: unknown }[] }>;
       })
       .then((j) => {
         const t = j.results?.[0];
-        if (!t?.previewUrl) throw new Error('Sin previa');
+        const previewUrl = appleUrl(t?.previewUrl, ['apple.com', 'mzstatic.com']);
+        if (!previewUrl) throw new Error('Sin previa');
+        const artwork = appleUrl(t?.artworkUrl100, ['mzstatic.com']);
         return {
-          previewUrl: t.previewUrl,
-          artwork: (t.artworkUrl100 ?? '').replace('100x100bb', '600x600bb'),
-          url: t.trackViewUrl ?? 'https://music.apple.com',
+          previewUrl,
+          artwork: artwork ? artwork.replace('100x100bb', '600x600bb') : '',
+          url: appleUrl(t?.trackViewUrl, ['apple.com']) ?? 'https://music.apple.com',
         };
       })
       .catch((e: unknown) => {

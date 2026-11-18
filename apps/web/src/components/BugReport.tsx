@@ -66,7 +66,6 @@ export function BugReport() {
           contact: contact.trim(),
           website,
           page: location.hash || '#diarios',
-          userAgent: navigator.userAgent,
           viewport: `${window.innerWidth}×${window.innerHeight}`,
         }),
       });

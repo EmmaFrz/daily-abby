@@ -9,10 +9,12 @@ const DAY_MS = 86_400_000;
 /** Día 1 de los puzzles numerados (#1, #2…). */
 export const EPOCH = '2026-11-01';
 
-/** Desfase de días solo para pruebas (modo dev). */
+/** Desfase de días solo para pruebas (modo dev). En producción siempre es 0. */
 export function dayOffset(): number {
+  if (!__DEV_TOOLS__) return 0;
   try {
-    return Number(localStorage.getItem(OFFSET_KEY)) || 0;
+    const days = Math.trunc(Number(localStorage.getItem(OFFSET_KEY)));
+    return Number.isFinite(days) ? Math.max(-3650, Math.min(3650, days)) : 0;
   } catch {
     return 0;
   }
@@ -20,7 +22,8 @@ export function dayOffset(): number {
 
 export function setDayOffset(days: number): void {
   try {
-    localStorage.setItem(OFFSET_KEY, String(days));
+    if (days) localStorage.setItem(OFFSET_KEY, String(days));
+    else localStorage.removeItem(OFFSET_KEY);
   } catch {
     /* sin almacenamiento: el desfase simplemente no persiste */
   }

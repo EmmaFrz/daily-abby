@@ -137,7 +137,26 @@ Se silencian con el botón 🔊 de la barra superior, y el volumen se regula en 
 
 Para añadir un efecto, crea una receta en `RECIPES` y llámala con `sfx('nombre')`.
 
-**Modo pruebas:** abre `http://localhost:5173/?dev` y en el pie de página aparecerá **"Avanzar día"**.
+**Modo pruebas:** abre `http://localhost:5173/?dev` y en el pie de página aparecerá **"Avanzar día"**. Solo existe en
+`npm run dev` y en las vistas previas de Vercel. En producción `?dev` no hace nada (`__DEV_TOOLS__` en `vite.config.ts`).
+
+## Reportes de bugs y seguridad
+
+El botón **🐞 Reportar bug** envía el texto a `api/report-bug.js`, la única función de servidor. Esa función lo
+reenvía a Discord con el webhook de la variable `DISCORD_WEBHOOK_URL`, que nunca llega al navegador. Para
+probarlo en local, pon la variable en un `.env` de la raíz (ver `.env.example`).
+
+La función:
+
+- solo acepta peticiones JSON hechas desde la propia web (comprueba `Origin` y `Sec-Fetch-Site`);
+- limita a 5 reportes por IP y 50 en total cada 10 minutos (contadores compartidos con el Runtime Cache de Vercel);
+- no reenvía dos veces el mismo texto en una hora;
+- mete el texto del usuario en bloques de código, para que no pueda crear enlaces disfrazados, menciones ni formato.
+
+`vercel.json` añade las cabeceras de seguridad: CSP, bloqueo de iframes, `nosniff`, `Referrer-Policy`,
+`Permissions-Policy` y `Cross-Origin-Opener-Policy`. **Si la web empieza a usar un dominio externo nuevo** (imágenes,
+audio, APIs…), hay que añadirlo a la `Content-Security-Policy` o el navegador lo bloqueará. `npm run build` seguido de
+`npm run preview` sirve la web con esas mismas cabeceras para comprobarlo en local.
 
 ## Personalizar
 
