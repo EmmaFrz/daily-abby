@@ -15,7 +15,12 @@ interface Settings {
   enabled: boolean;
   /** 0 a 1 */
   volume: number;
+  /** Volumen de la música (previas de canciones), 0 a 1. Independiente de los efectos. */
+  music: number;
 }
+
+const clamp01 = (n: unknown, fallback: number) => (typeof n === 'number' && Number.isFinite(n) ? Math.min(1, Math.max(0, n)) : fallback);
+const DEFAULTS: Settings = { enabled: true, volume: 0.7, music: 0.6 };
 
 const KEY = 'abby-sonido';
 const listeners = new Set<() => void>();
@@ -25,12 +30,16 @@ function loadSettings(): Settings {
     const raw = localStorage.getItem(KEY);
     if (raw) {
       const s = JSON.parse(raw) as Partial<Settings>;
-      return { enabled: s.enabled ?? true, volume: Math.min(1, Math.max(0, s.volume ?? 0.7)) };
+      return {
+        enabled: typeof s.enabled === 'boolean' ? s.enabled : DEFAULTS.enabled,
+        volume: clamp01(s.volume, DEFAULTS.volume),
+        music: clamp01(s.music, DEFAULTS.music),
+      };
     }
   } catch {
     /* sin almacenamiento: valores por defecto */
   }
-  return { enabled: true, volume: 0.7 };
+  return { ...DEFAULTS };
 }
 
 let settings = loadSettings();
@@ -49,13 +58,23 @@ function save(next: Settings) {
 export const soundSettings = () => settings;
 export const setSoundEnabled = (enabled: boolean) => save({ ...settings, enabled });
 export const setSoundVolume = (volume: number) => save({ ...settings, volume });
+export const setMusicVolume = (music: number) => save({ ...settings, music: clamp01(music, DEFAULTS.music) });
+
+/**
+ * Volumen real para un `<audio>` de música. Curva cuadrática: el oído percibe el volumen de forma
+ * logarítmica, así la mitad inferior del deslizador sirve de verdad para bajarlo.
+ */
+export const musicGain = () => settings.music ** 2;
+
+/** Avisa cada vez que cambian los ajustes de sonido. Devuelve la función para dejar de escuchar. */
+export function subscribeSound(cb: () => void): () => void {
+  listeners.add(cb);
+  return () => listeners.delete(cb);
+}
 
 export function useSoundSettings(): Settings {
   return useSyncExternalStore(
-    (cb) => {
-      listeners.add(cb);
-      return () => listeners.delete(cb);
-    },
+    subscribeSound,
     () => settings,
   );
 }

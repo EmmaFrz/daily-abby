@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
 import { EGGS, type EasterEgg } from '../data/eggs';
 import type { TrackInfo } from '../lib/itunes';
-import { soundSettings } from '../lib/sound';
+import { musicGain } from '../lib/sound';
 
 /**
  * Easter eggs de los códigos promocionales (datos en src/data/eggs.ts): una escena de fondo, una carta
@@ -56,7 +56,7 @@ export function EasterEggOverlay({ active, onDone }: { active: ActiveEgg; onDone
       setLink(info.url);
       if (!audio) return;
       if (audio.src !== info.previewUrl) audio.src = info.previewUrl;
-      audio.volume = Math.max(0.05, soundSettings().volume);
+      audio.volume = musicGain();
       void audio.play().catch(() => {});
     });
     const t = timers.current;
